@@ -1,81 +1,67 @@
-import { useEffect, useContext, useRef } from "react";
-
-import './XY.css'
-
-import { TimerContext } from "../../../context/TimerContext";
-import TimePanel from "../../molecules/time-panel/TimePanel";
-import RoundPanel from "../../molecules/round-panel/RoundPanel";
+import { useEffect, useContext, useRef } from 'react'
+import { TimerContext } from '../../../context/TimerContext'
+import TimePanel from '../../molecules/time-panel/TimePanel'
+import RoundPanel from '../../molecules/round-panel/RoundPanel'
 
 export default function XY(props) {
-    if (!props.isRunning || props.isCompleted) {
+    if (!props.running || props.completed) {
         return (
-          <div className="main-panel">
-                <TimePanel time={props.isCompleted ? props.endVal : props.startVal} />
-                <RoundPanel round={props.isCompleted ? props.roundEndVal : props.roundStartVal} />
+          <div>
+                <TimePanel time={props.completed ? props.endTimeValue : props.startTimeValue} />
+                <RoundPanel round={props.completed ? props.roundEndValue : props.roundStartValue} />
           </div>
-        );
+        )
     }
     
     return (
         <InnerXY
-            startVal={props.startVal}
-            endVal={props.endVal}
-            roundStartVal={props.roundStartVal}
-            roundEndVal={props.roundEndVal}
+            startTimeValue={props.startTimeValue}
+            endTimeValue={props.endTimeValue}
+            roundStartValue={props.roundStartValue}
+            roundEndValue={props.roundEndValue}
         />
     )
 }
 
 function InnerXY(props) {
     const {
-        count,
-        setCount,
-        round,
-        setRound,
-        isPaused,
-        isStopped,
-        remainingTime,
-        setRemainingTime,
-        dispatcher,
-    } = useContext(TimerContext);
-    const posRef = useRef();
+        time, setTime, remainingTime, setRemainingTime, 
+        round, setRound, paused, stopped, dispatcher
+    } = useContext(TimerContext)
+    const ref = useRef()
 
     useEffect(() => {
-        let time;
+        let currentTime
     
-        if (!isPaused && !isStopped) {
-            if (count > 0) {
-                time = setTimeout(() => {
-                setCount(count - 10);
-                setRemainingTime(remainingTime - 10);
-                }, 10);
+        if (!paused && !stopped) {
+            if (time > 0) {
+                currentTime = setTimeout(() => {
+                setTime(time - 10)
+                setRemainingTime(remainingTime - 10)
+                }, 10)
             }
         
-            if (round - 1 > 0 && count === 0) {
-                setRound(round - 1);
-                setCount(props.startVal);
+            if (round > 1 && time === 0) {
+                setRound(round - 1)
+                setTime(props.startTimeValue)
             }
         
-            if (round === 1 && count === 0) {
-                dispatcher(posRef);
+            if (round === 1 && time === 0) {
+                dispatcher(ref)
             }
         }
     
         return () => {
-            if (time) {
-                clearTimeout(time);
+            if (currentTime) {
+                clearTimeout(currentTime)
             }
-        };
-    }, [round, count, isPaused, isStopped]);
+        }
+    }, [round, time, paused, stopped])
     
     return (
-        <div className="xy" ref={posRef}>
-            {
-                !isStopped && !isPaused && (
-                    <RoundPanel round={round} />
-                )
-            }
-            <TimePanel time={count} />
+        <div ref={ref}>
+            {!stopped && !paused && <RoundPanel round={round} />}
+            <TimePanel time={time} />
         </div>
-    );
+    )
 }

@@ -1,57 +1,53 @@
-import { useContext, useRef, useEffect} from "react";
-import { TimerContext } from "../../../context/TimerContext";
-import TimePanel from "../../molecules/time-panel/TimePanel";
+import { useContext, useRef, useEffect} from 'react'
+import { TimerContext } from '../../../context/TimerContext'
+import TimePanel from '../../molecules/time-panel/TimePanel'
+
 
 export default function Countdown(props) {
-    if (!props.isRunning || props.isCompleted) {
+    if (!props.running || props.completed) {
         return (
-          <div className="main-panel">
-                <TimePanel time={props.isCompleted ? props.endVal : props.startVal} />
+          <div>
+                <TimePanel time={props.completed ? props.endTimeValue : props.startTimeValue} />
           </div>
         )
     }
 
-    return <InnerCountdown startVal={props.startVal} endVal={props.endVal} />
+    return <InnerCountdown startTimeValue={props.startTimeValue} endTimeValue={props.endTimeValue} />
 }
 
 function InnerCountdown(props) {
     const {
-        count,
-        setCount,
-        isPaused,
-        isStopped,
-        remainingTime,
-        setRemainingTime,
-        dispatcher,
-    } = useContext(TimerContext);
-    const posRef = useRef();
+        time, setTime, remainingTime, setRemainingTime,
+        paused, stopped, dispatcher
+    } = useContext(TimerContext)
+    const ref = useRef()
 
     useEffect(() => {
-        let time;
+        let currentTime
     
-        if (!isPaused && !isStopped) {
-            if (count > 0) {
-                time = setTimeout(() => {
-                setCount(count - 10);
-                setRemainingTime(remainingTime - 10);
-                }, 10);
+        if (!paused && !stopped) {
+            if (time > 0) {
+                currentTime = setTimeout(() => {
+                setTime(time - 10)
+                setRemainingTime(remainingTime - 10)
+                }, 10)
             }
         
-            if (count === 0) {
-                dispatcher(posRef);
+            if (time === 0) {
+                dispatcher(ref)
             }
         }
     
         return () => {
-            if (time) {
-                clearTimeout(time);
+            if (currentTime) {
+                clearTimeout(currentTime)
             }
-        };
-    }, [count, isPaused, isStopped]);
+        }
+    }, [time, paused, stopped])
 
     return (
-        <div className="countdown" ref={posRef}>
-            <TimePanel time={count} />
+        <div ref={ref}>
+            <TimePanel time={time} />
         </div>
     )
 }

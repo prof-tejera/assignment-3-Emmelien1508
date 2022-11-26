@@ -1,73 +1,59 @@
-import { useState, createContext } from "react"
+import { createContext, useState } from "react"
 
 export const TimerContext = createContext({})
 
-export default function TimerData({ children }) {
-    const [count, setCount] = useState(0)
+export default function Timers({ children }) {
+    const [time, setTime] = useState(0)
     const [round, setRound] = useState(0)
-    const [interval, setInterv] = useState(0)
+    const [restTime, setRestTime] = useState(0)
     const [remainingTime, setRemainingTime] = useState(0)
-    const [activeTimerIndex, setActiveTimerIndex] = useState(0)
+    const [currentTimerIndex, setCurrentTimerIndex] = useState(0)
     const [timers, setTimers] = useState([])
-    const [isPaused, setPaused] = useState(false)
-    const [isStopped, setStopped] = useState(true)
-
-    const markTimerComplete = () => {
-        const newTimers = timers.map((timer, i) => {
-            if (i === activeTimerIndex) {
-                return { ...timer, isCompleted: true }
+    const [paused, setPaused] = useState(false)
+    const [stopped, setStopped] = useState(true)
+    
+    function setTimerComplete() {
+        const newTimers = timers.map((timer, index) => {
+            if (currentTimerIndex === index) {
+                return {...timer, completed: true}
             }
             return timer
         })
         setTimers(newTimers)
     }
 
-    const dispatcher = (posRef) => {
-        if (activeTimerIndex + 1 < timers.length) {
-            markTimerComplete()
-            setCount(timers[activeTimerIndex + 1].startVal)
+    function dispatcher(ref) {
+        if (currentTimerIndex + 1< timers.length) {
+            setTimerComplete()
+            setTime(timers[currentTimerIndex + 1].startValue)
 
-            if (
-                timers[activeTimerIndex + 1].title === "XY" ||
-                timers[activeTimerIndex + 1].title === "Tabata"
-            ) {
-                setRound(timers[activeTimerIndex + 1].roundStartVal)
-            }
-            if (timers[activeTimerIndex + 1].title === "Tabata") {
-                setInterv(timers[activeTimerIndex + 1].intervalStartVal)
+            if (timers[currentTimerIndex + 1].name === 'XY' || timers[currentTimerIndex + 1].name === 'Tabata') {
+                setRound(timers[currentTimerIndex + 1].roundStartValue)
             }
 
-            setActiveTimerIndex(activeTimerIndex + 1)
-                posRef.current.scrollIntoView({ behavior: "smooth" })
+            if (timers[currentTimerIndex + 1].name === 'Tabata') {
+                setRestTime(timers[currentTimerIndex + 1].restTimeStartValue)
+            }
+
+            setCurrentTimerIndex(currentTimerIndex + 1)
+            ref.current.scrollIntoView({ behavior: "smooth" })
         } else {
-            const newTimers = timers.map((timer, i) => {
-                return { ...timer, isRunning: false, isCompleted: false }
+            const newTimers = timers.map((timer) => {
+                return {...timer, running: false, completed: false}
             })
             setTimers(newTimers)
             setStopped(true)
         }
-    }
+    } 
 
     return (
         <TimerContext.Provider
             value={{
-                count,
-                setCount,
-                round,
-                setRound,
-                interval,
-                setInterv,
-                isPaused,
-                setPaused,
-                isStopped,
-                setStopped,
-                activeTimerIndex,
-                setActiveTimerIndex,
-                timers,
-                setTimers,
-                remainingTime,
-                setRemainingTime,
-                dispatcher,
+                time, setTime, restTime, setRestTime, 
+                remainingTime, setRemainingTime, round, setRound, 
+                paused, setPaused, stopped, setStopped, 
+                currentTimerIndex, setCurrentTimerIndex, timers, setTimers, 
+                dispatcher
             }}
         >
             {children}

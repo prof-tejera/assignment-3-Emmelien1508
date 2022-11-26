@@ -1,22 +1,37 @@
-import { useEffect, useContext, useRef } from 'react'
-import { TimerContext } from '../../../context/TimerContext'
-import RoundPanel from '../../molecules/round-panel/RoundPanel'
-import TimePanel from '../../molecules/time-panel/TimePanel'
+import { useContext, useEffect, useRef } from "react"
+import { TimerContext } from "../../../context/TimerContext"
+import RoundPanel from "../../molecules/round-panel/RoundPanel"
+import TimePanel from "../../molecules/time-panel/TimePanel"
 
-
-export default function Tabata(props) {
+export default function Timer(props) {
     if (!props.running || props.completed) {
-        return (
-            <div>
-                <TimePanel time={props.completed ? props.endTimeValue : props.startTimeValue} />
-                <TimePanel time={props.completed ? props.restTimeEndValue : props.restTimeStartValue} />
-                <RoundPanel round={props.completed ? props.roundEndValue : props.roundStartValue} />
-            </div>
-        )
+        if (props.hasRestTime) {
+            return (
+                <div>
+                    <TimePanel time={props.completed ? props.endTimeValue : props.startTimeValue} />
+                    <TimePanel time={props.completed ? props.restTimeEndValue : props.restTimeStartValue} />
+                    <RoundPanel round={props.completed ? props.roundEndValue : props.roundStartValue} />
+                </div>
+            )
+        } else if (props.hasRounds) {
+            return (
+                <div>
+                      <TimePanel time={props.completed ? props.endTimeValue : props.startTimeValue} />
+                      <RoundPanel round={props.completed ? props.roundEndValue : props.roundStartValue} />
+                </div>
+              )
+        } else {
+            return (
+                <div>
+                    <TimePanel time={props.completed ? props.endTimeValue : props.startTimeValue} />
+                </div>
+            )
+        }
     }
-    
-      return (
-            <InnerTabata
+
+    if (props.hasRestTime) {
+        return (
+            <InnerTimer
                 startTimeValue={props.startTimeValue}
                 endTimeValue={props.endTimeValue}
                 roundStartValue={props.roundStartValue}
@@ -24,10 +39,28 @@ export default function Tabata(props) {
                 restTimeStartValue={props.restTimeStartValue}
                 restTimeEndValue={props.restTimeEndValue}
             />
-      )
+        )
+    } else if (props.hasRounds) {
+        return (
+            <InnerTimer
+                startTimeValue={props.startTimeValue}
+                endTimeValue={props.endTimeValue}
+                roundStartValue={props.roundStartValue}
+                roundEndValue={props.roundEndValue}
+            />
+        )
+    } else {
+        return (
+            <InnerTimer 
+                startTimeValue={props.startTimeValue} 
+                endTimeValue={props.endTimeValue} 
+            />
+        )
+    }
+
 }
 
-function InnerTabata(props) {
+function InnerTimer(props) {
     const {
         time, setTime, restTime, setRestTime, 
         remainingTime, setRemainingTime, round, setRound, 
@@ -76,7 +109,7 @@ function InnerTabata(props) {
             }
         }
     }, [round, time, restTime, paused, stopped])
-    
+
     return (
         <div ref={ref}>
             <h4>Work 🏋🏼</h4>

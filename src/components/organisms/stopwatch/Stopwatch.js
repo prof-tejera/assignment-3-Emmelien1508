@@ -1,59 +1,52 @@
-
-import TimePanel from '../../molecules/time-panel/TimePanel'
-import './Stopwatch.css'
 import { useContext, useRef, useEffect } from 'react'
 import { TimerContext } from '../../../context/TimerContext'
+import TimePanel from '../../molecules/time-panel/TimePanel'
 
 export default function Stopwatch(props) {
-    if (!props.isRunning || props.isCompleted) {
+    if (!props.running || props.completed) {
         return (
-            <div className="main-panel">
-                <TimePanel time={props.isCompleted ? props.endVal : props.startVal} />
+            <div>
+                <TimePanel time={props.completed ? props.endTimeValue : props.startTimeValue} />
             </div>
         )
     }
 
-    return <InnerStopwatch startVal={props.startVal} endVal={props.endVal} />
+    return <InnerStopwatch startTimeValue={props.startTimeValue} endTimeValue={props.endTimeValue} />
 }
 
 function InnerStopwatch(props) {
     const {
-        count,
-        setCount,
-        isPaused,
-        isStopped,
-        remainingTime,
-        setRemainingTime,
-        dispatcher,
+        time, setTime, remainingTime, setRemainingTime,
+        paused, stopped, dispatcher
     } = useContext(TimerContext)
-    const posRef = useRef()
+    const ref = useRef()
 
     useEffect(() => {
-        let time
+        let currentTime
     
-        if (!isPaused && !isStopped) {
-            if (count < props.endVal) {
-                time = setTimeout(() => {
-                    setCount(count + 10)
+        if (!paused && !stopped) {
+            if (time < props.endTimeValue) {
+                currentTime = setTimeout(() => {
+                    setTime(time + 10)
                     setRemainingTime(remainingTime - 10)
                 }, 10)
             }
         
-            if (count === props.endVal) {
-                dispatcher(posRef)
+            if (time === props.endTimeValue) {
+                dispatcher(ref)
             }
         }
     
         return () => {
-            if (time) {
-                clearTimeout(time)
+            if (currentTime) {
+                clearTimeout(currentTime)
             }
         }
-    }, [count, props.endVal, isPaused, isStopped])
+    }, [time, props.endTimeValue, paused, stopped])
 
     return (
-        <div className="stopwatch" ref={posRef}>
-            <TimePanel time={count} />
+        <div ref={ref}>
+            <TimePanel time={time} />
         </div>
     )
 }
