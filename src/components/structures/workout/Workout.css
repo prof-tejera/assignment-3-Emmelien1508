@@ -1,0 +1,65 @@
+.workout-container {
+    display: flex;
+    justify-content: flex-start;
+    padding-top: 50px;
+    align-items: center;
+    flex-direction: column;
+    color: var(--white);
+    max-width: 600px;
+    width: 60vw;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.total-workout-time,
+.remaining-workout-time {
+    border: 1px solid var(--color-gray4);
+    padding: 12px 40px;
+    border-radius: 3px;
+    text-align: center;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.workout-control-buttons {
+    width: 100%;
+}
+
+.workout-control-buttons > div {
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+}
+
+.workout-control-buttons > div > .button {
+    width: calc(100% / 3) !important;
+}
+
+.workout-control-buttons > div > div:nth-child(2) {
+    margin: 0 10px;
+}
+
+.no-workout h2 {
+    padding-bottom: 15px;
+}
+
+.workout-items {
+    width: 100%;
+}
+
+.workout-items .timer {
+    border: 1px solid var(--color-gray4);
+    padding: 12px;
+    border-radius: 3px;
+    text-align: center;
+    width: 100%;
+    margin-top: 15px;
+    position: relative;
+}
+
+.workout-items .timer .delete {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}

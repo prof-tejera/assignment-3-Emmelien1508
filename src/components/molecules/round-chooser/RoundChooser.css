@@ -1,0 +1,23 @@
+.round-chooser {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.round-chooser > * {
+    width: 30px;
+    text-align: center;
+    height: 30px;
+}
+
+.round-chooser-value {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid var(--color-gray3);
+    border-bottom: 1px solid var(--color-gray3);
+}
+
+.round-chooser-buttons {
+    text-align: center;
+}

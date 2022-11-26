@@ -1,0 +1,85 @@
+.button {
+    align-items: center;
+    cursor: pointer;
+    color: var(--white);
+    display: flex;
+    font-size: var(--size-sm);
+    height: 40px;
+    justify-content: center;
+    transition: all 400ms ease-in-out;
+
+    /* make text within unselectable */
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
+
+.button:not(.extra-small) { 
+    min-width: 10vw;
+    padding: 24px 36px;
+}
+
+.button p {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.button.primary {
+    background-color: var(--white);
+    border: 1px solid var(--color-gray4);
+    color: var(--black);
+}
+
+.button.primary:hover {
+    background-color: var(--color-gray4);
+}
+
+.button.secondary {
+    background-color: var(--color-gray2);
+    border: 1px solid var(--color-gray4);
+}
+
+.button.secondary:hover {
+    background-color: var(--color-gray1);
+}
+
+.button.tertiary {
+    background-color: var(--color-green2);
+    border: 1px solid var(--color-green2);
+}
+
+.button.tertiary:hover {
+    background-color: var(--color-green1);
+}
+
+.button.extra-small {
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--color-gray3);
+}
+
+.button.extra-small:hover {
+    background-color: var(--color-gray2);
+}
+
+.button.extra-small p {
+    text-align: center;
+    width: 100%;
+}
+
+.button.delete {
+    background-color: var(--color-brown1);
+    border: 1px solid var(--color-brown2);
+}
+
+.button.delete:hover {
+    background-color: var(--color-brown2);
+}
+
+.button.round {
+    border-radius: 50%;
+}

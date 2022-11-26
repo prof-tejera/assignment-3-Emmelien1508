@@ -1,0 +1,73 @@
+.add-timer-container {
+    display: flex;
+    justify-content: flex-start;
+    padding-top: 50px;
+    align-items: center;
+    flex-direction: column;
+    color: var(--white);
+    max-width: 600px;
+    width: 60vw;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.add-timer-header {
+    width: 100%;
+}
+
+.add-timer-header p {
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.add-timer-header select {
+    width: 100%;
+    border: none;
+    border-radius: 0;
+    height: 40px;
+    padding-left: 5px;
+}
+
+.add-timer-body {
+    width: 100%;
+    background-color: var(--color-gray1);
+    border: 1px solid var(--color-gray3);
+    border-radius: 3px;
+    padding: 20px;
+    margin: 15px 0;
+}
+
+.add-timer-body .timer-chooser {
+    padding-bottom: 15px;
+}
+
+.add-timer-body .timer-chooser-buttons {
+    display: flex;
+    flex-direction: column;
+}
+
+.add-timer-body .timer-chooser-buttons div,
+.add-timer-body .round-chooser-buttons {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-timer-buttons {
+    padding-top: 15px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.add-timer-buttons > *:first-child {
+    margin-right: 10px;
+}
+
+@media screen and (max-width: 600px) {
+    .add-timer-container {
+        width: 90vw;
+    }
+}

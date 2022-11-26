@@ -1,0 +1,27 @@
+.timer-chooser-buttons > div { 
+    margin-bottom: 15px;
+}
+
+.time-chooser {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+}
+
+.time-chooser-title {
+    text-align: center;
+}
+
+.time-chooser > * {
+    width: 30px;
+    text-align: center;
+    height: 30px;
+}
+
+.time-chooser-value {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid var(--color-gray3);
+    border-bottom: 1px solid var(--color-gray3);
+}
