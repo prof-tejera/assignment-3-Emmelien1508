@@ -1,0 +1,89 @@
+.workout {
+    padding: 25px 0;
+    color: var(--white);
+    width: 80vw;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.workout .workout-time {
+    border: 1px solid var(--gray3);
+    border-radius: 10px;
+    margin-bottom: 15px;
+    padding: 25px 0;
+}
+
+.workout .workout-time > div {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.workout .workout-time > div > * {
+    margin: 0 5px;
+}
+
+.workout .workout-buttons {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+}
+
+.workout .workout-buttons > * {
+    width: 19vw;
+}
+
+.workout .workout-wrapper {
+    padding: 25px 0;
+}
+
+.workout .workout-empty {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.workout .workout-empty > *:not(:last-child) {
+    padding-bottom: 25px;
+}
+
+.workout .workout-items {
+    display: grid;
+    grid-template-columns: repeat(4, 19vw);
+    column-gap: calc(4vw / 3);
+    row-gap: calc(4vw / 3);
+}
+
+.workout .timer {
+    position: relative;
+    background-color: var(--gray1);
+    border-radius: 10px;
+    padding: 10px;
+    min-height: 275px;
+}
+
+.workout .timer.active {
+    border: 1px solid var(--gray3);
+}
+
+.workout .timer .button {
+    position: absolute;
+    left: 10px;
+}
+
+.workout .timer .button.index {
+    top: 10px;
+}
+
+.workout .timer .button.delete {
+    top: 35px;
+}
+
+.workout .timer .timer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

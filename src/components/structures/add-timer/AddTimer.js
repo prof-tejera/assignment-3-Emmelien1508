@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react'
-import { useNavigate } from 'react-router'
 
 import { getMiliseconds } from '../../../utils/helpers'
 import { TimerContext } from '../../../context/TimerContext'
@@ -11,8 +10,10 @@ import Stopwatch from '../../organisms/stopwatch/Stopwatch'
 import Tabata from '../../organisms/tabata/Tabata'
 import XY from '../../organisms/xy/XY'
 
+import './AddTimer.css'
+
+
 export default function AddTimer() {
-    const navigate = useNavigate()
     const { timers, setTimers } = useContext(TimerContext)
   
     const [type, setType] = useState('')
@@ -23,8 +24,8 @@ export default function AddTimer() {
     const [seconds, setSeconds] = useState(0)
 
     const data = {
-        minutesLabel: 'Minutes',
-        secondsLabel: 'Seconds',
+        minutesLabel: 'minutes',
+        secondsLabel: 'seconds',
         minutes: minutes,
         seconds: seconds,
         setMinutes: setMinutes,
@@ -32,8 +33,8 @@ export default function AddTimer() {
     }
 
     const restData = {
-        minutesLabel: 'Rest minutes',
-        secondsLabel: 'Rest seconds',
+        minutesLabel: 'rest minutes',
+        secondsLabel: 'rest seconds',
         minutes: restMinutes,
         seconds: restSeconds,
         setMinutes: setRestMinutes,
@@ -46,8 +47,8 @@ export default function AddTimer() {
             component: null,
             running: false,
             completed: false,
-            startTimeValue: getMiliseconds(minutes, seconds),
-            endTimeValue: 0,
+            timeStartValue: getMiliseconds(minutes, seconds),
+            timeEndValue: 0,
             roundStartValue: rounds,
             roundEndValue: 1,
             restTimeStartValue: getMiliseconds(restMinutes, restSeconds),
@@ -56,19 +57,33 @@ export default function AddTimer() {
         timerData.name = type
 
         if (type === 'Stopwatch') {
+            const min = ("0" + minutes).slice(-2)
+            const sec = ("0" + seconds).slice(-2)
             timerData.component = Stopwatch
-            timerData.startTimeValue = 0
-            timerData.endTimeValue = getMiliseconds(minutes, seconds)
-            timerData.timerSeconds = timerData.endValue
+            timerData.timeStartValue = 0
+            timerData.timeEndValue = getMiliseconds(minutes, seconds)
+            timerData.timerMiliseconds = timerData.timeEndValue
+            timerData.subtitle = `count up to ${min}:${sec}`
         } else if (type === 'Countdown') {
+            const min = ("0" + minutes).slice(-2)
+            const sec = ("0" + seconds).slice(-2)
             timerData.component = Countdown
-            timerData.timerSeconds = timerData.startTimeValue
+            timerData.timerMiliseconds = timerData.timeStartValue
+            timerData.subtitle = `count down from ${min}:${sec}`
         } else if (type === 'XY') {
+            const min = ("0" + minutes).slice(-2)
+            const sec = ("0" + seconds).slice(-2)
             timerData.component = XY
-            timerData.timerSeconds = timerData.startTimeValue * timerData.roundStartValue
+            timerData.timerMiliseconds = timerData.timeStartValue * timerData.roundStartValue
+            timerData.subtitle = `count down from ${min}:${sec}`
         } else {
+            const min = ("0" + minutes).slice(-2)
+            const sec = ("0" + seconds).slice(-2)
+            const restMin = ("0" + restMinutes).slice(-2)
+            const restSec = ("0" + restSeconds).slice(-2)
             timerData.component = Tabata
-            timerData.timerSeconds = (timerData.startTimeValue + timerData.restTimeStartValue) * timerData.roundStartValue
+            timerData.timerMiliseconds = (timerData.timeStartValue + timerData.restTimeStartValue) * timerData.roundStartValue
+            timerData.subtitle = `work for ${min}:${sec} & rest for ${restMin}:${restSec}`
         }
 
         const newTimer = [...timers, timerData]
@@ -85,54 +100,48 @@ export default function AddTimer() {
         setSeconds(0)
     }
 
-    let timerChooser 
-    if (type === 'Stopwatch' || type === 'Countdown') {
-        timerChooser = (
-            <div>
-                <TimeChooser {...data} />
-            </div>
-        )
-    } else if (type === 'XY') {
-        timerChooser = (
-            <div>
-                <TimeChooser {...data} />
-                <RoundChooser rounds={rounds} setRounds={setRounds}/>
-            </div>
-        )
-    } else {
-        timerChooser = (
-            <div>
-                <TimeChooser {...data} />
-                <TimeChooser {...restData} />
-                <RoundChooser rounds={rounds} setRounds={setRounds}/>
-            </div>
-        )
+    function handleChooseTimer(event) {
+        setType(event.target.textContent)
     }
 
     return (
-        <div>
-            <div>
-                <h2>Choose a timer for your workout</h2>
-                <p className='text-xs'>Which timer do you want?</p>
-                <select value={type} onChange={(e) => {setType(e.target.value)}}>
-                    <option value='Countdown'>Countdown</option>
-                    <option value='Stopwatch'>Stopwatch</option>
-                    <option value='XY'>XY</option>
-                    <option value='Tabata'>Tabata</option>
-                </select>
+        <div className='add-timer'>
+            <h2>Choose a timer for your workout</h2>
+            <div className='add-timer-wrapper'>
+                <div className='timer-options'>
+                    <Button classes={`secondary ${type === 'Stopwatch' ? 'active' : ''}`} onClick={(e) => handleChooseTimer(e)}>Stopwatch</Button>
+                    <Button classes={`secondary ${type === 'Countdown' ? 'active' : ''}`} onClick={(e) => handleChooseTimer(e)}>Countdown</Button>
+                    <Button classes={`secondary ${type === 'XY' ? 'active' : ''}`} onClick={(e) => handleChooseTimer(e)}>XY</Button>
+                    <Button classes={`secondary ${type === 'Tabata' ? 'active' : ''}`} onClick={(e) => handleChooseTimer(e)}>Tabata</Button>
+                </div>
+                <div className='timer-data'>
+                    {(type === 'Stopwatch' || type === 'Countdown') && (
+                        <div>
+                            <TimeChooser {...data} />
+                        </div>
+                    )}
+
+                    {type === 'XY' && (
+                        <div>
+                            <TimeChooser {...data} />
+                            <RoundChooser rounds={rounds} setRounds={setRounds}/>
+                        </div>
+                    )}
+
+                    {type === 'Tabata' && (
+                        <div>
+                            <TimeChooser {...data} />
+                            <TimeChooser {...restData} />
+                            <RoundChooser rounds={rounds} setRounds={setRounds}/>
+                        </div>
+                    )}
+                </div>
             </div>
 
             {type && (
-                <div>
-                    <div>{timerChooser}</div>
-                    <Button classes='tertiary' onClick={addTimer}>Add Timer</Button>
-                </div>
+                <Button classes='primary' onClick={addTimer}>Save</Button>
             )}
 
-            <div>
-                <Button classes='primary' onClick={() => navigate('/')}>To workout</Button>
-                <Button classes='secondary' onClick={() => navigate('/docs')}>To docs</Button>
-            </div>
         </div>
     )
 }

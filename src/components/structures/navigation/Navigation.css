@@ -1,0 +1,22 @@
+nav.navigation {
+    background-color: var(--color-gray1);
+    padding: 20px 0;
+}
+
+nav.navigation ul {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    list-style-type: none;
+}
+
+nav.navigation a {
+    color: var(--white);
+    text-decoration: none;
+    margin: 0 15px;
+    transition: var(--transition);
+}
+
+nav.navigation a:hover {
+    color: var(--color-gray4);
+}
