@@ -3,7 +3,8 @@
 }
 
 .button.primary,
-.button.secondary {
+.button.secondary,
+.button.tertiary:not(.round) {
     align-items: center;
     border-radius: 5px;
     display: flex;
@@ -36,7 +37,7 @@
 .button.tertiary {
     background-color: var(--brown1);
     border: 1px solid var(--brown2);
-    color: var(--brown2);
+    color: var(--brown3);
 }
 
 .button.round {

@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react'
 
-import { getMiliseconds } from '../../../utils/helpers'
+import { getSeconds } from '../../../utils/helpers'
+import { initialRounds, initialMinutes, initialSeconds, initialRestMinutes, initialRestSeconds } from '../../../utils/constants'
 import { TimerContext } from '../../../context/TimerContext'
 import Button from '../../atoms/button/Button'
 import RoundChooser from '../../molecules/round-chooser/RoundChooser'
@@ -17,11 +18,11 @@ export default function AddTimer() {
     const { timers, setTimers } = useContext(TimerContext)
   
     const [type, setType] = useState('')
-    const [rounds, setRounds] = useState(1)
-    const [restMinutes, setRestMinutes] = useState(0)
-    const [restSeconds, setRestSeconds] = useState(30)
-    const [minutes, setMinutes] = useState(1)
-    const [seconds, setSeconds] = useState(0)
+    const [rounds, setRounds] = useState(initialRounds)
+    const [restMinutes, setRestMinutes] = useState(initialMinutes)
+    const [restSeconds, setRestSeconds] = useState(initialSeconds)
+    const [minutes, setMinutes] = useState(initialRestMinutes)
+    const [seconds, setSeconds] = useState(initialRestSeconds)
 
     const data = {
         minutesLabel: 'minutes',
@@ -47,11 +48,11 @@ export default function AddTimer() {
             component: null,
             running: false,
             completed: false,
-            timeStartValue: getMiliseconds(minutes, seconds),
+            timeStartValue: getSeconds(minutes, seconds),
             timeEndValue: 0,
             roundStartValue: rounds,
             roundEndValue: 1,
-            restTimeStartValue: getMiliseconds(restMinutes, restSeconds),
+            restTimeStartValue: getSeconds(restMinutes, restSeconds),
             restTimeEndValue: 0,
         }
         timerData.name = type
@@ -61,7 +62,7 @@ export default function AddTimer() {
             const sec = ("0" + seconds).slice(-2)
             timerData.component = Stopwatch
             timerData.timeStartValue = 0
-            timerData.timeEndValue = getMiliseconds(minutes, seconds)
+            timerData.timeEndValue = getSeconds(minutes, seconds)
             timerData.timerMiliseconds = timerData.timeEndValue
             timerData.subtitle = `count up to ${min}:${sec}`
         } else if (type === 'Countdown') {
@@ -93,11 +94,11 @@ export default function AddTimer() {
 
     function resetTimerData() {
         setType('')
-        setRounds(1)
-        setRestMinutes(0)
-        setRestSeconds(30)
-        setMinutes(1)
-        setSeconds(0)
+        setRounds(initialRounds)
+        setRestMinutes(initialRestMinutes)
+        setRestSeconds(initialRestSeconds)
+        setMinutes(initialMinutes)
+        setSeconds(initialSeconds)
     }
 
     function handleChooseTimer(event) {
@@ -106,6 +107,13 @@ export default function AddTimer() {
 
     return (
         <div className='add-timer'>
+            <div className='timer-placeholders'>
+                {timers.map((timer, index) => (
+                    <div className='timer-placeholder' key={index}>
+                        <p className='text-xs'>{index + 1}. {timer.name}</p>
+                    </div>
+                ))}
+            </div>
             <h2>Choose a timer for your workout</h2>
             <div className='add-timer-wrapper'>
                 <div className='timer-options'>

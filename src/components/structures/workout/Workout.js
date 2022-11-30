@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { calculateWorkoutTime, getTotalFastForwardTime, workoutIsDone } from "../../../utils/helpers"
+import { calculateWorkoutTime, workoutIsDone } from "../../../utils/helpers"
 import { TimerContext } from "../../../context/TimerContext"
 import Button from "../../atoms/button/Button"
 import TimePanel from "../../molecules/time-panel/TimePanel"
@@ -38,12 +38,13 @@ export default function Workout() {
             return {...timer, running: false, completed: false}
         })
         setTimers(newTimers)
-        setTime(timers[0].startTimeValue)
+        setTime(timers[0].timeStartValue)
 
         if (timers[0].name === "XY" || timers[0].name === "Tabata") {
             setRound(timers[0].roundStartValue)
         }
-        if (timers[0].title === "Tabata") {
+
+        if (timers[0].name === "Tabata") {
             setRestTime(timers[0].restTimeStartValue)
         }
 
@@ -65,27 +66,8 @@ export default function Workout() {
         setCurrentTimerIndex(999)
     }
 
-    function handleFastForward() {
-        if (!stopped) {
-            setTime(timers[currentTimerIndex].timeEndValue)
-
-            if (timers[currentTimerIndex].name === "XY" || timers[currentTimerIndex].name === "Tabata") {
-                setRound(timers[currentTimerIndex].roundEndValue)
-            }
-            if (timers[currentTimerIndex].name === "Tabata") {
-                setRestTime(timers[currentTimerIndex].restTimeEndValue)
-            }
-
-            setRemainingTime(workoutRunningTime.current - getTotalFastForwardTime(timers, currentTimerIndex))
-        }
-    }
-    console.log(`current timer index: ${currentTimerIndex}`)
-
     const workoutIsFinished = workoutIsDone(timers)
 
-    console.log(`stopped: ${stopped}`)
-    console.log(`workout finished: ${workoutIsFinished}`)
-    console.log(!stopped || workoutIsFinished)
     return (
         <div className="workout">
             {timers.length > 0 && stopped && !workoutIsFinished && (
@@ -110,9 +92,8 @@ export default function Workout() {
                 <div className="workout-buttons">
                     <Link to='/add'><Button classes="primary" onClick={() => handleReset()}>Add another timer</Button></Link>
                     {stopped && <Button classes="primary" onClick={() => handleStart()}>Start</Button>}
-                    {!stopped && <Button classes="primary" onClick={() => handlePause()}>{paused ? "Resume" : "Pause"}</Button>}
+                    {!stopped && <Button classes={paused ? 'primary' : 'tertiary'} onClick={() => handlePause()}>{paused ? "Resume" : "Pause"}</Button>}
                     <Button classes="secondary" disabled={stopped} onClick={() => handleReset()}>Reset</Button>
-                    <Button classes="secondary" disabled={stopped} onClick={() => handleFastForward()}>Fast Forward</Button>
                 </div>
             )}
 
@@ -130,7 +111,7 @@ export default function Workout() {
                     {timers.map((timer, index) => (
                         <div className={`timer ${(index === currentTimerIndex && (!stopped || workoutIsFinished)) ? 'active' : ''}`} key={`timer-${timer.name}-${index}`}>
                             <Button classes="round secondary index">
-                                {index}
+                                {index + 1}
                             </Button>
                             {stopped && (
                                 <Button classes="round tertiary delete" key={`delete-${timer.name}-${index}`} onClick={() => removeTimer(index)}>

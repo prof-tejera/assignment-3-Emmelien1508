@@ -4,7 +4,7 @@ import './TimePanel.css'
 
 
 export default function TimePanel(props) {
-    const { minutes, seconds, miliseconds } = getTime(props.time)
+    const { minutes, seconds } = getTime(props.time)
     return (
         <div className='time-panel'>
             <p className="digits">
@@ -13,10 +13,6 @@ export default function TimePanel(props) {
             <p>:</p>
             <p className="digits">
                 {("0" + seconds).slice(-2)}
-            </p>
-            <p>:</p>
-            <p className="digits miliseconds">
-                {("0" + miliseconds).slice(-2)}
             </p>
         </div>
     )

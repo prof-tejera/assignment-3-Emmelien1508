@@ -6,6 +6,27 @@
     margin-right: auto;
 }
 
+.add-timer .timer-placeholders {
+    display: grid;
+    width: 50vw;
+    grid-template-columns: repeat(5, 9vw);
+    column-gap: 10px;
+    justify-content: space-between;
+    row-gap: 10px;
+    margin-bottom: 25px;
+}
+
+.add-timer .timer-placeholder {
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    background-color: var(--gray1);
+}
+
+.add-timer h2 {
+    text-align: center;
+}
+
 .add-timer .add-timer-wrapper {
     display: flex;
     flex-flow: row nowrap;
@@ -25,4 +46,49 @@
     background-color: var(--gray1);
     border-radius: 10px;
     padding: 10px 20px;
+}
+
+@media screen and (max-width: 992px) {
+    .add-timer {
+        width: 60vw;
+    }
+
+    .add-timer .timer-placeholders {
+        width: 60vw;
+        grid-template-columns: repeat(4, 15vw);
+    }
+
+    .add-timer .add-timer-wrapper > * {
+        width: 48%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .add-timer {
+        width: 80vw;
+    }
+
+    .add-timer .timer-placeholders {
+        width: 80vw;
+        grid-template-columns: repeat(3, 26vw);
+    }
+
+    .add-timer .add-timer-wrapper {
+        flex-direction: column;
+    }
+
+
+    .add-timer .timer-options {
+        margin-bottom: 15px;
+    }
+
+    .add-timer .add-timer-wrapper > * {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .add-timer .timer-placeholders {
+        grid-template-columns: repeat(2, 38vw);
+    }
 }

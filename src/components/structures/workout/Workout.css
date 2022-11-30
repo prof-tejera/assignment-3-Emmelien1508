@@ -22,6 +22,11 @@
 
 .workout .workout-time > div > * {
     margin: 0 5px;
+    width: 50%;
+}
+
+.workout .workout-time > div > *:first-child {
+    text-align: right;
 }
 
 .workout .workout-buttons {
@@ -31,7 +36,7 @@
 }
 
 .workout .workout-buttons > * {
-    width: 19vw;
+    width: 26vw;
 }
 
 .workout .workout-wrapper {
@@ -86,4 +91,26 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+
+@media screen and (max-width: 992px) {
+    .workout .workout-items {
+        grid-template-columns: repeat(3, 25vw);
+        column-gap: calc(5vw / 2);
+        row-gap: calc(5vw / 2);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .workout .workout-items {
+        grid-template-columns: repeat(2, 39vw);
+        column-gap: 2vw;
+        row-gap: 2vw;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .workout .workout-items {
+        grid-template-columns: 80vw;
+    }
 }

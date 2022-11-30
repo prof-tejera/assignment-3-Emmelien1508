@@ -23,7 +23,7 @@ export default function Timers({ children }) {
     }
 
     function dispatcher(ref) {
-        if (currentTimerIndex + 1< timers.length) {
+        if (currentTimerIndex + 1 < timers.length) {
             setTimerComplete()
             setTime(timers[currentTimerIndex + 1].timeStartValue)
 

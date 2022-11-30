@@ -1,5 +1,7 @@
 export default function RoundPanel(props) {
     return (
-        <div>This is round {props.round}</div>
+        <div className="text-xs gray3">
+            This is round {props.roundEndValue} / {props.round}
+        </div>
     )
 }
