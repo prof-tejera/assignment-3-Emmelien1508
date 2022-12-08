@@ -87,8 +87,11 @@ export default function AddTimer() {
             timerData.subtitle = `work for ${min}:${sec} & rest for ${restMin}:${restSec}`
         }
 
-        const newTimer = [...timers, timerData]
-        setTimers(newTimer)
+        // console.log(timerData)
+        // new URLSearchParams(timerData).toString()
+
+        const newTimers = [...timers, timerData]
+        setTimers(newTimers)
         resetTimerData()
     }
 
@@ -106,7 +109,7 @@ export default function AddTimer() {
     }
 
     return (
-        <div className='add-timer'>
+        <div className='add-timer blurred'>
             <div className='timer-placeholders'>
                 {timers.map((timer, index) => (
                     <div className='timer-placeholder' key={index}>
@@ -114,7 +117,7 @@ export default function AddTimer() {
                     </div>
                 ))}
             </div>
-            <h2>Choose a timer for your workout</h2>
+            <p className='text-lg text-center'>Choose a timer for your workout</p>
             <div className='add-timer-wrapper'>
                 <div className='timer-options'>
                     <Button classes={`secondary ${type === 'Stopwatch' ? 'active' : ''}`} onClick={(e) => handleChooseTimer(e)}>Stopwatch</Button>

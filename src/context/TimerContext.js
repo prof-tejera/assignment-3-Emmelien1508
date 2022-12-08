@@ -1,4 +1,4 @@
-import { createContext, useState } from "react"
+import { createContext, useEffect, useState } from "react"
 
 export const TimerContext = createContext({})
 
@@ -11,6 +11,15 @@ export default function Timers({ children }) {
     const [timers, setTimers] = useState([])
     const [paused, setPaused] = useState(false)
     const [stopped, setStopped] = useState(true)
+
+    useEffect(() => {
+        const storedTimers = JSON.parse(localStorage.getItem("timers"))
+        if (timers.length === 0) {
+            localStorage.setItem("timers", JSON.stringify(storedTimers))
+        } else {
+            localStorage.setItem("timers", JSON.stringify(timers))
+        }
+    }, [timers])
     
     function setTimerComplete() {
         const newTimers = timers.map((timer, index) => {
@@ -20,9 +29,10 @@ export default function Timers({ children }) {
             return timer
         })
         setTimers(newTimers)
+        localStorage.setItem("timers", JSON.stringify(newTimers))
     }
 
-    function dispatcher(ref) {
+    function handleTimerCompleted() {
         if (currentTimerIndex + 1 < timers.length) {
             setTimerComplete()
             setTime(timers[currentTimerIndex + 1].timeStartValue)
@@ -36,7 +46,6 @@ export default function Timers({ children }) {
             }
 
             setCurrentTimerIndex(currentTimerIndex + 1)
-            ref.current.scrollIntoView({ behavior: "smooth" })
         } else {
             const newTimers = timers.map((timer) => {
                 return {...timer, running: false, completed: false}
@@ -53,7 +62,7 @@ export default function Timers({ children }) {
                 remainingTime, setRemainingTime, round, setRound, 
                 paused, setPaused, stopped, setStopped, 
                 currentTimerIndex, setCurrentTimerIndex, timers, setTimers, 
-                dispatcher
+                handleTimerCompleted
             }}
         >
             {children}

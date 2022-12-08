@@ -1,4 +1,4 @@
-import { useEffect, useContext, useRef } from 'react'
+import { useEffect, useContext } from 'react'
 
 import { TimerContext } from '../../../context/TimerContext'
 import RoundPanel from '../../molecules/round-panel/RoundPanel'
@@ -8,21 +8,28 @@ import './XY.css'
 
 
 export default function XY(props) {
+
     if (!props.running || props.completed) {
         return (
           <div className='xy'>
-                <TimePanel time={props.completed ? props.timeEndValue : props.timeStartValue} />
-                <RoundPanel round={props.completed ? props.roundEndValue : props.roundStartValue} />
+                <TimePanel 
+                    animated={props.running && !props.completed}
+                    time={props.completed ? props.timeEndValue : props.timeStartValue} 
+                />
+                <RoundPanel 
+                    currentRound={props.roundStartValue} 
+                    roundStartValue={props.roundStartValue} 
+                    running={props.running}
+                />
           </div>
         )
     }
     
     return (
         <InnerXY
+            animated={props.running && !props.completed}
             timeStartValue={props.timeStartValue}
-            timeEndValue={props.timeEndValue}
             roundStartValue={props.roundStartValue}
-            roundEndValue={props.roundEndValue}
         />
     )
 }
@@ -31,9 +38,8 @@ function InnerXY(props) {
     const {
         time, setTime,
         remainingTime, setRemainingTime, round, setRound, 
-        paused, stopped, dispatcher
+        paused, stopped, handleTimerCompleted
     } = useContext(TimerContext)
-    const ref = useRef()
 
     useEffect(() => {
         let interval = null
@@ -52,22 +58,27 @@ function InnerXY(props) {
             }
         
             if (round === 1 && time === 0) {
-                dispatcher(ref)
+                handleTimerCompleted()
             }
         } else {
             clearInterval(interval)
         }
 
-        return () => {
-            clearInterval(interval)
-        }
+        return () => clearInterval(interval)
 
     }, [round, time, paused, stopped])
     
     return (
-        <div className='xy' ref={ref}>
-            {!stopped && !paused && <RoundPanel round={round} />}
-            <TimePanel time={time} />
+        <div className='xy'>
+            <RoundPanel 
+                currentRound={round}
+                roundStartValue={props.roundStartValue} 
+                running={!stopped}
+            />
+            <TimePanel 
+                time={time} 
+                animated={props.animated}
+            />
         </div>
     )
 }

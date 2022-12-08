@@ -1,4 +1,4 @@
-import { useContext, useRef, useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 
 import { TimerContext } from '../../../context/TimerContext'
 import TimePanel from '../../molecules/time-panel/TimePanel'
@@ -10,14 +10,17 @@ export default function Stopwatch(props) {
     if (!props.running || props.completed) {
         return (
             <div className='stopwatch'>
-                <TimePanel time={props.completed ? props.timeEndValue : props.timeStartValue} />
+                <TimePanel 
+                    animated={props.running && !props.completed}
+                    time={props.completed ? props.timeEndValue : props.timeStartValue} 
+                />
             </div>
         )
     }
 
     return (
         <InnerStopwatch 
-            timeStartValue={props.timeStartValue} 
+            animated={props.running && !props.completed}
             timeEndValue={props.timeEndValue} 
         />
     )
@@ -27,9 +30,8 @@ function InnerStopwatch(props) {
     const {
         time, setTime,
         remainingTime, setRemainingTime,
-        paused, stopped, dispatcher
+        paused, stopped, handleTimerCompleted
     } = useContext(TimerContext)
-    const ref = useRef()
 
     useEffect(() => {
         let interval = null
@@ -43,7 +45,7 @@ function InnerStopwatch(props) {
             }
 
             if (time === props.timeEndValue) {
-                dispatcher(ref)
+                handleTimerCompleted()
             }
         } else {
             clearInterval(interval)
@@ -55,8 +57,11 @@ function InnerStopwatch(props) {
     }, [time, paused, stopped])
 
     return (
-        <div className='stopwatch' ref={ref}>
-            <TimePanel time={time} />
+        <div className='stopwatch'>
+            <TimePanel 
+                time={time} 
+                animated={props.animated}   
+            />
         </div>
     )
 }

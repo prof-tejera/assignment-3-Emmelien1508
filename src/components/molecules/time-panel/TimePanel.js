@@ -1,19 +1,25 @@
-import { getTime } from '../../../utils/helpers'
-
 import './TimePanel.css'
-
+import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 
 export default function TimePanel(props) {
-    const { minutes, seconds } = getTime(props.time)
+    const children = ({ remainingTime }) => {
+        return (
+            <div className='text-center'>
+                <p>{props.title ? props.title : ''}</p>
+                <p>{remainingTime}</p>
+            </div>
+        )
+    }
     return (
-        <div className='time-panel'>
-            <p className="digits">
-                {("0" + minutes).slice(-2)}
-            </p>
-            <p>:</p>
-            <p className="digits">
-                {("0" + seconds).slice(-2)}
-            </p>
+        <div className={`time-panel ${props.classes ? props.classes : ''} ${props.animated ? 'animated' : ''}`}>
+            <CountdownCircleTimer
+                isPlaying={props.animated ? true : false}
+                duration={props.time}
+                strokeWidth={4}
+                colors={['#8437e8']}
+            >
+                {children}
+            </CountdownCircleTimer>
         </div>
     )
 }

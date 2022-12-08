@@ -1,4 +1,4 @@
-import { useContext, useRef, useEffect} from 'react'
+import { useContext, useEffect} from 'react'
 
 import { TimerContext } from '../../../context/TimerContext'
 import TimePanel from '../../molecules/time-panel/TimePanel'
@@ -7,29 +7,31 @@ import './Countdown.css'
 
 
 export default function Countdown(props) {
+
     if (!props.running || props.completed) {
         return (
           <div className='countdown'>
-                <TimePanel time={props.completed ? props.timeEndValue : props.timeStartValue} />
+                <TimePanel 
+                    animated={props.running && !props.completed}
+                    time={props.completed ? props.timeEndValue : props.timeStartValue} 
+                />
           </div>
         )
     }
 
     return (
         <InnerCountdown 
-            timeStartValue={props.timeStartValue} 
-            timeEndValue={props.timeEndValue} 
+            animated={props.running && !props.completed}
         />
     )
 }
 
-function InnerCountdown() {
+function InnerCountdown(props) {
     const {
         time, setTime,
         remainingTime, setRemainingTime,
-        paused, stopped, dispatcher
+        paused, stopped, handleTimerCompleted
     } = useContext(TimerContext)
-    const ref = useRef()
 
     useEffect(() => {
         let interval = null
@@ -43,7 +45,7 @@ function InnerCountdown() {
             }
 
             if (time === 0) {
-                dispatcher(ref)
+                handleTimerCompleted()
             }
         } else {
             clearInterval(interval)
@@ -56,8 +58,11 @@ function InnerCountdown() {
     }, [time, paused, stopped])
 
     return (
-        <div className='countdown' ref={ref}>
-            <TimePanel time={time} />
+        <div className='countdown'>
+            <TimePanel 
+                animated={props.animated}
+                time={time} 
+            />
         </div>
     )
 }

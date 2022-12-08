@@ -1,7 +1,7 @@
 .add-timer {
-    padding: 25px 0;
+    padding: 25px 50px 50px 50px;
     color: var(--white);
-    width: 50vw;
+    width: 60vw;
     margin-left: auto;
     margin-right: auto;
 }
@@ -19,8 +19,8 @@
 .add-timer .timer-placeholder {
     padding: 10px;
     text-align: center;
-    border-radius: 5px;
-    background-color: var(--gray1);
+    border-radius: var(--border-radius-xs);
+    background-color: var(--purple1);
 }
 
 .add-timer h2 {
@@ -43,8 +43,8 @@
 }
 
 .add-timer .timer-data {
-    background-color: var(--gray1);
-    border-radius: 10px;
+    background-color: var(--purple1);
+    border-radius: var(--border-radius-sm);
     padding: 10px 20px;
 }
 

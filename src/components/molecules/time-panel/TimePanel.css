@@ -1,8 +1,5 @@
 .time-panel {
     display: flex;
     flex-flow: row nowrap;
-}
-
-.digits.miliseconds {
-    color: var(--red1);
+    justify-content: center;
 }
