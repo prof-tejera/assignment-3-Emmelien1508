@@ -1,0 +1,39 @@
+
+.workout-items {
+    display: grid;
+    grid-template-columns: 80vw;
+    column-gap: calc(4vw / 3);
+    row-gap: calc(4vw / 3);
+}
+
+.timer {
+    min-height: 400px;
+    padding: 10px;
+    position: relative;
+}
+
+.timer .button {
+    position: absolute;
+}
+
+.timer .button.index,
+.timer .button.delete {
+    top: 0;
+}
+
+.timer .button.index {
+    left: 0;
+}
+
+.timer .button.delete {
+    right: 0;
+}
+
+.timer .timer-content {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

@@ -1,45 +1,39 @@
 import { useContext, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 
-import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
 import { calculateWorkoutTime, workoutIsDone } from '../../../utils/helpers'
 import { TimerContext } from '../../../context/TimerContext'
 import Button from '../../atoms/button/Button'
 import TimePanel from '../../molecules/time-panel/TimePanel'
 
 import './Workout.css'
-import XY from '../../organisms/xy/XY'
-import Tabata from '../../organisms/tabata/Tabata'
-import Countdown from '../../organisms/countdown/Countdown'
-import Stopwatch from '../../organisms/stopwatch/Stopwatch'
+import WorkoutItems from '../../organisms/workout-items/WorkoutItems'
 
 
 export default function Workout() {
     const {
         setTime, setRestTime, remainingTime, setRemainingTime,
         setRound, paused, setPaused, stopped, setStopped,
-        currentTimerIndex, setCurrentTimerIndex, setTimers
+        setCurrentTimerIndex, setTimers
     } = useContext(TimerContext)
 
     const storedTimers = JSON.parse(localStorage.getItem('timers'))
     const workoutRunningTime = useRef(0)
 
     // tijdens het runnen de current timer index + tijd + round + resttime elke 5-10 seconden saven
-    useEffect(() => {
-        let interval = null
-        if (remainingTime <= 0) {
-            clearInterval(interval)
-        } else {
-            interval = setInterval(() => {
-                console.log('Logs every 5 seconds if timers are running')
-            }, 5000)
-        }
+    // useEffect(() => {
+    //     let interval = null
+    //     if (remainingTime <= 0) {
+    //         clearInterval(interval)
+    //     } else {
+    //         interval = setInterval(() => {
+    //             console.log('Logs every 5 seconds if timers are running')
+    //         }, 5000)
+    //     }
 
-        return () => clearInterval(interval)
+    //     return () => clearInterval(interval)
 
-    }, [])
+    // }, [])
 
     useEffect(() => {
         if (stopped) {
@@ -47,12 +41,6 @@ export default function Workout() {
             setRemainingTime(workoutRunningTime.current)
         }
     }, [stopped])
-
-    function removeTimer(timerIndex) {
-        const newTimers = storedTimers.filter((timer, index) => index !== timerIndex)
-        setTimers(newTimers)
-        localStorage.setItem("timers", JSON.stringify(newTimers))
-    }
 
     function handleStart() {
         const newTimers = storedTimers.map((timer, index) => {
@@ -86,18 +74,6 @@ export default function Workout() {
         setTimers(newTimers)
         setStopped(true)
         setCurrentTimerIndex(999)
-    }
-
-    function getTimerComponent(data, index, running) {
-        if (data.name === 'Stopwatch') {
-            return <Stopwatch {...data} index={index} running={running}/>
-        } else if (data.name === 'Countdown') {
-            return <Countdown {...data} index={index} running={running}/>
-        } else if (data.name === 'XY') {
-            return <XY {...data} index={index} running={running}/>
-        } else {
-            return <Tabata {...data} index={index} running={running}/>
-        }
     }
 
     const workoutIsFinished = workoutIsDone(storedTimers)
@@ -153,23 +129,10 @@ export default function Workout() {
                 )}
 
                 {storedTimers !== null && storedTimers.length > 0 && (
-                    <div className='workout-items'>
-                        {storedTimers.map((timer, index) => (
-                            <div className={`timer blurred-dark ${(index === currentTimerIndex && (!stopped || workoutIsFinished)) ? 'blurred-active' : ''}`} key={`timer-${timer.name}-${index}`}>
-                                <Button classes='round secondary index'>
-                                    {index + 1}
-                                </Button>
-                                {stopped && (
-                                    <Button classes='round tertiary delete' key={`delete-${timer.name}-${index}`} onClick={() => removeTimer(index)}>
-                                        <FontAwesomeIcon icon={faTrashCan} size='sm' />    
-                                    </Button>
-                                )}
-                                <div className='timer-content' key={`timer-content-${timer.name}-${index}`}>
-                                    {getTimerComponent(timer, index, index === currentTimerIndex)}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                    <WorkoutItems 
+                        timers={storedTimers}
+                        setTimers={setTimers}
+                    />
                 )}
             </div>
         </div>
