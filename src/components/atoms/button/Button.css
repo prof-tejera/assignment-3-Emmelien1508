@@ -5,9 +5,10 @@
 .button.primary,
 .button.secondary,
 .button.tertiary:not(.round) {
+    font-weight: 200;
     align-items: center;
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     border-radius: var(--border-radius-xs);
     display: flex;
     height: 60px;
@@ -17,31 +18,42 @@
     text-transform: lowercase;
     transition: var(--transition);
     white-space: nowrap;
+
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+
 }
 
 .button.primary {
     background: rgba(28, 38, 15, 0.3);
-    border: 1px solid rgba(135, 185, 72, 0.25);
+    border: 1px solid rgba(167, 247, 69, 0.25);
     box-shadow: 0 4px 30px rgba(28, 38, 15, 0.1);
     color: var(--green3);
 }
 
 .button.primary:hover {
     background: rgba(28, 38, 15, 0.5);
-    border: 1px solid rgba(135, 185, 72, 0.5);
+    border: 1px solid rgba(167, 247, 69, 0.5);
 }
 
 .button.secondary {
     background: rgba(25, 15, 38, 0.3);
-    border: 1px solid rgba(132, 55, 232, 0.25);
+    border: 1px solid rgba(157, 0, 255, 0.25);
     box-shadow: 0 4px 30px rgba(25, 15, 38, 0.1);
     color: var(--purple4);
 }
 
-.button.secondary:hover,
-.button.secondary.active {
+.button.secondary:hover {
     background: rgba(25, 15, 38, 0.5);
-    border: 1px solid rgba(132, 55, 232, 0.5);
+    border: 1px solid rgba(157, 0, 255, 0.5);
+}
+
+.button.secondary.active {
+    background: rgba(25, 15, 38, 0.7);
+    border: 1px solid var(--purple4);
+    font-weight: 300;
 }
 
 .button.tertiary {
@@ -57,10 +69,31 @@
 }
 
 .button.round {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
+    width: 35px;
+    height: 35px;
     padding: 0;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button.round.index {
+    cursor: default;
+    border-top: 0;
+    border-left: 0;
+    border-radius: 0;
+    font-weight: 400;
+    border-top-left-radius: var(--border-radius-md);
+    border-bottom-right-radius: var(--border-radius-sm);
+}
+
+.button.round.delete {
+    transition: var(--transition);
+    border-top: 0;
+    border-right: 0;
+    border-radius: 0;
+    border-top-right-radius: var(--border-radius-md);
+    border-bottom-left-radius: var(--border-radius-sm);
 }

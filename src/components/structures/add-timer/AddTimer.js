@@ -87,9 +87,6 @@ export default function AddTimer() {
             timerData.subtitle = `work for ${min}:${sec} & rest for ${restMin}:${restSec}`
         }
 
-        // console.log(timerData)
-        // new URLSearchParams(timerData).toString()
-
         const newTimers = [...timers, timerData]
         setTimers(newTimers)
         resetTimerData()
@@ -112,7 +109,7 @@ export default function AddTimer() {
         <div className='add-timer blurred'>
             <div className='timer-placeholders'>
                 {timers.map((timer, index) => (
-                    <div className='timer-placeholder' key={index}>
+                    <div className='timer-placeholder blurred' key={index}>
                         <p className='text-xs'>{index + 1}. {timer.name}</p>
                     </div>
                 ))}
@@ -125,28 +122,30 @@ export default function AddTimer() {
                     <Button classes={`secondary ${type === 'XY' ? 'active' : ''}`} onClick={(e) => handleChooseTimer(e)}>XY</Button>
                     <Button classes={`secondary ${type === 'Tabata' ? 'active' : ''}`} onClick={(e) => handleChooseTimer(e)}>Tabata</Button>
                 </div>
-                <div className='timer-data'>
-                    {(type === 'Stopwatch' || type === 'Countdown') && (
-                        <div>
-                            <TimeChooser {...data} />
-                        </div>
-                    )}
+                {type && (
+                    <div className='timer-data blurred'>
+                        {(type === 'Stopwatch' || type === 'Countdown') && (
+                            <div>
+                                <TimeChooser {...data} />
+                            </div>
+                        )}
 
-                    {type === 'XY' && (
-                        <div>
-                            <TimeChooser {...data} />
-                            <RoundChooser rounds={rounds} setRounds={setRounds}/>
-                        </div>
-                    )}
+                        {type === 'XY' && (
+                            <div>
+                                <TimeChooser {...data} />
+                                <RoundChooser rounds={rounds} setRounds={setRounds}/>
+                            </div>
+                        )}
 
-                    {type === 'Tabata' && (
-                        <div>
-                            <TimeChooser {...data} />
-                            <TimeChooser {...restData} />
-                            <RoundChooser rounds={rounds} setRounds={setRounds}/>
-                        </div>
-                    )}
-                </div>
+                        {type === 'Tabata' && (
+                            <div>
+                                <TimeChooser {...data} />
+                                <TimeChooser {...restData} />
+                                <RoundChooser rounds={rounds} setRounds={setRounds}/>
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
 
             {type && (

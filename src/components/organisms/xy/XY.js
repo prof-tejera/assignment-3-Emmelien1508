@@ -1,7 +1,6 @@
 import { useEffect, useContext } from 'react'
 
 import { TimerContext } from '../../../context/TimerContext'
-import RoundPanel from '../../molecules/round-panel/RoundPanel'
 import TimePanel from '../../molecules/time-panel/TimePanel'
 
 import './XY.css'
@@ -13,13 +12,14 @@ export default function XY(props) {
         return (
           <div className='xy'>
                 <TimePanel 
+                    name={props.name}
+                    subtitle={props.subtitle}
+                    index={props.index}
+                    currentRound={0}
+                    roundStartValue={props.roundStartValue}
                     animated={props.running && !props.completed}
-                    time={props.completed ? props.timeEndValue : props.timeStartValue} 
-                />
-                <RoundPanel 
-                    currentRound={props.roundStartValue} 
-                    roundStartValue={props.roundStartValue} 
-                    running={props.running}
+                    currentTime={props.completed ? props.timeEndValue : props.timeStartValue}
+                    duration={props.timeStartValue}  
                 />
           </div>
         )
@@ -27,7 +27,9 @@ export default function XY(props) {
     
     return (
         <InnerXY
-            animated={props.running && !props.completed}
+            name={props.name}
+            subtitle={props.subtitle}
+            index={props.index}
             timeStartValue={props.timeStartValue}
             roundStartValue={props.roundStartValue}
         />
@@ -70,14 +72,15 @@ function InnerXY(props) {
     
     return (
         <div className='xy'>
-            <RoundPanel 
-                currentRound={round}
-                roundStartValue={props.roundStartValue} 
-                running={!stopped}
-            />
             <TimePanel 
-                time={time} 
-                animated={props.animated}
+                name={props.name}
+                subtitle={props.subtitle}
+                index={props.index}
+                currentTime={time} 
+                currentRound={round}
+                roundStartValue={props.roundStartValue}
+                animated={!paused && !stopped && time > 0}
+                duration={props.timeStartValue} 
             />
         </div>
     )

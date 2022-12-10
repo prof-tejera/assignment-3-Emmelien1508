@@ -88,51 +88,63 @@ export default function Workout() {
         setCurrentTimerIndex(999)
     }
 
-    function getTimerComponent(data, running) {
+    function getTimerComponent(data, index, running) {
         if (data.name === 'Stopwatch') {
-            return <Stopwatch {...data} running={running}/>
+            return <Stopwatch {...data} index={index} running={running}/>
         } else if (data.name === 'Countdown') {
-            return <Countdown {...data} running={running}/>
+            return <Countdown {...data} index={index} running={running}/>
         } else if (data.name === 'XY') {
-            return <XY {...data} running={running}/>
+            return <XY {...data} index={index} running={running}/>
         } else {
-            return <Tabata {...data} running={running}/>
+            return <Tabata {...data} index={index} running={running}/>
         }
     }
 
     const workoutIsFinished = workoutIsDone(storedTimers)
     return (
         <div className='workout'>
-            {storedTimers.length > 0 && stopped && !workoutIsFinished && (
-                <div className='workout-time blurred'>
-                    <div className='text-center'>
-                        <p>Total time</p>
-                        <TimePanel classes="text-xl" time={calculateWorkoutTime(storedTimers)} />
-                    </div>
-                </div>
-            )}
+            {storedTimers !== null && storedTimers.length > 0 && (
+                <div className='workout-time-container blurred-dark'>    
+                    {stopped && !workoutIsFinished && (
+                        <div className='workout-time'>
+                            <div className='text-center'>
+                                <TimePanel 
+                                    name={"total time"}
+                                    index={0}
+                                    size={200}
+                                    duration={calculateWorkoutTime(storedTimers)}
+                                    currentTime={calculateWorkoutTime(storedTimers)} 
+                                />
+                            </div>
+                        </div>
+                    )}
 
-            {storedTimers.length > 0 && (!stopped || workoutIsFinished) && (
-                <div className='workout-time blurred'>
-                    <div className='text-center'>
-                        <p>Time remaining</p>
-                        <TimePanel classes="text-xl" time={workoutIsFinished ? 0 : remainingTime}/>
-                    </div>
-                </div>
-            )}
+                    {(!stopped || workoutIsFinished) && (
+                        <div className='workout-time'>
+                            <div className='text-center'>
+                                <TimePanel 
+                                    name={"time remaining"}
+                                    index={0}
+                                    size={200}
+                                    duration={workoutIsFinished ? 0 : remainingTime}
+                                    currentTime={workoutIsFinished ? 0 : remainingTime}
+                                />
+                            </div>
+                        </div>
+                    )} 
 
-            {storedTimers.length > 0 && (
-                <div className='workout-buttons'>
-                    <Link to='/add'><Button classes='primary' onClick={() => handleReset()}>Add another timer</Button></Link>
-                    {stopped && <Button classes='primary' onClick={() => handleStart()}>Start</Button>}
-                    {!stopped && <Button classes={paused ? 'primary' : 'tertiary'} onClick={() => handlePause()}>{paused ? 'Resume' : 'Pause'}</Button>}
-                    <Button classes='secondary' disabled={stopped} onClick={() => handleReset()}>Reset</Button>
+                    <div className='workout-buttons'>
+                        <Link to='/add'><Button classes='primary' onClick={() => handleReset()}>Add another timer</Button></Link>
+                        {stopped && <Button classes='primary' onClick={() => handleStart()}>Start</Button>}
+                        {!stopped && <Button classes={paused ? 'primary' : 'tertiary'} onClick={() => handlePause()}>{paused ? 'Resume' : 'Pause'}</Button>}
+                        <Button classes='secondary' disabled={stopped} onClick={() => handleReset()}>Reset</Button>
+                    </div>
                 </div>
             )}
 
             <div className='workout-wrapper'>
-                {storedTimers.length === 0 && (
-                    <div className='workout-empty blurred'>
+                {(storedTimers === null || storedTimers.length === 0) && (
+                    <div className='workout-empty blurred-dark'>
                         <p className='text-md'>You haven't chosen your workout yet! 🏋🏼</p>
                         <Link to='/add'>
                             <Button classes='primary'>Add timer</Button>
@@ -140,25 +152,25 @@ export default function Workout() {
                     </div>
                 )}
 
-                <div className='workout-items'>
-                    {storedTimers.map((timer, index) => (
-                        <div className={`timer blurred ${(index === currentTimerIndex && (!stopped || workoutIsFinished)) ? 'blurred-active' : ''}`} key={`timer-${timer.name}-${index}`}>
-                            <Button classes='round secondary index'>
-                                {index + 1}
-                            </Button>
-                            {stopped && (
-                                <Button classes='round tertiary delete' key={`delete-${timer.name}-${index}`} onClick={() => removeTimer(index)}>
-                                    <FontAwesomeIcon icon={faTrashCan} size='sm' />    
+                {storedTimers !== null && storedTimers.length > 0 && (
+                    <div className='workout-items'>
+                        {storedTimers.map((timer, index) => (
+                            <div className={`timer blurred-dark ${(index === currentTimerIndex && (!stopped || workoutIsFinished)) ? 'blurred-active' : ''}`} key={`timer-${timer.name}-${index}`}>
+                                <Button classes='round secondary index'>
+                                    {index + 1}
                                 </Button>
-                            )}
-                            <div className='timer-content' key={`timer-content-${timer.name}-${index}`}>
-                                <p>{timer.name}</p>
-                                <p className='text-xs gray3'>{timer.subtitle}</p>
-                                {getTimerComponent(timer, index === currentTimerIndex)}
+                                {stopped && (
+                                    <Button classes='round tertiary delete' key={`delete-${timer.name}-${index}`} onClick={() => removeTimer(index)}>
+                                        <FontAwesomeIcon icon={faTrashCan} size='sm' />    
+                                    </Button>
+                                )}
+                                <div className='timer-content' key={`timer-content-${timer.name}-${index}`}>
+                                    {getTimerComponent(timer, index, index === currentTimerIndex)}
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     )

@@ -41,18 +41,18 @@ export default function TimeChooser(props) {
             <div className='chooser minute-chooser'>
                 <p>{props.minutesLabel}</p>
                 <div className='chooser-buttons'>
-                    <Button disabled={props.disabled} onClick={handleMinDecrement}>-</Button>
+                    <Button onClick={handleMinDecrement}>-</Button>
                     <p className='chooser-amount'>{props.minutes}</p>
-                    <Button disabled={props.disabled} onClick={handleMinIncrement}>+</Button>
+                    <Button onClick={handleMinIncrement}>+</Button>
                 </div>
             </div>
             
             <div className='chooser second-chooser'>
                 <p>{props.secondsLabel}</p>
                 <div className='chooser-buttons'>
-                    <Button disabled={props.disabled} onClick={handleSecDecrement}>-</Button>
+                    <Button onClick={handleSecDecrement}>-</Button>
                     <p className='chooser-amount'>{props.seconds}</p>
-                    <Button disabled={props.disabled} onClick={handleSecIncrement}>+</Button>
+                    <Button onClick={handleSecIncrement}>+</Button>
                 </div>
             </div>
         </div>

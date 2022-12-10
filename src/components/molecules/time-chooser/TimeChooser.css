@@ -11,7 +11,7 @@
 
 .chooser-buttons {
     width: 90px;
-    border: 1px solid var(--purple3);
+    border: 1px solid var(--purple4);
     border-radius: var(--border-radius-xs);
 }
 
@@ -21,6 +21,6 @@
 }
 
 .chooser-buttons > .chooser-amount {
-    border-left: 1px solid var(--purple3);
-    border-right: 1px solid var(--purple3);
+    border-left: 1px solid var(--purple4);
+    border-right: 1px solid var(--purple4);
 }

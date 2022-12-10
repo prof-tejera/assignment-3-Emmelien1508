@@ -1,4 +1,8 @@
 export function calculateWorkoutTime(timers) {
+    if (timers === null) {
+        return 0
+    }
+    
     let time = 0
     for (let i=0; i<timers.length; i++) {
         time += timers[i].timerMiliseconds
@@ -7,6 +11,9 @@ export function calculateWorkoutTime(timers) {
 }
 
 export function workoutIsDone(timers) {
+    if (timers === null) {
+        return true
+    }
     return !timers.some((timer) => timer.completed === false)
 }
 

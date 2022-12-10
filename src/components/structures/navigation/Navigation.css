@@ -1,6 +1,7 @@
 nav.navigation {
-    background-color: var(--color-gray1);
+    border-radius: 0;
     padding: 20px 0;
+    margin-bottom: 25px;
 }
 
 nav.navigation ul {

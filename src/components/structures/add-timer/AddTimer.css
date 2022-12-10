@@ -4,6 +4,7 @@
     width: 60vw;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 50px;
 }
 
 .add-timer .timer-placeholders {
@@ -20,7 +21,6 @@
     padding: 10px;
     text-align: center;
     border-radius: var(--border-radius-xs);
-    background-color: var(--purple1);
 }
 
 .add-timer h2 {
@@ -43,7 +43,7 @@
 }
 
 .add-timer .timer-data {
-    background-color: var(--purple1);
+    /* background-color: var(--purple1); */
     border-radius: var(--border-radius-sm);
     padding: 10px 20px;
 }
