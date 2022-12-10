@@ -19,5 +19,5 @@ nav.navigation a {
 }
 
 nav.navigation a:hover {
-    color: var(--color-gray4);
+    color: var(--green3);
 }

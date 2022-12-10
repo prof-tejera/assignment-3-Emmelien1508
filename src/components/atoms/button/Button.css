@@ -15,7 +15,7 @@
     justify-content: center;
     padding: 10px 50px;
     text-align: center;
-    text-transform: lowercase;
+    /* text-transform: lowercase; */
     transition: var(--transition);
     white-space: nowrap;
 
@@ -69,8 +69,8 @@
 }
 
 .button.round {
-    width: 35px;
-    height: 35px;
+    width: 40px;
+    height: 40px;
     padding: 0;
     font-size: 0.9rem;
     text-align: center;

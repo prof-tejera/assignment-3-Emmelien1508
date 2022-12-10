@@ -11,12 +11,14 @@ export default function Stopwatch(props) {
         return (
             <div className='stopwatch'>
                 <TimePanel 
-                    name={props.name}
-                    subtitle={props.subtitle}
-                    index={props.index}
                     animated={props.running && !props.completed}
+                    compact={props.compact ? props.compact : false}
                     currentTime={props.completed ? props.timeEndValue : props.timeStartValue} 
                     duration={props.timeEndValue}
+                    index={props.index}
+                    name={props.name}
+                    size={props.size} 
+                    subtitle={props.subtitle}
                 />
             </div>
         )
@@ -24,9 +26,11 @@ export default function Stopwatch(props) {
 
     return (
         <InnerStopwatch 
-            name={props.name}
-            subtitle={props.subtitle}
+            compact={props.compact ? props.compact : false}
             index={props.index}
+            name={props.name}
+            size={props.size} 
+            subtitle={props.subtitle}
             timeEndValue={props.timeEndValue} 
         />
     )
@@ -65,12 +69,14 @@ function InnerStopwatch(props) {
     return (
         <div className='stopwatch'>
             <TimePanel 
-                name={props.name}
-                subtitle={props.subtitle}
-                index={props.index}
-                duration={props.timeEndValue}
-                currentTime={time} 
                 animated={!paused && !stopped && time < props.timeEndValue}   
+                compact={props.compact ? props.compact : false}
+                currentTime={time} 
+                duration={props.timeEndValue}
+                index={props.index}
+                name={props.name}
+                size={props.size} 
+                subtitle={props.subtitle}
             />
         </div>
     )

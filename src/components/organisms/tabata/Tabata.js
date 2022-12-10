@@ -11,15 +11,17 @@ export default function Tabata(props) {
         return (
             <div className='tabata'>
                 <TimePanel 
-                    name={props.name}
-                    title={'Work 🏋🏼'}
-                    subtitle={props.subtitle}
-                    index={props.index}
-                    currentRound={0}
-                    roundStartValue={props.roundStartValue}
                     animated={props.running && !props.completed}
+                    compact={props.compact ? props.compact : false}
+                    currentRound={0}
                     currentTime={props.completed ? props.timeEndValue : props.timeStartValue} 
                     duration={props.timeStartValue} 
+                    index={props.index}
+                    name={props.name}
+                    roundStartValue={props.roundStartValue}
+                    size={props.size} 
+                    subtitle={props.subtitle}
+                    title={'Work 🏋🏼'}
                 />
             </div>
         )
@@ -27,10 +29,12 @@ export default function Tabata(props) {
     
     return (
         <InnerTabata
+            compact={props.compact ? props.compact : false}
             name={props.name}
-            subtitle={props.subtitle}
             restTimeStartValue={props.restTimeStartValue}
             roundStartValue={props.roundStartValue}
+            size={props.size} 
+            subtitle={props.subtitle}
             timeStartValue={props.timeStartValue}
         />
     )
@@ -98,43 +102,49 @@ function InnerTabata(props) {
         <div className='tabata'>
             {isWorkTime && (
                 <TimePanel 
-                    name={props.name}
-                    subtitle={props.subtitle}
-                    index={props.index}
-                    title={'Work 🏋🏼'}
-                    currentRound={round}
-                    roundStartValue={props.roundStartValue}
                     animated={!paused && !stopped && time > 0}
+                    compact={props.compact ? props.compact : false}
+                    currentRound={round}
                     currentTime={time}
                     duration={props.timeStartValue} 
+                    index={props.index}
+                    name={props.name}
+                    roundStartValue={props.roundStartValue}
+                    size={props.size} 
+                    subtitle={props.subtitle}
+                    title={'Work 🏋🏼'}
                 />
             )}
 
             {!isWorkTime && (
                 <TimePanel 
-                    name={props.name}
-                    subtitle={props.subtitle}
-                    index={props.index}
-                    title={'Rest 🧘🏼'}
-                    currentRound={round}
-                    roundStartValue={props.roundStartValue}
                     animated={!paused && !stopped && time === 0 && restTime > 0}
+                    compact={props.compact ? props.compact : false}
+                    currentRound={round}
                     currentTime={restTime ? restTime : 0} 
                     duration={props.restTimeStartValue} 
+                    index={props.index}
+                    name={props.name}
+                    roundStartValue={props.roundStartValue}
+                    size={props.size} 
+                    subtitle={props.subtitle}
+                    title={'Rest 🧘🏼'}
                 />
             )}
 
             {!paused && !stopped && time === 0 && restTime === 0 && (
                 <TimePanel 
-                    name={props.name}
-                    title={'Work 🏋🏼'}
-                    subtitle={props.subtitle}
-                    index={props.index}
-                    currentRound={0}
-                    roundStartValue={props.roundStartValue}
                     animated={props.running && !props.completed}
+                    compact={props.compact ? props.compact : false}
+                    currentRound={0}
                     currentTime={props.completed ? props.timeEndValue : props.timeStartValue} 
                     duration={props.timeStartValue} 
+                    index={props.index}
+                    name={props.name}
+                    roundStartValue={props.roundStartValue}
+                    size={props.size} 
+                    subtitle={props.subtitle}
+                    title={'Work 🏋🏼'}
                 />
             )}
         </div>

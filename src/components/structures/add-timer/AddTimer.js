@@ -12,6 +12,7 @@ import Tabata from '../../organisms/tabata/Tabata'
 import XY from '../../organisms/xy/XY'
 
 import './AddTimer.css'
+import { Link } from 'react-router-dom'
 
 
 export default function AddTimer() {
@@ -106,13 +107,18 @@ export default function AddTimer() {
     }
 
     return (
-        <div className='add-timer blurred'>
-            <div className='timer-placeholders'>
-                {timers.map((timer, index) => (
-                    <div className='timer-placeholder blurred' key={index}>
-                        <p className='text-xs'>{index + 1}. {timer.name}</p>
-                    </div>
-                ))}
+        <div className='add-timer blurred-dark'>
+            <div className='timer-placeholder-summary'>
+                <div className='timer-placeholders'>
+                    {timers.map((timer, index) => (
+                        <div className='timer-placeholder blurred' key={index}>
+                            <p className='text-xs'>{index + 1}. {timer.name}</p>
+                        </div>
+                    ))}
+                </div>
+                {timers.length > 0 && (
+                    <Link to='/'><Button classes='primary'>Go to workout</Button></Link>
+                )}
             </div>
             <p className='text-lg text-center'>Choose a timer for your workout</p>
             <div className='add-timer-wrapper'>

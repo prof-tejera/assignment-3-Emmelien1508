@@ -12,14 +12,16 @@ export default function XY(props) {
         return (
           <div className='xy'>
                 <TimePanel 
-                    name={props.name}
-                    subtitle={props.subtitle}
-                    index={props.index}
-                    currentRound={0}
-                    roundStartValue={props.roundStartValue}
                     animated={props.running && !props.completed}
+                    compact={props.compact ? props.compact : false}
+                    currentRound={0}
                     currentTime={props.completed ? props.timeEndValue : props.timeStartValue}
                     duration={props.timeStartValue}  
+                    index={props.index}
+                    name={props.name}
+                    roundStartValue={props.roundStartValue}
+                    size={props.size} 
+                    subtitle={props.subtitle}
                 />
           </div>
         )
@@ -27,11 +29,13 @@ export default function XY(props) {
     
     return (
         <InnerXY
-            name={props.name}
-            subtitle={props.subtitle}
+            compact={props.compact ? props.compact : false}
             index={props.index}
-            timeStartValue={props.timeStartValue}
+            name={props.name}
             roundStartValue={props.roundStartValue}
+            size={props.size} 
+            subtitle={props.subtitle}
+            timeStartValue={props.timeStartValue}
         />
     )
 }
@@ -73,14 +77,16 @@ function InnerXY(props) {
     return (
         <div className='xy'>
             <TimePanel 
-                name={props.name}
-                subtitle={props.subtitle}
-                index={props.index}
-                currentTime={time} 
-                currentRound={round}
-                roundStartValue={props.roundStartValue}
                 animated={!paused && !stopped && time > 0}
+                compact={props.compact ? props.compact : false}
+                currentRound={round}
+                currentTime={time} 
                 duration={props.timeStartValue} 
+                index={props.index}
+                name={props.name}
+                roundStartValue={props.roundStartValue}
+                size={props.size} 
+                subtitle={props.subtitle}
             />
         </div>
     )

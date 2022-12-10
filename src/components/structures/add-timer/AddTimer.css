@@ -7,6 +7,10 @@
     margin-top: 50px;
 }
 
+.add-timer .timer-placeholder-summary {
+    margin-bottom: 25px;
+}
+
 .add-timer .timer-placeholders {
     display: grid;
     width: 50vw;
@@ -14,7 +18,7 @@
     column-gap: 10px;
     justify-content: space-between;
     row-gap: 10px;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
 }
 
 .add-timer .timer-placeholder {

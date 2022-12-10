@@ -8,6 +8,7 @@
 
 .workout .workout-time-container {
     padding: 15px;
+    margin-bottom: 25px;
 }
 
 .workout .workout-time {
@@ -33,7 +34,7 @@
 }
 
 .workout .workout-wrapper {
-    padding: 25px 0;
+    padding: 0 0 25px 0;
 }
 
 .workout .workout-empty {

@@ -9,6 +9,7 @@ export default function Timers({ children }) {
     const [remainingTime, setRemainingTime] = useState(0)
     const [currentTimerIndex, setCurrentTimerIndex] = useState(0)
     const [timers, setTimers] = useState([])
+    const [history, setHistory] = useState([])
     const [paused, setPaused] = useState(false)
     const [stopped, setStopped] = useState(true)
 
@@ -20,6 +21,16 @@ export default function Timers({ children }) {
             localStorage.setItem("timers", JSON.stringify(timers))
         }
     }, [timers])
+
+    useEffect(() => {
+        const storedHistory = JSON.parse(localStorage.getItem("history"))
+        if (history.length === 0) {
+            localStorage.setItem("history", JSON.stringify(storedHistory))
+        } else {
+            localStorage.setItem("history", JSON.stringify(history))
+        }
+        localStorage.setItem("history", JSON.stringify(history))
+    }, [history])
     
     function setTimerComplete() {
         const newTimers = timers.map((timer, index) => {
@@ -51,6 +62,8 @@ export default function Timers({ children }) {
                 return {...timer, running: false, completed: false}
             })
             setTimers(newTimers)
+            const newHistory = [...history, newTimers]
+            setHistory(newHistory)
             setStopped(true)
         }
     } 

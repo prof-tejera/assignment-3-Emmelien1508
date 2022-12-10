@@ -12,12 +12,14 @@ export default function Countdown(props) {
         return (
           <div className='countdown'>
                 <TimePanel 
-                    name={props.name}
-                    subtitle={props.subtitle}
-                    index={props.index}
                     animated={props.running && !props.completed}
+                    compact={props.compact ? props.compact : false}
                     currentTime={props.completed ? props.timeEndValue : props.timeStartValue} 
                     duration={props.timeStartValue} 
+                    index={props.index}
+                    name={props.name}
+                    size={props.size} 
+                    subtitle={props.subtitle}
                 />
           </div>
         )
@@ -25,10 +27,12 @@ export default function Countdown(props) {
 
     return (
         <InnerCountdown 
+            compact={props.compact ? props.compact : false}
+            index={props.index}
             name={props.name}
+            size={props.size} 
             subtitle={props.subtitle}
             timeStartValue={props.timeStartValue}
-            index={props.index}
         />
     )
 }
@@ -67,12 +71,14 @@ function InnerCountdown(props) {
     return (
         <div className='countdown'>
             <TimePanel 
-                name={props.name}
-                subtitle={props.subtitle}
-                index={props.index}
                 animated={!paused && !stopped && time > 0}
+                compact={props.compact ? props.compact : false}
                 currentTime={time} 
                 duration={props.timeStartValue} 
+                index={props.index}
+                name={props.name}
+                size={props.size} 
+                subtitle={props.subtitle}
             />
         </div>
     )

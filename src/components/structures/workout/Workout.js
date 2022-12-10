@@ -110,7 +110,7 @@ export default function Workout() {
                     )} 
 
                     <div className='workout-buttons'>
-                        <Link to='/add'><Button classes='primary' onClick={() => handleReset()}>Add another timer</Button></Link>
+                        <Link to='/add'><Button classes='primary'>Add another timer</Button></Link>
                         {stopped && <Button classes='primary' onClick={() => handleStart()}>Start</Button>}
                         {!stopped && <Button classes={paused ? 'primary' : 'tertiary'} onClick={() => handlePause()}>{paused ? 'Resume' : 'Pause'}</Button>}
                         <Button classes='secondary' disabled={stopped} onClick={() => handleReset()}>Reset</Button>

@@ -9,6 +9,7 @@ export default function Navigation() {
             <ul>
                 <li><Link to='/'>Workout</Link></li>
                 <li><Link to='/docs'>Documentation</Link></li>
+                <li><Link to='/history'>History</Link></li>
                 <li><Link to='/add'>Add timer</Link></li>
             </ul>
         </nav>
