@@ -17,16 +17,26 @@
 }
 
 .timer .button.index,
-.timer .button.delete {
-    top: 0;
+.timer .button.delete,
+.timer .button.up,
+.timer .button.down {
+    top: -1px;
 }
 
 .timer .button.index {
-    left: 0;
+    left: -1px;
 }
 
 .timer .button.delete {
-    right: 0;
+    right: -1px;
+}
+
+.timer .button.up {
+    right: 77px;
+}
+
+.timer .button.down {
+    right: 38px;
 }
 
 .timer .timer-content {

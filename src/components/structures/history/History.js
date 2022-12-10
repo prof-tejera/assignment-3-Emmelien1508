@@ -8,14 +8,14 @@ export default function History(props) {
     
     return (
         <div className="workout-history">
-            {workoutHistory.length === 0 && (
+            {(workoutHistory === null || workoutHistory.length === 0) && (
                 <div className='history-empty blurred-dark'>
                     <p className='text-md'>Create your first workout!</p>
                     <Link to='/add'><Button classes='primary'>Add a timer</Button></Link>
                 </div>
             )}
 
-            {workoutHistory.length > 0 && workoutHistory.map((workout, index) => (
+            {workoutHistory !== null && workoutHistory.length > 0 && workoutHistory.map((workout, index) => (
                 <WorkoutSummary 
                     key={index}
                     workoutIndex={index}

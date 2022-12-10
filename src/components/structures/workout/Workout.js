@@ -18,6 +18,7 @@ export default function Workout() {
     } = useContext(TimerContext)
 
     const storedTimers = JSON.parse(localStorage.getItem('timers'))
+    const workoutHistory = JSON.parse(localStorage.getItem('history'))
     const workoutRunningTime = useRef(0)
 
     // tijdens het runnen de current timer index + tijd + round + resttime elke 5-10 seconden saven
@@ -121,7 +122,12 @@ export default function Workout() {
             <div className='workout-wrapper'>
                 {(storedTimers === null || storedTimers.length === 0) && (
                     <div className='workout-empty blurred-dark'>
-                        <p className='text-md'>You haven't chosen your workout yet! 🏋🏼</p>
+                        {workoutHistory !== null && workoutHistory.length > 0 && (
+                            <p className='text-md'>Create your next workout! 🏋🏼</p>
+                        )}
+                        {(workoutHistory === null || workoutHistory.length === 0) && (
+                            <p className='text-md'>You haven't chosen your workout yet! 🏋🏼</p>
+                        )}
                         <Link to='/add'>
                             <Button classes='primary'>Add timer</Button>
                         </Link>
