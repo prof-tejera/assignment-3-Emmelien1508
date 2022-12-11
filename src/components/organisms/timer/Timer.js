@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import { TimerContext } from "../../../context/TimerContext";
-import { useQueryState } from "../../../hooks/useQueryState";
 import { getRunningTimerData, getTimerData } from "../../../utils/helpers";
 import TimePanel from "../../molecules/time-panel/TimePanel";
 
@@ -24,12 +23,8 @@ function InnerTimer(props) {
     const {
         time, setTime, restTime, setRestTime, 
         remainingTime, setRemainingTime, round, setRound, 
-        paused, stopped, currentTimerIndex, handleTimerCompleted
+        paused, stopped, handleTimerCompleted
     } = useContext(TimerContext)
-    
-    const [totalTimeLeft, setTotalTimeLeft] = useQueryState('time-remaining')
-    const [timerTimeLeft, setTimerTimeLeft] = useQueryState('timer-time-remaining')
-    const [activeTimerIndex, setActiveTimerIndex] = useQueryState('current-timer-index')
     const [isWorkTime, setIsWorkTime] = useState(true)
 
     function increaseTime() {
@@ -118,22 +113,6 @@ function InnerTimer(props) {
             clearInterval(restInterval)
         }
     }, [round, time, restTime, paused, stopped])
-
-
-    useEffect(() => {
-        setActiveTimerIndex(currentTimerIndex)
-        console.log("this is the active index: " + currentTimerIndex + ' | ' + activeTimerIndex)
-    }, [currentTimerIndex])
-
-    useEffect(() => {
-        setTimerTimeLeft(time)
-        console.log('time: ' + time + " | " + timerTimeLeft)
-    }, [time])
-
-    useEffect(() => {
-        setTotalTimeLeft(remainingTime)
-        console.log("total time remaining: " + remainingTime + " | " + totalTimeLeft)
-    }, [remainingTime])
 
     const data = getRunningTimerData(props, {isWorkTime, paused, restTime, round, stopped, time})
 

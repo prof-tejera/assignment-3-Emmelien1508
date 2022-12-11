@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 
 import { faArrowDown, faArrowUp, faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -12,15 +12,73 @@ import Tabata from '../../organisms/tabata/Tabata'
 import XY from '../../organisms/xy/XY'
 
 import './WorkoutItems.css'
+import { useSearchParams } from 'react-router-dom'
 
 export default function WorkoutItems(props) {
-    const { stopped, currentTimerIndex } = useContext(TimerContext)
-
+    const { 
+        time, setTime, restTime, setRestTime, 
+        remainingTime, setRemainingTime, round, setRound, 
+        paused, setPaused, stopped, setStopped, 
+        currentTimerIndex, setCurrentTimerIndex
+    } = useContext(TimerContext)
+    
+    const [searchParams, setSearchParams] = useSearchParams()
     function removeTimer(timerIndex) {
         const newTimers = props.timers.filter((timer, index) => index !== timerIndex)
         props.setTimers(newTimers)
         localStorage.setItem('timers', JSON.stringify(newTimers))
     }
+
+    useEffect(() => {
+        // we also actually have to change the stored timers themselves 
+        // but more importantly, change the data that is stored in these timers,
+        // ---> check the getrunningTimerData function for the fields
+        console.log(searchParams)
+        // show the correct state based on the query params
+        if (searchParams.get('current-timer-index')) {
+            setCurrentTimerIndex(parseInt(searchParams.get('current-timer-index')))
+        }
+
+        if (searchParams.get('paused')) {
+            setPaused(Boolean(searchParams.get('paused')))
+        }
+
+        if (searchParams.get('remaining-time')) {
+            setRemainingTime(parseInt(searchParams.get('remaining-time')))
+        }        
+        
+        if (searchParams.get('rest-time')) {
+            setRestTime(parseInt(searchParams.get('rest-time')))
+        }
+
+        if (searchParams.get('round')) {
+            setRound(parseInt(searchParams.get('round')))
+        }
+
+        if (searchParams.get('stopped')) {
+            setStopped(Boolean(searchParams.get('stopped')))
+        }
+
+        if (searchParams.get('time')) {
+            setTime(parseInt(searchParams.get('time')))
+        }
+    }, [])
+
+    useEffect(() => {
+        if (!stopped && remainingTime > 0) {
+            const q = {
+                'current-timer-index': currentTimerIndex,
+                'paused': paused,
+                'remaining-time': remainingTime,
+                'rest-time': restTime,
+                'round': round,
+                'stopped': stopped,
+                'time': time,
+            }
+            console.log(q)
+            setSearchParams(q)
+        }
+    }, [currentTimerIndex, time, restTime, remainingTime, round])
 
     function getTimerComponent(data, index, running) {
         if (data.name === 'Stopwatch') {
@@ -35,9 +93,7 @@ export default function WorkoutItems(props) {
     }
     
     function moveTimerDown(index) {
-        if (index === props.timers.length - 1) {
-            console.log('cannot move timer down')
-        } else {
+        if (index !== props.timers.length - 1) {
             const newTimers = swapElements(props.timers, index, index + 1)
             props.setTimers(newTimers)
             localStorage.setItem('timers', JSON.stringify(newTimers))
@@ -45,9 +101,7 @@ export default function WorkoutItems(props) {
     }
 
     function moveTimerUp(index) {
-        if (index === 0) {
-            console.log('cannot move timer up')
-        } else {
+        if (index !== 0) {
             const newTimers = swapElements(props.timers, index - 1, index)
             props.setTimers(newTimers)
             localStorage.setItem('timers', JSON.stringify(newTimers))
