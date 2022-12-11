@@ -19,7 +19,7 @@ export default function WorkoutItems(props) {
     function removeTimer(timerIndex) {
         const newTimers = props.timers.filter((timer, index) => index !== timerIndex)
         props.setTimers(newTimers)
-        localStorage.setItem("timers", JSON.stringify(newTimers))
+        localStorage.setItem('timers', JSON.stringify(newTimers))
     }
 
     function getTimerComponent(data, index, running) {
@@ -36,21 +36,21 @@ export default function WorkoutItems(props) {
     
     function moveTimerDown(index) {
         if (index === props.timers.length - 1) {
-            console.log("cannot move timer down")
+            console.log('cannot move timer down')
         } else {
             const newTimers = swapElements(props.timers, index, index + 1)
             props.setTimers(newTimers)
-            localStorage.setItem("timers", JSON.stringify(newTimers))
+            localStorage.setItem('timers', JSON.stringify(newTimers))
         }
     }
 
     function moveTimerUp(index) {
         if (index === 0) {
-            console.log("cannot move timer up")
+            console.log('cannot move timer up')
         } else {
             const newTimers = swapElements(props.timers, index - 1, index)
             props.setTimers(newTimers)
-            localStorage.setItem("timers", JSON.stringify(newTimers))
+            localStorage.setItem('timers', JSON.stringify(newTimers))
         }
     }
 

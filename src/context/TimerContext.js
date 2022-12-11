@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react"
+import { createContext, useEffect, useState } from 'react'
 
 export const TimerContext = createContext({})
 
@@ -12,15 +12,24 @@ export default function Timers({ children }) {
     const [history, setHistory] = useState([])
     const [paused, setPaused] = useState(false)
     const [stopped, setStopped] = useState(true)
+    const [showConfetti, setShowConfetti] = useState(false)
 
     useEffect(() => {
-        const storedTimers = JSON.parse(localStorage.getItem("timers"))
+        const storedTimers = JSON.parse(localStorage.getItem('timers'))
         if (timers.length === 0) {
-            localStorage.setItem("timers", JSON.stringify(storedTimers))
+            localStorage.setItem('timers', JSON.stringify(storedTimers))
         } else {
-            localStorage.setItem("timers", JSON.stringify(timers))
+            localStorage.setItem('timers', JSON.stringify(timers))
         }
     }, [timers])
+
+    useEffect(() => {
+        if (showConfetti) {
+            setTimeout(() => {
+                setShowConfetti(false)
+            }, 5000)
+        }
+    }, [showConfetti])
     
     function setTimerComplete() {
         const newTimers = timers.map((timer, index) => {
@@ -30,7 +39,7 @@ export default function Timers({ children }) {
             return timer
         })
         setTimers(newTimers)
-        localStorage.setItem("timers", JSON.stringify(newTimers))
+        localStorage.setItem('timers', JSON.stringify(newTimers))
     }
 
     function handleTimerCompleted() {
@@ -52,11 +61,12 @@ export default function Timers({ children }) {
                 return {...timer, running: false, completed: true}
             })
             setTimers([])
-            localStorage.setItem("timers", JSON.stringify([]))
+            localStorage.setItem('timers', JSON.stringify([]))
             const newHistory = [...history, newTimers]
             setHistory(newHistory)
-            localStorage.setItem("history", JSON.stringify(newHistory))
+            localStorage.setItem('history', JSON.stringify(newHistory))
             setStopped(true)
+            setShowConfetti(true)
         }
     } 
 
@@ -67,7 +77,7 @@ export default function Timers({ children }) {
                 remainingTime, setRemainingTime, round, setRound, 
                 paused, setPaused, stopped, setStopped, 
                 currentTimerIndex, setCurrentTimerIndex, timers, setTimers, 
-                handleTimerCompleted
+                handleTimerCompleted, showConfetti, setShowConfetti
             }}
         >
             {children}

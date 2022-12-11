@@ -7,7 +7,7 @@ export default function History(props) {
     const workoutHistory = JSON.parse(localStorage.getItem('history'))
     
     return (
-        <div className="workout-history">
+        <div className='workout-history'>
             {(workoutHistory === null || workoutHistory.length === 0) && (
                 <div className='history-empty blurred-dark'>
                     <p className='text-md'>Create your first workout!</p>

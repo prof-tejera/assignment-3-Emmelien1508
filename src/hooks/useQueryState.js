@@ -1,11 +1,10 @@
 import { useCallback } from "react"
-import { useHistory, useLocation } from "react-router-dom"
-
+import { useLocation, useNavigate } from "react-router"
 import qs from "qs"
 
 export const useQueryState = query => {
     const location = useLocation()
-    const history = useHistory()
+    const navigate = useNavigate()
 
     const setQuery = useCallback(value => {
         const existingQueries = qs.parse(location.search, {
@@ -17,11 +16,19 @@ export const useQueryState = query => {
             { skipNulls: true }
         )
 
-        history.push(`${location.pathname}?${queryString}`)
-    }, [history, location, query])
+        navigate(`${location.pathname}?${queryString}`)
+    }, [navigate, location, query])
 
     return [
         qs.parse(location.search, { ignoreQueryPrefix: true })[query],
         setQuery,
     ]
 }
+
+
+// const [chosenType, setChosenType] = useQueryState("type")
+// const [chosenRounds, setChosenRounds] = useQueryState("rounds")
+// const [chosenMinutes, setChosenMinutes] = useQueryState("minutes")
+// const [chosenSeconds, setChosenSeconds] = useQueryState("seconds")
+// const [chosenRestMinutes, setChosenRestMinutes] = useQueryState("restminutes")
+// const [chosenRestSeconds, setChosenRestSeconds] = useQueryState("restseconds")

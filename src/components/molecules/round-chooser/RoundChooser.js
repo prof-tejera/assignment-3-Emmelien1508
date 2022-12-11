@@ -7,11 +7,13 @@ export default function RoundChooser(props) {
     function handleRoundDecrement() {
         if (props.rounds > 1) {
             props.setRounds(props.rounds - 1)
+            props.setChosenRounds(props.rounds - 1)
         }
     }
 
     function handleRoundIncrement() {
         props.setRounds(props.rounds + 1)
+        props.setChosenRounds(props.rounds + 1)
     }
 
 

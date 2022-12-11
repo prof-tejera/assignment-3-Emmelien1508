@@ -1,5 +1,7 @@
 import { useContext, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import Confetti from 'react-confetti'
+import useWindowSize from 'react-use/lib/useWindowSize'
 
 import { calculateWorkoutTime, workoutIsDone } from '../../../utils/helpers'
 import { TimerContext } from '../../../context/TimerContext'
@@ -14,7 +16,7 @@ export default function Workout() {
     const {
         setTime, setRestTime, remainingTime, setRemainingTime,
         setRound, paused, setPaused, stopped, setStopped,
-        setCurrentTimerIndex, setTimers
+        setCurrentTimerIndex, setTimers, showConfetti
     } = useContext(TimerContext)
 
     const storedTimers = JSON.parse(localStorage.getItem('timers'))
@@ -77,16 +79,37 @@ export default function Workout() {
         setCurrentTimerIndex(999)
     }
 
+    const { width, height } = useWindowSize()
     const workoutIsFinished = workoutIsDone(storedTimers)
     return (
         <div className='workout'>
+            {showConfetti && (
+                <Confetti
+                    width={width}
+                    tweenDuration={2000}
+                    height={height}
+                    colors={[
+                        '#D90467', 
+                        '#F2059F', 
+                        '#9C5FD9', 
+                        '#F28241', 
+                        '#D3B3F2', 
+                        '#9D00FF',
+                        '#F23DB3',
+                        '#F2AC29',
+                        '#D94929',
+                        '#F20F4B'
+                    ]}
+                />
+            )}
+
             {storedTimers !== null && storedTimers.length > 0 && (
-                <div className='workout-time-container blurred-dark'>    
+                <div className='workout-time-container blurred'>    
                     {stopped && !workoutIsFinished && (
                         <div className='workout-time'>
                             <div className='text-center'>
                                 <TimePanel 
-                                    name={"total time"}
+                                    name={'total time'}
                                     index={0}
                                     size={200}
                                     duration={calculateWorkoutTime(storedTimers)}
@@ -100,7 +123,7 @@ export default function Workout() {
                         <div className='workout-time'>
                             <div className='text-center'>
                                 <TimePanel 
-                                    name={"time remaining"}
+                                    name={'time remaining'}
                                     index={0}
                                     size={200}
                                     duration={workoutIsFinished ? 0 : remainingTime}
@@ -121,7 +144,7 @@ export default function Workout() {
 
             <div className='workout-wrapper'>
                 {(storedTimers === null || storedTimers.length === 0) && (
-                    <div className='workout-empty blurred-dark'>
+                    <div className='workout-empty blurred'>
                         {workoutHistory !== null && workoutHistory.length > 0 && (
                             <p className='text-md'>Create your next workout! 🏋🏼</p>
                         )}

@@ -7,14 +7,17 @@ export default function TimeChooser(props) {
     function handleMinIncrement() {
         if (props.minutes < 60) {
             props.setMinutes(props.minutes + 1)
+            props.setChosenMinutes(props.minutes + 1)
         }
     }
 
     function handleMinDecrement() {
         if (props.minutes > 1) {
             props.setMinutes(props.minutes - 1)
+            props.setChosenMinutes(props.minutes - 1)
         } else if (props.seconds > 0) {
             props.setMinutes(0)
+            props.setChosenMinutes(0)
         }
     }
 
@@ -22,17 +25,23 @@ export default function TimeChooser(props) {
         if (props.seconds === 59) {
             props.setMinutes(props.minutes + 1)
             props.setSeconds(0)
+            props.setChosenMinutes(props.minutes + 1)
+            props.setChosenSeconds(0)
         } else {
             props.setSeconds(props.seconds + 1)
+            props.setChosenSeconds(props.seconds + 1)
         }
     }
 
     function handleSecDecrement() {
         if (props.seconds > 1) {
             props.setSeconds(props.seconds - 1)
+            props.setChosenSeconds(props.seconds - 1)
         } else if (props.minutes > 0) {
             props.setSeconds(59)
             props.setMinutes(props.minutes - 1)
+            props.setChosenSeconds(59)
+            props.setChosenMinutes(props.minutes - 1)
         }
     }
 

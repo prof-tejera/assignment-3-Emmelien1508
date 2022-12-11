@@ -24,10 +24,21 @@
     --brown2: #A4680C;
     --brown3: #EB9511;
 
+    --confetti1: #D90467;
+    --confetti2: #F2059F;
+    --confetti3: #9C5FD9;
+    --confetti4: #F28241;
+    --confetti5: #D3B3F2;
+    --confetti6: #9D00FF;
+    --confetti7: #F23DB3;
+    --confetti8: #F2AC29;
+    --confetti9: #D94929;
+    --confetti10: #F20F4B;
+
     --transition: 300ms ease-in-out;
 
     --size-xs: 0.7rem;
-    --size-sm: 0.95rem;
+    --size-sm: 0.85rem;
     --size-md: 1.5rem;
     --size-lg: 2rem;
     --size-xl: 4rem;
@@ -63,7 +74,7 @@ a {
 }
 
 body {
-    background-image: url('./assets/images/background.jpg');
+    background-image: url('./assets/images/background8.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;

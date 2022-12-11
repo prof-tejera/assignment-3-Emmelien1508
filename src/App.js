@@ -12,7 +12,7 @@ export default function App() {
     return (
         <div className='container'>
             <Timers>
-                <Router basename="/assignment-3-Emmelien1508">
+                <Router basename='/assignment-3-Emmelien1508'>
                     <Navigation />
                     <Routes>
                         <Route path='/' element={<Workout />} />

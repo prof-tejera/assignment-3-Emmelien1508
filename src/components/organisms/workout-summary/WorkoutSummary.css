@@ -1,13 +1,20 @@
 .workout-summary {
     color: var(--white);
-    padding: 25px;
     position: relative;
 }
 
+.workout-information {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
 .workout-number {
-    position: absolute;
+    /* position: absolute;
     top: -1px;
-    left: -1px;
+    left: -1px; */
+    margin-right: 25px;
+    margin-top: -1px;
+    margin-left: -1px;
     height: 50px;
     display: flex;
     justify-content: center;
@@ -25,7 +32,6 @@
     font-weight: 200;
     text-align: center;
     width: fit-content;
-    text-transform: lowercase;
     transition: var(--transition);
     white-space: nowrap;
 
@@ -36,14 +42,23 @@
 }
 
 .workout-summary-container {
-    margin-top: 50px;
     display: grid;
     grid-template-columns: repeat(4, 20vw);
     justify-content: space-between;
     row-gap: 1vw;
+    padding: 25px;
 }
 
 .timer-summary {
     width: 19vw;
     min-height: 275px;
+    /* position: relative; */
+}
+
+.timer-summary .button.index {
+    /* position: absolute; */
+    /* top: -1px;
+    left: -1px; */
+    margin-left: -1px;
+    margin-top: -1px;
 }

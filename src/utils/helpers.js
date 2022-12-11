@@ -18,7 +18,7 @@ export function workoutIsDone(timers) {
 }
 
 export function getSeconds(minutes, seconds) {
-    return minutes * 60 + seconds;
+    return minutes * 60 + seconds
 }
 
 export function getTime(time) {
