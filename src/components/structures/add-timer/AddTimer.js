@@ -18,7 +18,7 @@ import './AddTimer.css'
 
 export default function AddTimer() {
     const [searchParams, setSearchParams] = useSearchParams()
-    const { timers, setTimers } = useContext(TimerContext)
+    const {timers, setTimers} = useContext(TimerContext)
   
     const [type, setType] = useState('')
     const [rounds, setRounds] = useState(initialRounds)
@@ -31,8 +31,8 @@ export default function AddTimer() {
     const [chosenRounds, setChosenRounds] = useQueryState("rounds")
     const [chosenMinutes, setChosenMinutes] = useQueryState("minutes")
     const [chosenSeconds, setChosenSeconds] = useQueryState("seconds")
-    const [chosenRestMinutes, setChosenRestMinutes] = useQueryState("restminutes")
-    const [chosenRestSeconds, setChosenRestSeconds] = useQueryState("restseconds")
+    const [chosenRestMinutes, setChosenRestMinutes] = useQueryState("rest-minutes")
+    const [chosenRestSeconds, setChosenRestSeconds] = useQueryState("rest-seconds")
 
     const chooseTime = {
         chosenMinutes: chosenMinutes,
@@ -72,7 +72,6 @@ export default function AddTimer() {
     }
 
     useEffect(() => {
-        // first we need a type to do the rest
         if (searchParams.get('type') !== '' || searchParams.get('type') !== null) {
             setType(searchParams.get('type'))
 
@@ -84,12 +83,12 @@ export default function AddTimer() {
                 setSeconds(parseInt(searchParams.get('seconds')))
             }
     
-            if (searchParams.get('restminutes')) {
-                setRestMinutes(parseInt(searchParams.get('restminutes')))
+            if (searchParams.get('rest-minutes')) {
+                setRestMinutes(parseInt(searchParams.get('rest-minutes')))
             }
     
-            if (searchParams.get('restseconds')) {
-                setRestSeconds(parseInt(searchParams.get('restseconds')))
+            if (searchParams.get('rest-seconds')) {
+                setRestSeconds(parseInt(searchParams.get('rest-seconds')))
             }
     
             if (searchParams.get('rounds')) {
@@ -112,8 +111,8 @@ export default function AddTimer() {
     
             if (chosenType === 'Tabata') {
                 q['rounds'] = chosenRounds ? chosenRounds : initialRounds
-                q['restminutes'] = chosenRestMinutes ? chosenRestMinutes : initialRestMinutes
-                q['restseconds'] = chosenRestSeconds ? chosenRestSeconds : initialRestSeconds
+                q['rest-minutes'] = chosenRestMinutes ? chosenRestMinutes : initialRestMinutes
+                q['rest-seconds'] = chosenRestSeconds ? chosenRestSeconds : initialRestSeconds
             }
     
             setSearchParams(q)
@@ -168,15 +167,9 @@ export default function AddTimer() {
         const newTimers = [...timers, timerData]
         setTimers(newTimers)
         resetTimerData()
-        clearQueryParameters()
+        setSearchParams(new URLSearchParams({}))
     }
 
-    function clearQueryParameters() {
-        setSearchParams({})
-        const queryParams = new URLSearchParams(window.location.search)
-        console.log("these are the current query params")
-        console.log(queryParams)
-    }
     function resetTimerData() {
         setType('')
         setRounds(initialRounds)

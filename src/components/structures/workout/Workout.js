@@ -14,29 +14,15 @@ import WorkoutItems from '../../organisms/workout-items/WorkoutItems'
 
 export default function Workout() {
     const {
-        setTime, setRestTime, remainingTime, setRemainingTime,
-        setRound, paused, setPaused, stopped, setStopped,
+        setTime, setRestTime, 
+        remainingTime, setRemainingTime, setRound, 
+        paused, setPaused, stopped, setStopped, 
         setCurrentTimerIndex, setTimers, showConfetti
     } = useContext(TimerContext)
 
     const storedTimers = JSON.parse(localStorage.getItem('timers'))
     const workoutHistory = JSON.parse(localStorage.getItem('history'))
     const workoutRunningTime = useRef(0)
-
-    // tijdens het runnen de current timer index + tijd + round + resttime elke 5-10 seconden saven
-    // useEffect(() => {
-    //     let interval = null
-    //     if (remainingTime <= 0) {
-    //         clearInterval(interval)
-    //     } else {
-    //         interval = setInterval(() => {
-    //             console.log('Logs every 5 seconds if timers are running')
-    //         }, 5000)
-    //     }
-
-    //     return () => clearInterval(interval)
-
-    // }, [])
 
     useEffect(() => {
         if (stopped) {

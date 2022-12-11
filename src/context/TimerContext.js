@@ -3,6 +3,7 @@ import { createContext, useEffect, useState } from 'react'
 export const TimerContext = createContext({})
 
 export default function Timers({ children }) {
+
     const [time, setTime] = useState(0)
     const [round, setRound] = useState(0)
     const [restTime, setRestTime] = useState(0)
@@ -22,6 +23,16 @@ export default function Timers({ children }) {
             localStorage.setItem('timers', JSON.stringify(timers))
         }
     }, [timers])
+
+    useEffect(() => {
+        const storedHistory = JSON.parse(localStorage.getItem('history'))
+        if (history === null || history.length === 0) {
+            localStorage.setItem('history', JSON.stringify(storedHistory))
+            setHistory(storedHistory)
+        } else {
+            localStorage.setItem('history', JSON.stringify(history))
+        }
+    }, [history])
 
     useEffect(() => {
         if (showConfetti) {
@@ -57,12 +68,12 @@ export default function Timers({ children }) {
 
             setCurrentTimerIndex(currentTimerIndex + 1)
         } else {
-            const newTimers = timers.map((timer) => {
+            const newTimers = timers.map((timer, index) => {
                 return {...timer, running: false, completed: true}
             })
             setTimers([])
             localStorage.setItem('timers', JSON.stringify([]))
-            const newHistory = [...history, newTimers]
+            const newHistory = history !== null ? [...history, newTimers] : [newTimers]
             setHistory(newHistory)
             localStorage.setItem('history', JSON.stringify(newHistory))
             setStopped(true)

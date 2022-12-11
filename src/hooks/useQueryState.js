@@ -24,11 +24,3 @@ export const useQueryState = query => {
         setQuery,
     ]
 }
-
-
-// const [chosenType, setChosenType] = useQueryState("type")
-// const [chosenRounds, setChosenRounds] = useQueryState("rounds")
-// const [chosenMinutes, setChosenMinutes] = useQueryState("minutes")
-// const [chosenSeconds, setChosenSeconds] = useQueryState("seconds")
-// const [chosenRestMinutes, setChosenRestMinutes] = useQueryState("restminutes")
-// const [chosenRestSeconds, setChosenRestSeconds] = useQueryState("restseconds")
