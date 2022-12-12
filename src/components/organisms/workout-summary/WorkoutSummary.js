@@ -1,4 +1,5 @@
 import { calculateWorkoutTime } from '../../../utils/helpers'
+
 import Button from '../../atoms/button/Button'
 import Countdown from '../countdown/Countdown'
 import Stopwatch from '../stopwatch/Stopwatch'
@@ -9,15 +10,17 @@ import './WorkoutSummary.css'
 
 
 export default function WorkoutSummary(props) {
-    function getTimerSummary(data, index) {
+    function getTimerSummary(data) {
+        data.size = 100
+        data.compact = true
         if (data.name === 'Stopwatch') {
-            return <Stopwatch size={100} compact={true} {...data} index={index} running={false}/>
+            return <Stopwatch {...data} />
         } else if (data.name === 'Countdown') {
-            return <Countdown size={100} compact={true} {...data} index={index} running={false}/>
+            return <Countdown {...data} />
         } else if (data.name === 'XY') {
-            return <XY size={100} compact={true} {...data} index={index} running={false}/>
+            return <XY {...data} />
         } else {
-            return <Tabata size={100} compact={true} {...data} index={index} running={false}/>
+            return <Tabata {...data} />
         }
     }
 
@@ -36,7 +39,7 @@ export default function WorkoutSummary(props) {
                             {index + 1}
                         </Button>
                         <div className='timer-summary-content' key={`timer-summary-content-${timer.name}-${props.workoutIndex}-${index}`}>
-                            {getTimerSummary(timer, index)}
+                            {getTimerSummary(timer)}
                         </div>
                     </div>
                 ))} 

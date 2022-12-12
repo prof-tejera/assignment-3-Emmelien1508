@@ -19,7 +19,8 @@
 .timer .button.index,
 .timer .button.delete,
 .timer .button.up,
-.timer .button.down {
+.timer .button.down,
+.timer .button.edit {
     top: -1px;
 }
 
@@ -29,6 +30,10 @@
 
 .timer .button.delete {
     right: -1px;
+}
+
+.timer .button.edit {
+    right: 116px;
 }
 
 .timer .button.up {

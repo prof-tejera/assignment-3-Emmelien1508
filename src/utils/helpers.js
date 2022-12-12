@@ -5,7 +5,7 @@ export function calculateWorkoutTime(timers) {
     
     let time = 0
     for (let i=0; i<timers.length; i++) {
-        time += timers[i].timerMiliseconds
+        time += timers[i].duration
     }
     return time
 }
@@ -34,56 +34,64 @@ export function swapElements(array, index1, index2) {
     return array
 }
 
-export function getTimerData(props) {
-    let data = {
-        animated: props.running && !props.completed,
-        compact: props.compact ? props.compact : false,
-        currentTime: props.completed ? props.timeEndValue : props.timeStartValue,
-        duration: props.name === 'Stopwatch' ? props.timeEndValue : props.timeStartValue,
-        index: props.index,
-        name: props.name,
-        size: props.size,
-        subtitle: props.subtitle,
-        timeEndValue: props.timeEndValue,
-        timeStartValue: props.timeStartValue,
-        currentRound: (props.name === 'XY' || props.name === 'Tabata') ? 0 : null,
-        title: props.name === 'Tabata' ? 'Work 🏋🏼' : null,
-        restTimeStartValue: (props.name === 'XY' || props.name === 'Tabata') ? props.restTimeStartValue : null,
-        roundStartValue: (props.name === 'XY' || props.name === 'Tabata') ? props.roundStartValue : null
-    }
-
-    return data
+export function getFormattedTime(minutes, seconds) {
+    return `${('0' + minutes).slice(-2)}:${('0' + seconds).slice(-2)}`
 }
 
-export function getRunningTimerData(props, { paused, stopped, time, restTime, isWorkTime, round }) {
-    let data = {
-        animated: (!paused && !stopped) && (time > 0 || (time === 0 && restTime > 0)),
-        compact: props.compact ? props.compact : false,
-        currentTime: (props.name === 'Tabata' && !isWorkTime ) ? restTime : time,
-        duration: (props.name === 'Tabata' && !isWorkTime) ? props.restTimeStartValue : props.duration,
-        index: props.index,
-        name: props.name,
-        size: props.size,
-        subtitle: props.subtitle,
+export function getInitialTimerData(type, length, minutes, seconds) {
+    return {
+        animated: false,
+        compact: false,
+        completed: false,
+        component: null,
+        currentRound: null,
+        currentTime: 0,
+        duration: 0,
+        index: length > 0 ? length - 1 : 0,
+        name: type,
+        restTimeEndValue: null,
+        restTimeStartValue: null,
+        roundEndValue: null,
+        roundStartValue: null,
+        running: false,
+        size: 240,
+        subtitle: '',
+        timeEndValue: 0,
+        timeStartValue: getSeconds(minutes, seconds),
+        title: '',
+    }
+}
+
+export function getInitialChooserData(prefix, minutes, seconds, setMinutes, setSeconds) {
+    return {
+        minutesLabel: `${prefix}minutes`,
+        secondsLabel: `${prefix}seconds`,
+        minutes: minutes,
+        seconds: seconds,
+        setMinutes: setMinutes,
+        setSeconds: setSeconds,
+    }
+}
+
+export function setTimerConfiguration(searchParams, timer, minutes, seconds, rounds, restMinutes, restSeconds, timers) {
+    const q = {
+        ...searchParams,
+        index: timer.index,
+        type: timer.name,
+        minutes: minutes,
+        seconds: seconds,
+        timers: timers,
     }
 
-    if (props.name === 'Tabata') {
-        data.title = !isWorkTime ? 'Rest 🧘🏼' : 'Work 🏋🏼'
-        data.duration = props.roundStartValue * (props.restTimeStartValue + props.timeStartValue)
-
-        if (!paused && !stopped && time === 0 && restTime === 0) {
-            data.currentRound = 0
-        }
+    if (timer.name === 'XY' || timer.name === 'Tabata') {
+        q['rounds'] = rounds
     }
 
-    if (props.name === 'XY') {
-        data.duration = props.roundStartValue * props.timeStartValue
+    if (timer.name === 'Tabata') {
+        q['rest-minutes'] = restMinutes
+        q['rest-seconds'] = restSeconds
     }
 
-    if (props.name === 'Tabata' || props.name === 'XY') {
-        data.currentRound = round
-        data.roundStartValue = props.roundStartValue
-    }
-
-    return data
+    console.log(q)
+    return q
 }

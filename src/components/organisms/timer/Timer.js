@@ -1,45 +1,44 @@
 import { useContext, useEffect, useState } from "react";
 import { TimerContext } from "../../../context/TimerContext";
-import { getRunningTimerData, getTimerData } from "../../../utils/helpers";
 import TimePanel from "../../molecules/time-panel/TimePanel";
 
 export default function Timer(props) {
-    const timerData = getTimerData(props)
+    let data = { ...props }
 
     if (!props.running || props.completed) {
         return (
             <div className={props.name}>
-                <TimePanel {...timerData} />
+                <TimePanel {...data} />
             </div>
         )
     }
 
     return (
-        <InnerTimer {...timerData} />
+        <InnerTimer {...data} />
     )
 }
 
 function InnerTimer(props) {
     const {
         time, setTime, restTime, setRestTime, 
-        remainingTime, setRemainingTime, round, setRound, 
+        setRemainingTime, round, setRound, 
         paused, stopped, handleTimerCompleted
     } = useContext(TimerContext)
     const [isWorkTime, setIsWorkTime] = useState(true)
 
     function increaseTime() {
-        setTime(time + 1)
-        setRemainingTime(remainingTime - 1)
+        setTime((time) => time + 1)
+        setRemainingTime((remainingTime) => remainingTime - 1)
     }
 
     function decreaseTime() {
-        setTime(time - 1)
-        setRemainingTime(remainingTime - 1)
+        setTime((time) => time - 1)
+        setRemainingTime((remainingTime) => remainingTime - 1)
     }
 
     function decreaseRestTime() {
-        setRestTime(restTime - 1)
-        setRemainingTime(remainingTime - 1)
+        setRestTime((restTime) => restTime - 1)
+        setRemainingTime((remainingTime) => remainingTime - 1)
     }
 
     function resetRound() {
@@ -55,7 +54,7 @@ function InnerTimer(props) {
     useEffect(() => {
         let interval = null
         let restInterval = null
-        const timeNotEnded = props.name === 'Stopwatch' ? time < props.timeEndValue : time > 0
+        const timeNotEnded = props.name === 'Stopwatch' ? time <= props.timeEndValue : time > 0
         const restTimeNotEnded = time === 0 && restTime > 0
 
         if (!paused && !stopped) {
@@ -114,7 +113,20 @@ function InnerTimer(props) {
         }
     }, [round, time, restTime, paused, stopped])
 
-    const data = getRunningTimerData(props, {isWorkTime, paused, restTime, round, stopped, time})
+    let data = { ...props }
+    data.animated = (!paused && !stopped) && (time > 0 || (time === 0 && restTime > 0))
+    data.currentTime = (data.name === 'Tabata' && !isWorkTime ) ? restTime : time
+    
+    if (data.name === 'Tabata') {
+        data.title = !isWorkTime ? 'Rest 🧘🏼' : 'Work 🏋🏼'
+        if (!paused && !stopped && time === 0 && restTime === 0) {
+            data.currentRound = 0
+        }
+    }
+
+    if (data.name === 'Tabata' || data.name === 'XY') {
+        data.currentRound = round
+    }
 
     return (
         <div className={props.name}>

@@ -1,5 +1,5 @@
-import { useContext, useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { useContext, useEffect, useRef, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import Confetti from 'react-confetti'
 import useWindowSize from 'react-use/lib/useWindowSize'
 
@@ -17,12 +17,26 @@ export default function Workout() {
         setTime, setRestTime, 
         remainingTime, setRemainingTime, setRound, 
         paused, setPaused, stopped, setStopped, 
-        setCurrentTimerIndex, setTimers, showConfetti
+        setCurrentTimerIndex, timers, setTimers, 
+        showConfetti, setShowConfetti
     } = useContext(TimerContext)
 
+    const [searchParams, setSearchParams] = useSearchParams()
     const storedTimers = JSON.parse(localStorage.getItem('timers'))
     const workoutHistory = JSON.parse(localStorage.getItem('history'))
     const workoutRunningTime = useRef(0)
+    const [duration, setDuration] = useState(0)
+
+    useEffect(() => {
+        setShowConfetti(false)
+    }, [])
+    
+    useEffect(() => {
+        if (localStorage.getItem('timers') === 'null' && searchParams.get('timers')) {
+            setTimers(JSON.parse(searchParams.get('timers')))
+            localStorage.setItem('timers', searchParams.get('timers'))
+        }
+    }, [])
 
     useEffect(() => {
         if (stopped) {
@@ -31,12 +45,22 @@ export default function Workout() {
         }
     }, [stopped])
 
+    useEffect(() => {
+        setSearchParams({
+            ...searchParams,
+            timers: storedTimers ? JSON.stringify(storedTimers) : timers
+        })
+    }, [timers])
+
     function handleStart() {
         const newTimers = storedTimers.map((timer, index) => {
+            setDuration((duration) => duration + timer.duration)
             return {...timer, running: false, completed: false}
         })
 
+        newTimers[0].running = true
         setTimers(newTimers)
+
         setTime(storedTimers[0].timeStartValue)
 
         if (storedTimers[0].name === 'XY' || storedTimers[0].name === 'Tabata') {
@@ -74,6 +98,7 @@ export default function Workout() {
                     width={width}
                     tweenDuration={2000}
                     height={height}
+                    numberOfPieces={400}
                     colors={[
                         '#D90467', 
                         '#F2059F', 
@@ -95,11 +120,11 @@ export default function Workout() {
                         <div className='workout-time'>
                             <div className='text-center'>
                                 <TimePanel 
-                                    name={'total time'}
+                                    name={'Total Time'}
                                     index={0}
                                     size={200}
-                                    duration={calculateWorkoutTime(storedTimers)}
-                                    currentTime={calculateWorkoutTime(storedTimers)} 
+                                    duration={duration}
+                                    currentTime={remainingTime} 
                                 />
                             </div>
                         </div>
@@ -109,7 +134,7 @@ export default function Workout() {
                         <div className='workout-time'>
                             <div className='text-center'>
                                 <TimePanel 
-                                    name={'time remaining'}
+                                    name={'Time remaining'}
                                     index={0}
                                     size={200}
                                     duration={workoutIsFinished ? 0 : remainingTime}

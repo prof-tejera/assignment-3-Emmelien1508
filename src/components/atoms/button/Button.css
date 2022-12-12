@@ -95,9 +95,13 @@
 
 .button.round.up {
     border-radius: 0;
-    border-bottom-left-radius: var(--border-radius-sm);
 }
 
 .button.round.down {
     border-radius: 0;
+}
+
+.button.round.edit {
+    border-radius: 0;
+    border-bottom-left-radius: var(--border-radius-sm);
 }

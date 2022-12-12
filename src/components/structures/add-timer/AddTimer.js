@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { getSeconds } from '../../../utils/helpers'
+
+import { getFormattedTime, getInitialChooserData, getInitialTimerData, getSeconds, setTimerConfiguration } from '../../../utils/helpers'
 import { initialRounds, initialMinutes, initialSeconds, initialRestMinutes, initialRestSeconds } from '../../../utils/constants'
 import { TimerContext } from '../../../context/TimerContext'
-import { useQueryState } from '../../../hooks/useQueryState'
 
 import Button from '../../atoms/button/Button'
 import RoundChooser from '../../molecules/round-chooser/RoundChooser'
@@ -27,52 +27,24 @@ export default function AddTimer() {
     const [minutes, setMinutes] = useState(initialMinutes)
     const [seconds, setSeconds] = useState(initialSeconds)
 
-    const [chosenType, setChosenType] = useQueryState("type")
-    const [chosenRounds, setChosenRounds] = useQueryState("rounds")
-    const [chosenMinutes, setChosenMinutes] = useQueryState("minutes")
-    const [chosenSeconds, setChosenSeconds] = useQueryState("seconds")
-    const [chosenRestMinutes, setChosenRestMinutes] = useQueryState("rest-minutes")
-    const [chosenRestSeconds, setChosenRestSeconds] = useQueryState("rest-seconds")
+    const data = getInitialChooserData('', minutes, seconds, setMinutes, setSeconds)
+    const restData = getInitialChooserData('rest ', restMinutes, restSeconds, setRestMinutes, setRestSeconds)
 
-    const chooseTime = {
-        chosenMinutes: chosenMinutes,
-        setChosenMinutes: setChosenMinutes,
-        chosenSeconds: chosenSeconds,
-        setChosenSeconds: setChosenSeconds,
-    }
-
-    const chooseRestTime = {
-        chosenMinutes: chosenRestMinutes,
-        setChosenMinutes: setChosenRestMinutes,
-        chosenSeconds: chosenRestSeconds,
-        setChosenSeconds: setChosenRestSeconds,
-    }
-
-    const chooseRounds = {
-        chosenRounds: chosenRounds,
-        setChosenRounds: setChosenRounds,
-    }
-
-    const data = {
-        minutesLabel: 'minutes',
-        secondsLabel: 'seconds',
-        minutes: minutes,
-        seconds: seconds,
-        setMinutes: setMinutes,
-        setSeconds: setSeconds,
-    }
-
-    const restData = {
-        minutesLabel: 'rest minutes',
-        secondsLabel: 'rest seconds',
-        minutes: restMinutes,
-        seconds: restSeconds,
-        setMinutes: setRestMinutes,
-        setSeconds: setRestSeconds,
-    }
+    const storedTimers = JSON.parse(localStorage.getItem('timers'))
+    useEffect(() => {
+        setSearchParams({
+            ...searchParams,
+            timers: storedTimers ? JSON.stringify(storedTimers) : timers
+        })
+    }, [timers])
 
     useEffect(() => {
-        if (searchParams.get('type') !== '' || searchParams.get('type') !== null) {
+        const timers = JSON.parse(searchParams.get('timers'))
+        if (timers === null || timers.length === 0) { } else {
+            setTimers(JSON.parse(searchParams.get('timers')))
+        }
+
+        if (searchParams.get('type') !== '' || searchParams.get('type') !== 'null') {
             setType(searchParams.get('type'))
 
             if (searchParams.get('minutes')) {
@@ -98,76 +70,48 @@ export default function AddTimer() {
     }, [])
 
     useEffect(() => {
-        if (type !== '') {
-            const q = {
-                'type': chosenType ? chosenType : '',
-                'minutes': chosenMinutes ? chosenMinutes : initialMinutes,
-                'seconds': chosenSeconds ? chosenSeconds : initialSeconds,
-            }
-    
-            if (chosenType === 'XY') {
-                q['rounds'] = chosenRounds ? chosenRounds : initialRounds
-            }
-    
-            if (chosenType === 'Tabata') {
-                q['rounds'] = chosenRounds ? chosenRounds : initialRounds
-                q['rest-minutes'] = chosenRestMinutes ? chosenRestMinutes : initialRestMinutes
-                q['rest-seconds'] = chosenRestSeconds ? chosenRestSeconds : initialRestSeconds
-            }
-    
-            setSearchParams(q)
-        }
-    }, [chosenType, chosenMinutes, chosenSeconds, chosenRestMinutes, chosenRestSeconds, chosenRounds])
+        const timerData = timers ? JSON.stringify(timers) : JSON.stringify(storedTimers)
+        const query = setTimerConfiguration(searchParams, type, minutes, seconds, rounds, restMinutes, restSeconds, timerData)
+        setSearchParams(query)
+    }, [type, minutes, seconds, restMinutes, restSeconds, rounds])
 
     function addTimer() {
-        let timerData = {
-            name: '',
-            component: null,
-            running: false,
-            completed: false,
-            timeStartValue: getSeconds(minutes, seconds),
-            timeEndValue: 0,
-            roundStartValue: rounds,
-            roundEndValue: 1,
-            restTimeStartValue: getSeconds(restMinutes, restSeconds),
-            restTimeEndValue: 0,
-        }
-        timerData.name = type
+        let data = getInitialTimerData(type, timers.length + 1, minutes, seconds)
 
         if (type === 'Stopwatch') {
-            const min = ('0' + minutes).slice(-2)
-            const sec = ('0' + seconds).slice(-2)
-            timerData.component = Stopwatch
-            timerData.timeStartValue = 0
-            timerData.timeEndValue = getSeconds(minutes, seconds)
-            timerData.timerMiliseconds = timerData.timeEndValue
-            timerData.subtitle = `count up to ${min}:${sec}`
+            data.component = Stopwatch
+            data.subtitle = `count up to ${getFormattedTime(minutes, seconds)}`
+            data.timeEndValue = getSeconds(minutes, seconds) + 1
+            data.timeStartValue = 1
+            data.duration = data.timeEndValue - 1
         } else if (type === 'Countdown') {
-            const min = ('0' + minutes).slice(-2)
-            const sec = ('0' + seconds).slice(-2)
-            timerData.component = Countdown
-            timerData.timerMiliseconds = timerData.timeStartValue
-            timerData.subtitle = `count down from ${min}:${sec}`
+            data.component = Countdown
+            data.subtitle = `count down from ${getFormattedTime(minutes, seconds)}`
+            data.duration = data.timeStartValue
         } else if (type === 'XY') {
-            const min = ('0' + minutes).slice(-2)
-            const sec = ('0' + seconds).slice(-2)
-            timerData.component = XY
-            timerData.timerMiliseconds = timerData.timeStartValue * timerData.roundStartValue
-            timerData.subtitle = `count down from ${min}:${sec}`
+            data.component = XY
+            data.currentRound = 0
+            data.roundEndValue = 1
+            data.roundStartValue = rounds
+            data.subtitle = `count down from ${getFormattedTime(minutes, seconds)}`
+            data.duration = data.timeStartValue * data.roundStartValue
         } else {
-            const min = ('0' + minutes).slice(-2)
-            const sec = ('0' + seconds).slice(-2)
-            const restMin = ('0' + restMinutes).slice(-2)
-            const restSec = ('0' + restSeconds).slice(-2)
-            timerData.component = Tabata
-            timerData.timerMiliseconds = (timerData.timeStartValue + timerData.restTimeStartValue) * timerData.roundStartValue
-            timerData.subtitle = `work for ${min}:${sec} & rest for ${restMin}:${restSec}`
+            data.component = Tabata
+            data.restTimeEndValue = 0
+            data.restTimeStartValue = getSeconds(restMinutes, restSeconds)
+            data.roundEndValue = 1
+            data.roundStartValue = rounds
+            data.subtitle = `work for ${getFormattedTime(minutes, seconds)} & rest for ${getFormattedTime(restMinutes, restSeconds)}`
+            data.title = 'Work 🏋🏼'
+            data.duration = (data.timeStartValue + data.restTimeStartValue) * data.roundStartValue
         }
 
-        const newTimers = [...timers, timerData]
+        const newTimers = [...timers, data]
         setTimers(newTimers)
         resetTimerData()
-        setSearchParams(new URLSearchParams({}))
+        setSearchParams({
+            timers: newTimers ? JSON.stringify(newTimers) : JSON.stringify(storedTimers)
+        })
     }
 
     function resetTimerData() {
@@ -181,20 +125,19 @@ export default function AddTimer() {
 
     function handleChooseTimer(event) {
         setType(event.target.textContent)
-        setChosenType(event.target.textContent)
     }
 
     return (
         <div className='add-timer blurred'>
             <div className='timer-placeholder-summary'>
                 <div className='timer-placeholders'>
-                    {timers.map((timer, index) => (
+                    {storedTimers && storedTimers.map((timer, index) => (
                         <div className='timer-placeholder blurred' key={index}>
                             <p className='text-xs'>{index + 1}. {timer.name}</p>
                         </div>
                     ))}
                 </div>
-                {timers.length > 0 && (
+                {storedTimers && storedTimers.length > 0 && (
                     <Link to='/'><Button classes='primary'>Go to workout</Button></Link>
                 )}
             </div>
@@ -210,22 +153,22 @@ export default function AddTimer() {
                     <div className='timer-data blurred'>
                         {(type === 'Stopwatch' || type === 'Countdown') && (
                             <div>
-                                <TimeChooser {...data} {...chooseTime} chosenType={chosenType} />
+                                <TimeChooser {...data} />
                             </div>
                         )}
 
                         {type === 'XY' && (
                             <div>
-                                <TimeChooser {...data} {...chooseTime} chosenType={chosenType} />
-                                <RoundChooser rounds={rounds} setRounds={setRounds} {...chooseRounds}/>
+                                <TimeChooser {...data} />
+                                <RoundChooser rounds={rounds} setRounds={setRounds} />
                             </div>
                         )}
 
                         {type === 'Tabata' && (
                             <div>
-                                <TimeChooser {...data} {...chooseTime} chosenType={chosenType} />
-                                <TimeChooser {...restData} {...chooseRestTime} chosenType={chosenType} />
-                                <RoundChooser rounds={rounds} setRounds={setRounds} {...chooseRounds}/>
+                                <TimeChooser {...data} />
+                                <TimeChooser {...restData} />
+                                <RoundChooser rounds={rounds} setRounds={setRounds} />
                             </div>
                         )}
                     </div>

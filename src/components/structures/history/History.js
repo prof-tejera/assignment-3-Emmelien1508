@@ -31,7 +31,7 @@ export default function History(props) {
             {currentWorkouts !== null && currentWorkouts.length > 0 && currentWorkouts.map((workout, index) => (
                 <WorkoutSummary 
                     key={index}
-                    workoutIndex={index + ((currentPage - 1)* workoutsPerPage)}
+                    workoutIndex={index + ((currentPage - 1) * workoutsPerPage)}
                     timers={workout}
                 />
             ))}
