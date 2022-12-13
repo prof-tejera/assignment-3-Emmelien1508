@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react"
 import { Link, useSearchParams } from "react-router-dom"
 import { TimerContext } from "../../../context/TimerContext"
 import { initialRounds, initialMinutes, initialSeconds, initialRestMinutes, initialRestSeconds } from "../../../utils/constants"
-import { getInitialChooserData, setTimerConfiguration } from "../../../utils/helpers"
+import { getInitialChooserData, setEditTimerConfiguration } from "../../../utils/helpers"
 import Button from "../../atoms/button/Button"
 import RoundChooser from "../../molecules/round-chooser/RoundChooser"
 import TimeChooser from "../../molecules/time-chooser/TimeChooser"
@@ -25,13 +25,12 @@ export default function EditTimer() {
 
     useEffect(() => {
         if (searchParams.get('index')) {
-            console.log(storedTimers)
             currentTimer.current = storedTimers[parseInt(searchParams.get('index'))]
             setTimer(currentTimer.current)
         }
 
         const timerData = storedTimers ? JSON.stringify(storedTimers) : JSON.stringify(timers)
-        const query = setTimerConfiguration(searchParams, currentTimer.current, minutes, seconds, rounds, restMinutes, restSeconds, timerData)
+        const query = setEditTimerConfiguration(searchParams, currentTimer.current, minutes, seconds, rounds, restMinutes, restSeconds, timerData)
         setSearchParams(query)
     }, [])
 
@@ -99,7 +98,7 @@ export default function EditTimer() {
                 {timer && timer.name && (
                     <div>
                         <Button classes='primary' onClick={editTimer}>Save</Button>
-                        <Link to='/'><Button classes='secondary'>Go to workout</Button></Link>
+                        <Link to='/'><Button classes='secondary'>Cancel</Button></Link>
                     </div>
                 )}
 

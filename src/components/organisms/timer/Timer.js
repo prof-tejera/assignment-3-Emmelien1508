@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { TimerContext } from "../../../context/TimerContext";
 import TimePanel from "../../molecules/time-panel/TimePanel";
 
@@ -24,6 +24,7 @@ function InnerTimer(props) {
         setRemainingTime, round, setRound, 
         paused, stopped, handleTimerCompleted
     } = useContext(TimerContext)
+    const timer = useRef()
     const [isWorkTime, setIsWorkTime] = useState(true)
 
     function increaseTime() {
@@ -64,7 +65,7 @@ function InnerTimer(props) {
                 }
 
                 if (time === props.timeEndValue) { 
-                    handleTimerCompleted() 
+                    handleTimerCompleted(timer) 
                 }
             } else if (props.name === 'Countdown') {
                 if (timeNotEnded) { 
@@ -72,7 +73,7 @@ function InnerTimer(props) {
                 }
 
                 if (time === 0) { 
-                    handleTimerCompleted() 
+                    handleTimerCompleted(timer) 
                 }
             } else if (props.name === 'XY') {
                 if (timeNotEnded) { 
@@ -84,7 +85,7 @@ function InnerTimer(props) {
                 }
 
                 if (round === 1 && time === 0) { 
-                    handleTimerCompleted() 
+                    handleTimerCompleted(timer) 
                 }
             } else {
                 if (timeNotEnded) {
@@ -99,7 +100,7 @@ function InnerTimer(props) {
                 }
 
                 if (round === 1 && time === 0 && restTime === 0) { 
-                    handleTimerCompleted() 
+                    handleTimerCompleted(timer) 
                 }
             }
         } else {
@@ -129,7 +130,7 @@ function InnerTimer(props) {
     }
 
     return (
-        <div className={props.name}>
+        <div className={props.name} ref={timer}>
             <TimePanel {...data} />
         </div>
     )

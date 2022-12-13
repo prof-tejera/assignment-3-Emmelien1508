@@ -49,7 +49,7 @@ export default function TimePanel(props) {
                         strokeWidth={4}
                         key={key}
                         size={props.size ? props.size : 240}
-                        colors={['#c925ff']}
+                        colors={props.color ? [props.color] : ['#c925ff']}
                         onComplete={() => {
                             setKey(prevKey => prevKey + 1)
                         }}

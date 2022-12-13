@@ -114,67 +114,71 @@ export default function Workout() {
                 />
             )}
 
-            {storedTimers !== null && storedTimers.length > 0 && (
-                <div className='workout-time-container blurred'>    
-                    {stopped && !workoutIsFinished && (
-                        <div className='workout-time'>
-                            <div className='text-center'>
-                                <TimePanel 
-                                    name={'Total Time'}
-                                    index={0}
-                                    size={200}
-                                    duration={duration}
-                                    currentTime={remainingTime} 
-                                />
-                            </div>
-                        </div>
+            {(storedTimers === null || storedTimers.length === 0) && (
+                <div className='workout-empty blurred'>
+                    {workoutHistory !== null && workoutHistory.length > 0 && (
+                        <p className='text-md'>Create your next workout! 🏋🏼</p>
                     )}
-
-                    {(!stopped || workoutIsFinished) && (
-                        <div className='workout-time'>
-                            <div className='text-center'>
-                                <TimePanel 
-                                    name={'Time remaining'}
-                                    index={0}
-                                    size={200}
-                                    duration={workoutIsFinished ? 0 : remainingTime}
-                                    currentTime={workoutIsFinished ? 0 : remainingTime}
-                                />
-                            </div>
-                        </div>
-                    )} 
-
-                    <div className='workout-buttons'>
-                        <Link to='/add'><Button classes='primary'>Add another timer</Button></Link>
-                        {stopped && <Button classes='primary' onClick={() => handleStart()}>Start</Button>}
-                        {!stopped && <Button classes={paused ? 'primary' : 'tertiary'} onClick={() => handlePause()}>{paused ? 'Resume' : 'Pause'}</Button>}
-                        <Button classes='secondary' disabled={stopped} onClick={() => handleReset()}>Reset</Button>
-                    </div>
+                    {(workoutHistory === null || workoutHistory.length === 0) && (
+                        <p className='text-md'>You haven't chosen your workout yet! 🏋🏼</p>
+                    )}
+                    <Link to='/add'>
+                        <Button classes='primary'>Add timer</Button>
+                    </Link>
                 </div>
             )}
 
-            <div className='workout-wrapper'>
-                {(storedTimers === null || storedTimers.length === 0) && (
-                    <div className='workout-empty blurred'>
-                        {workoutHistory !== null && workoutHistory.length > 0 && (
-                            <p className='text-md'>Create your next workout! 🏋🏼</p>
+            <div className='workout-container'>
+                {storedTimers !== null && storedTimers.length > 0 && (
+                    <div className='workout-time-container blurred'>    
+                        {stopped && !workoutIsFinished && (
+                            <div className='workout-time'>
+                                <div className='text-center'>
+                                    <TimePanel 
+                                        name={'Total Time'}
+                                        index={0}
+                                        size={200}
+                                        color={'#a7f745'}
+                                        duration={duration}
+                                        currentTime={remainingTime} 
+                                    />
+                                </div>
+                            </div>
                         )}
-                        {(workoutHistory === null || workoutHistory.length === 0) && (
-                            <p className='text-md'>You haven't chosen your workout yet! 🏋🏼</p>
-                        )}
-                        <Link to='/add'>
-                            <Button classes='primary'>Add timer</Button>
-                        </Link>
+
+                        {(!stopped || workoutIsFinished) && (
+                            <div className='workout-time'>
+                                <div className='text-center'>
+                                    <TimePanel 
+                                        name={'Time remaining'}
+                                        index={0}
+                                        size={200}
+                                        duration={workoutIsFinished ? 0 : remainingTime}
+                                        currentTime={workoutIsFinished ? 0 : remainingTime}
+                                    />
+                                </div>
+                            </div>
+                        )} 
+
+                        <div className='workout-buttons'>
+                            <Link to='/add'><Button classes='primary'>Add another timer</Button></Link>
+                            {stopped && <Button classes='primary' onClick={() => handleStart()}>Start</Button>}
+                            {!stopped && <Button classes={paused ? 'primary' : 'tertiary'} onClick={() => handlePause()}>{paused ? 'Resume' : 'Pause'}</Button>}
+                            <Button classes='secondary' disabled={stopped} onClick={() => handleReset()}>Reset</Button>
+                        </div>
                     </div>
                 )}
 
-                {storedTimers !== null && storedTimers.length > 0 && (
-                    <WorkoutItems 
-                        timers={storedTimers}
-                        setTimers={setTimers}
-                    />
-                )}
+                <div className='workout-wrapper'>
+                    {storedTimers !== null && storedTimers.length > 0 && (
+                        <WorkoutItems 
+                            timers={storedTimers}
+                            setTimers={setTimers}
+                        />
+                    )}
+                </div>
             </div>
+
         </div>
     )
 }

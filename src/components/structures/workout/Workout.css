@@ -1,14 +1,22 @@
 .workout {
     padding: 25px 0;
     color: var(--white);
-    width: 80vw;
+    width: 90vw;
     margin-left: auto;
     margin-right: auto;
+}
+
+.workout-container {
+    display: flex;
+    flex-flow: row nowrap;
+    width: 90vw;
 }
 
 .workout .workout-time-container {
     padding: 15px;
     margin-bottom: 25px;
+    width: 30%;
+    margin-right: 15px;
 }
 
 .workout .workout-time {
@@ -25,8 +33,11 @@
 
 .workout .workout-buttons {
     display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
+    flex-flow: column nowrap;
+}
+
+.workout .workout-buttons > .button {
+    margin-top: 10px;
 }
 
 .workout .workout-buttons > * {
@@ -35,6 +46,8 @@
 
 .workout .workout-wrapper {
     padding: 0 0 25px 0;
+    width: 70%;
+    margin-left: 15px;
 }
 
 .workout .workout-empty {

@@ -73,7 +73,7 @@ export function getInitialChooserData(prefix, minutes, seconds, setMinutes, setS
     }
 }
 
-export function setTimerConfiguration(searchParams, timer, minutes, seconds, rounds, restMinutes, restSeconds, timers) {
+export function setEditTimerConfiguration(searchParams, timer, minutes, seconds, rounds, restMinutes, restSeconds, timers) {
     const q = {
         ...searchParams,
         index: timer.index,
@@ -92,6 +92,26 @@ export function setTimerConfiguration(searchParams, timer, minutes, seconds, rou
         q['rest-seconds'] = restSeconds
     }
 
-    console.log(q)
+    return q
+}
+
+export function setAddTimerConfiguration(searchParams, type, minutes, seconds, rounds, restMinutes, restSeconds, timers) {
+    const q = {
+        ...searchParams,
+        type: type,
+        minutes: minutes,
+        seconds: seconds,
+        timers: timers,
+    }
+
+    if (type === 'XY' || type === 'Tabata') {
+        q['rounds'] = rounds
+    }
+
+    if (type === 'Tabata') {
+        q['rest-minutes'] = restMinutes
+        q['rest-seconds'] = restSeconds
+    }
+
     return q
 }

@@ -54,7 +54,7 @@ export default function Timers({ children }) {
         localStorage.setItem('timers', JSON.stringify(newTimers))
     }
 
-    function handleTimerCompleted() {
+    function handleTimerCompleted(timer) {
         if (currentTimerIndex + 1 < timers.length) {
             setTimerComplete()
             setTime(timers[currentTimerIndex + 1].timeStartValue)
@@ -68,6 +68,7 @@ export default function Timers({ children }) {
             }
 
             setCurrentTimerIndex(currentTimerIndex + 1)
+            timer.current.scrollIntoView({ behavior: "smooth" })
         } else {
             const newTimers = timers.map((timer, index) => {
                 return {...timer, running: false, completed: true}

@@ -1,9 +1,8 @@
 
 .workout-items {
     display: grid;
-    grid-template-columns: 80vw;
-    column-gap: calc(4vw / 3);
-    row-gap: calc(4vw / 3);
+    grid-template-columns: 100%;
+    row-gap: 2vw;
 }
 
 .timer {

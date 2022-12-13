@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 
-import { getFormattedTime, getInitialChooserData, getInitialTimerData, getSeconds, setTimerConfiguration } from '../../../utils/helpers'
+import { getFormattedTime, getInitialChooserData, getInitialTimerData, getSeconds, setAddTimerConfiguration } from '../../../utils/helpers'
 import { initialRounds, initialMinutes, initialSeconds, initialRestMinutes, initialRestSeconds } from '../../../utils/constants'
 import { TimerContext } from '../../../context/TimerContext'
 
@@ -71,7 +71,7 @@ export default function AddTimer() {
 
     useEffect(() => {
         const timerData = timers ? JSON.stringify(timers) : JSON.stringify(storedTimers)
-        const query = setTimerConfiguration(searchParams, type, minutes, seconds, rounds, restMinutes, restSeconds, timerData)
+        const query = setAddTimerConfiguration(searchParams, type, minutes, seconds, rounds, restMinutes, restSeconds, timerData)
         setSearchParams(query)
     }, [type, minutes, seconds, restMinutes, restSeconds, rounds])
 

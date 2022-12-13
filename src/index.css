@@ -1,11 +1,13 @@
 @font-face {
     font-family: "SF";
     src: url('./assets/fonts/SF-Pro.ttf') format("truetype");
+    font-weight: 100;
 }
 
 @font-face {
     font-family: "SF Italic";
     src: url('./assets/fonts/SF-Pro-Italic.ttf') format("truetype");
+    font-weight: 100;
 }
 
 :root {
