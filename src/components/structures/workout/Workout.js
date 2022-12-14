@@ -21,11 +21,41 @@ export default function Workout() {
         showConfetti, setShowConfetti
     } = useContext(TimerContext)
 
+    const [sidebarTop, setSidebarTop] = useState(undefined)
     const [searchParams, setSearchParams] = useSearchParams()
     const storedTimers = JSON.parse(localStorage.getItem('timers'))
     const workoutHistory = JSON.parse(localStorage.getItem('history'))
     const workoutRunningTime = useRef(0)
-    const [duration, setDuration] = useState(0)
+
+    useEffect(() => {
+        const timerContainer = document.querySelector('.workout-time-container')
+        if (timerContainer) {
+            setSidebarTop(timerContainer.getBoundingClientRect().top)
+        }
+    }, [])
+
+    useEffect(() => {
+        if (!sidebarTop) {
+            return
+        }
+        window.addEventListener('scroll', makeSticky)
+        return () => {
+            window.removeEventListener('scroll', makeSticky)
+        }
+    }, [sidebarTop])
+    
+    function makeSticky() {
+        const timerContainer = document.querySelector('.workout-time-container')
+        const scrollTop = window.scrollY
+
+        if (timerContainer) {
+            if (scrollTop >= sidebarTop - 10) {
+                timerContainer.classList.add('is-sticky')
+            } else {
+                timerContainer.classList.remove('is-sticky')
+            }
+        }
+    }
 
     useEffect(() => {
         setShowConfetti(false)
@@ -54,7 +84,6 @@ export default function Workout() {
 
     function handleStart() {
         const newTimers = storedTimers.map((timer, index) => {
-            setDuration((duration) => duration + timer.duration)
             return {...timer, running: false, completed: false}
         })
 
@@ -139,7 +168,7 @@ export default function Workout() {
                                         index={0}
                                         size={200}
                                         color={'#a7f745'}
-                                        duration={duration}
+                                        duration={calculateWorkoutTime(storedTimers)}
                                         currentTime={remainingTime} 
                                     />
                                 </div>

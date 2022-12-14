@@ -47,7 +47,6 @@
 }
 
 .add-timer .timer-data {
-    /* background-color: var(--purple1); */
     border-radius: var(--border-radius-sm);
     padding: 10px 20px;
 }

@@ -28,9 +28,9 @@ export default function TimeChooser(props) {
     }
 
     function handleSecDecrement() {
-        if (props.seconds > 1) {
+        if (props.seconds >= 1) {
             props.setSeconds(props.seconds - 1)
-        } else if (props.minutes > 0) {
+        } else if (props.minutes === 1 && props.seconds === 0) {
             props.setSeconds(59)
             props.setMinutes(props.minutes - 1)
         }

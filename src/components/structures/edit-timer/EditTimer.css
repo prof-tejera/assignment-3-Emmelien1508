@@ -1,0 +1,37 @@
+.edit-timer {
+    padding: 25px 50px;
+    color: var(--white);
+    width: 70vw;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+}
+
+.edit-timer .edit-timer-wrapper {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    padding: 15px 0;
+}
+
+.edit-timer .edit-timer-wrapper > * {
+    width: 100%;
+}
+
+.edit-timer .timer-data {
+    border-radius: var(--border-radius-sm);
+    padding: 10px 20px;
+    padding-bottom: 30px;
+}
+
+.edit-timer .timer-data .time-chooser .minute-chooser {
+    padding: 20px 0;
+}
+
+.edit-timer .timer-data .round-chooser {
+    padding-top: 20px;
+}
+
+.edit-timer .button.primary {
+    margin-bottom: 20px;
+}

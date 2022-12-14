@@ -2,13 +2,21 @@ nav.navigation {
     border-radius: 0;
     padding: 20px 0;
     margin-bottom: 25px;
+    height: 7vw;
 }
 
 nav.navigation ul {
+    height: 100%;
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
     list-style-type: none;
+}
+
+nav.navigation ul li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 nav.navigation a {

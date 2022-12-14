@@ -36,7 +36,7 @@ export default function History(props) {
                 />
             ))}
 
-            {currentWorkouts !== null && currentWorkouts.length > 0 && (
+            {currentWorkouts !== null && currentWorkouts.length > 10 && (
                 <Pagination
                     workoutsPerPage={workoutsPerPage}
                     totalWorkouts={workoutHistory.length}
