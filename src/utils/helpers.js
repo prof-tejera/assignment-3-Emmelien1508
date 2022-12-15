@@ -22,10 +22,6 @@ export function workoutIsDone(timers) {
     return !timers.some((timer) => timer.completed === false)
 }
 
-export function getSeconds(minutes, seconds) {
-    return minutes * 60 + seconds
-}
-
 export function getTime(time) {
     const minutes =  Math.floor((time / 60) % 60)
     const seconds = Math.floor((time) % 60)
@@ -37,10 +33,6 @@ export function swapElements(array, index1, index2) {
     array[index1] = array[index2]
     array[index2] = temp
     return array
-}
-
-export function getFormattedTime(minutes, seconds) {
-    return `${('0' + minutes).slice(-2)}:${('0' + seconds).slice(-2)}`
 }
 
 export function getInitialTimerData(type, length, minutes, seconds) {
@@ -180,4 +172,12 @@ export function saveTimerData(data, minutes, seconds, restMinutes, restSeconds, 
     }
 
     return data
+}
+
+function getSeconds(minutes, seconds) {
+    return minutes * 60 + seconds
+}
+
+function getFormattedTime(minutes, seconds) {
+    return `${('0' + minutes).slice(-2)}:${('0' + seconds).slice(-2)}`
 }
