@@ -3,6 +3,7 @@ import { useContext, useEffect, useRef, useState } from "react"
 import TimePanel from "../../molecules/time-panel/TimePanel"
 
 import { TimerContext } from "../../../context/TimerContext"
+import { useSearchParams } from "react-router-dom"
 
 
 export default function Timer(props) {
@@ -23,12 +24,37 @@ export default function Timer(props) {
 
 function InnerTimer(props) {
     const {
-        time, setTime, restTime, setRestTime, 
-        setRemainingTime, round, setRound, 
-        paused, stopped, handleTimerCompleted
+        time, setTime, restTime, setRestTime, remainingTime,
+        setRemainingTime, round, setRound, currentTimerIndex,
+        paused, stopped, handleTimerCompleted, timers
     } = useContext(TimerContext)
     const timer = useRef()
     const [isWorkTime, setIsWorkTime] = useState(true)
+    const [searchParams, setSearchParams] = useSearchParams()
+
+    useEffect(() => {
+        if (!stopped && remainingTime > 0) {
+            const newTimers = timers.map((timer, index) => {
+                return {...timer, currentTime: index === currentTimerIndex ? time : 0}
+            })
+
+            const params = {
+                ...searchParams,
+                'current-timer-index': currentTimerIndex,
+                'paused': paused,
+                'remaining-time': remainingTime,
+                'rest-time': restTime,
+                'round': round,
+                'stopped': stopped,
+                'time': time,
+                'is-work-time': isWorkTime,
+                'timers': JSON.stringify(newTimers)
+            }
+
+            setSearchParams(params)
+        }
+    
+    }, [currentTimerIndex, time, restTime, remainingTime, round])
 
     function increaseTime() {
         setTime((time) => time + 1)
@@ -120,7 +146,7 @@ function InnerTimer(props) {
     let data = { ...props }
     data.animated = (!paused && !stopped) && (time > 0 || (time === 0 && restTime > 0))
     data.currentTime = (data.name === 'Tabata' && !isWorkTime ) ? restTime : time
-    
+
     if (data.name === 'Tabata') {
         data.title = !isWorkTime ? 'Rest 🧘🏼' : 'Work 🏋🏼'
         if (!paused && !stopped && time === 0 && restTime === 0) {

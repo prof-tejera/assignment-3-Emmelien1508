@@ -79,55 +79,59 @@ export default function AddTimer() {
     }
 
     return (
-        <div className='add-timer blurred'>
-            <div className='timer-placeholder-summary'>
-                <div className='timer-placeholders'>
-                    {storedTimers && storedTimers.map((timer, index) => (
-                        <div className='timer-placeholder blurred' key={index}>
-                            <p className='text-xs'>{index + 1}. {timer.name}</p>
-                        </div>
-                    ))}
-                </div>
-                {storedTimers && storedTimers.length > 0 && (
-                    <Link to='/'><Button classes='primary'>Go to workout</Button></Link>
-                )}
-            </div>
-            <p className='text-lg text-center'>Choose a timer for your workout</p>
-            <div className='add-timer-wrapper'>
-                <div className='timer-options'>
-                    <Button classes={`secondary ${type === 'Stopwatch' ? 'active' : ''}`} onClick={(e) => handleChooseTimer(e)}>Stopwatch</Button>
-                    <Button classes={`secondary ${type === 'Countdown' ? 'active' : ''}`} onClick={(e) => handleChooseTimer(e)}>Countdown</Button>
-                    <Button classes={`secondary ${type === 'XY' ? 'active' : ''}`} onClick={(e) => handleChooseTimer(e)}>XY</Button>
-                    <Button classes={`secondary ${type === 'Tabata' ? 'active' : ''}`} onClick={(e) => handleChooseTimer(e)}>Tabata</Button>
-                </div>
-                {type && (
-                    <div className='timer-data blurred'>
-                        {(type === 'Stopwatch' || type === 'Countdown') && (
-                            <div>
-                                <TimeChooser {...data} />
-                            </div>
-                        )}
-
-                        {type === 'XY' && (
-                            <div>
-                                <TimeChooser {...data} />
-                                <RoundChooser rounds={rounds} setRounds={setRounds} />
-                            </div>
-                        )}
-
-                        {type === 'Tabata' && (
-                            <div>
-                                <TimeChooser {...data} />
-                                <TimeChooser {...restData} />
-                                <RoundChooser rounds={rounds} setRounds={setRounds} />
-                            </div>
-                        )}
+        <div className='add-timer'>
+            
+            <div className='add-timer-container blurred'>
+                <p className='text-lg text-center'>Choose a timer for your workout</p>
+                <div className='add-timer-wrapper'>
+                    <div className='timer-options'>
+                        <Button classes={`secondary ${type === 'Stopwatch' ? 'active' : ''}`} onClick={(e) => handleChooseTimer(e)}>Stopwatch</Button>
+                        <Button classes={`secondary ${type === 'Countdown' ? 'active' : ''}`} onClick={(e) => handleChooseTimer(e)}>Countdown</Button>
+                        <Button classes={`secondary ${type === 'XY' ? 'active' : ''}`} onClick={(e) => handleChooseTimer(e)}>XY</Button>
+                        <Button classes={`secondary ${type === 'Tabata' ? 'active' : ''}`} onClick={(e) => handleChooseTimer(e)}>Tabata</Button>
                     </div>
+                    {type && (
+                        <div className='timer-data blurred'>
+                            {(type === 'Stopwatch' || type === 'Countdown') && (
+                                <div>
+                                    <TimeChooser {...data} />
+                                </div>
+                            )}
+
+                            {type === 'XY' && (
+                                <div>
+                                    <TimeChooser {...data} />
+                                    <RoundChooser rounds={rounds} setRounds={setRounds} />
+                                </div>
+                            )}
+
+                            {type === 'Tabata' && (
+                                <div>
+                                    <TimeChooser {...data} />
+                                    <TimeChooser {...restData} />
+                                    <RoundChooser rounds={rounds} setRounds={setRounds} />
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+
+                {type && (
+                    <Button classes='primary' onClick={addTimer}>Save</Button>
                 )}
             </div>
 
-            {type && (
-                <Button classes='primary' onClick={addTimer}>Save</Button>
+            {storedTimers && storedTimers.length > 0 && (
+                <div className='timer-placeholder-summary blurred'>
+                    <div className='timer-placeholders'>
+                        {storedTimers && storedTimers.map((timer, index) => (
+                            <div className='timer-placeholder blurred' key={index}>
+                                <p className='text-xs'>{index + 1}. {timer.name}</p>
+                            </div>
+                        ))}
+                    </div>
+                    <Link to='/'><Button classes='secondary'>Go to workout</Button></Link>
+                </div>
             )}
 
         </div>

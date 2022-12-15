@@ -1,5 +1,5 @@
-import { useContext, useEffect } from 'react'
-import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom'
+import { useContext } from 'react'
+import { createSearchParams, useNavigate } from 'react-router-dom'
 import { ErrorBoundary } from 'react-error-boundary'
 
 import { faArrowDown, faArrowUp, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons'
@@ -19,70 +19,16 @@ import './WorkoutItems.css'
 
 export default function WorkoutItems({timers, setTimers}) {
     const { 
-        time, setTime, restTime, setRestTime, 
-        remainingTime, setRemainingTime, round, setRound, 
-        paused, setPaused, stopped, setStopped, 
-        currentTimerIndex, setCurrentTimerIndex
+        stopped, currentTimerIndex
     } = useContext(TimerContext)
     
     const navigate = useNavigate()
-    const [searchParams, setSearchParams] = useSearchParams()
     
     function removeTimer(timerIndex) {
         const newTimers = timers.filter((timer, index) => index !== timerIndex)
         setTimers(newTimers)
         localStorage.setItem('timers', JSON.stringify(newTimers))
     }
-
-    useEffect(() => {
-        // we also actually have to change the stored timers themselves 
-        // but more importantly, change the data that is stored in these timers,
-        // ---> check the getrunningTimerData function for the fields
-
-        // show the correct state based on the query params
-        if (searchParams.get('current-timer-index')) {
-            setCurrentTimerIndex(parseInt(searchParams.get('current-timer-index')))
-        }
-
-        if (searchParams.get('paused')) {
-            setPaused(Boolean(searchParams.get('paused')))
-        }
-
-        if (searchParams.get('remaining-time')) {
-            setRemainingTime(parseInt(searchParams.get('remaining-time')))
-        }        
-        
-        if (searchParams.get('rest-time')) {
-            setRestTime(parseInt(searchParams.get('rest-time')))
-        }
-
-        if (searchParams.get('round')) {
-            setRound(parseInt(searchParams.get('round')))
-        }
-
-        if (searchParams.get('stopped')) {
-            setStopped(Boolean(searchParams.get('stopped')))
-        }
-
-        if (searchParams.get('time')) {
-            setTime(parseInt(searchParams.get('time')))
-        }
-    }, [])
-
-    useEffect(() => {
-        if (!stopped && remainingTime > 0) {
-            setSearchParams({
-                ...searchParams,
-                'current-timer-index': currentTimerIndex,
-                'paused': paused,
-                'remaining-time': remainingTime,
-                'rest-time': restTime,
-                'round': round,
-                'stopped': stopped,
-                'time': time,
-            })
-        }
-    }, [currentTimerIndex, time, restTime, remainingTime, round])
 
     function getTimerComponent(data, running) {
         if (data.name === 'Stopwatch') {
