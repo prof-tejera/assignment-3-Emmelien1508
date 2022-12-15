@@ -1,10 +1,10 @@
-import { calculateWorkoutTime } from '../../../utils/helpers'
-
-import Button from '../../atoms/button/Button'
 import Countdown from '../countdown/Countdown'
 import Stopwatch from '../stopwatch/Stopwatch'
 import Tabata from '../tabata/Tabata'
 import XY from '../xy/XY'
+import Button from '../../atoms/button/Button'
+
+import { calculateWorkoutTime } from '../../../utils/helpers'
 
 import './WorkoutSummary.css'
 

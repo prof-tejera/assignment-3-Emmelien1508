@@ -1,5 +1,5 @@
 .workout {
-    padding: 25px 0;
+    padding: var(--padding-lg) 0;
     color: var(--white);
     width: 90vw;
     margin-left: auto;
@@ -13,10 +13,10 @@
 }
 
 .workout .workout-time-container {
-    padding: 15px;
+    padding: var(--padding-sm);
     margin-bottom: 25px;
     width: 30vw;
-    margin-right: 15px;
+    margin-right: var(--padding-sm);
     height: calc(100% - 20px);
     min-height: calc(100vh - 70px - 7vw);
 }
@@ -31,7 +31,7 @@
 .workout .workout-time {
     border-radius: var(--border-radius-sm);
     margin-bottom: 15px;
-    padding: 25px 0;
+    padding: var(--padding-lg) 0;
 }
 
 .workout .workout-time {
@@ -54,13 +54,13 @@
 }
 
 .workout .workout-wrapper {
-    padding: 0 0 25px 0;
+    padding: 0 0 var(--padding-lg) 0;
     width: calc(60vw - 15px);
     margin-left: auto;
 }
 
 .workout .workout-empty {
-    padding: 50px 0;
+    padding: var(--padding-xl) 0;
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -68,7 +68,7 @@
 }
 
 .workout .workout-empty > *:not(:last-child) {
-    padding-bottom: 25px;
+    padding-bottom: var(--padding-lg);
 }
 
 @media screen and (max-width: 768px) {
@@ -87,7 +87,7 @@
     }
 
     .workout .workout-wrapper {
-        padding: 0 0 25px 0;
+        padding: 0 0 var(--padding-lg) 0;
         width: 100%;
         margin-left: 0;
     }

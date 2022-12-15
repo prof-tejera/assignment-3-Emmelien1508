@@ -27,7 +27,7 @@
     border: 1px solid rgba(167, 247, 69, 0.25);
     box-shadow: 0 4px 30px rgba(28, 38, 15, 0.1);
     color: var(--green3);
-    padding: 10px 40px;
+    padding: var(--padding-xs) var(--padding-xl);
     display: flex;
     font-weight: 200;
     text-align: center;
@@ -46,7 +46,7 @@
     grid-template-columns: repeat(4, 20vw);
     justify-content: space-between;
     row-gap: 1vw;
-    padding: 25px;
+    padding: var(--padding-lg);
 }
 
 .timer-summary {

@@ -1,6 +1,9 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import { TimerContext } from "../../../context/TimerContext";
-import TimePanel from "../../molecules/time-panel/TimePanel";
+import { useContext, useEffect, useRef, useState } from "react"
+
+import TimePanel from "../../molecules/time-panel/TimePanel"
+
+import { TimerContext } from "../../../context/TimerContext"
+
 
 export default function Timer(props) {
     let data = { ...props }

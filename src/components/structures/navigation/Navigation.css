@@ -1,7 +1,7 @@
 nav.navigation {
     border-radius: 0;
-    padding: 20px 0;
-    margin-bottom: 25px;
+    padding: var(--padding-md) 0;
+    margin-bottom: var(--padding-lg);
     height: 7vw;
 }
 

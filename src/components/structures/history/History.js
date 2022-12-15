@@ -1,19 +1,21 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import Button from '../../atoms/button/Button'
+
 import WorkoutSummary from '../../organisms/workout-summary/WorkoutSummary'
+import Pagination from '../../molecules/pagination/Pagination'
+import Button from '../../atoms/button/Button'
+
 import './History.css'
 
-import { useState } from 'react'
-import Pagination from '../../molecules/pagination/Pagination'
 
 export default function History(props) {
     const [currentPage, setCurrentPage] = useState(1)
     const [workoutsPerPage] = useState(10)
     const workoutHistory = JSON.parse(localStorage.getItem('history'))
     
-    const indexOfLastPost = currentPage * workoutsPerPage
-    const indexOfFirstPost = indexOfLastPost - workoutsPerPage
-    const currentWorkouts = workoutHistory !== null ? workoutHistory.slice(indexOfFirstPost, indexOfLastPost) : []
+    const indexOfLastWorkout = currentPage * workoutsPerPage
+    const indexOfFirstWorkout = indexOfLastWorkout - workoutsPerPage
+    const currentWorkouts = workoutHistory !== null ? workoutHistory.slice(indexOfFirstWorkout, indexOfLastWorkout) : []
 
     function paginate(pageNumber) {
         setCurrentPage(pageNumber)

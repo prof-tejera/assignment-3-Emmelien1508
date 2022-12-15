@@ -49,6 +49,12 @@
     --border-radius-md: 16px;
     --border-radius-sm: 12px;
     --border-radius-xs: 6px;
+
+    --padding-xs: 10px;
+    --padding-sm: 15px;
+    --padding-md: 20px;
+    --padding-lg: 25px;
+    --padding-xl: 50px;
 }
 
 body {

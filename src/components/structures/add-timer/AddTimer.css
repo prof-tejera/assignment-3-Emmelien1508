@@ -1,5 +1,5 @@
 .add-timer {
-    padding: 25px 50px 50px 50px;
+    padding: var(--padding-lg) var(--padding-xl) var(--padding-xl) var(--padding-xl);
     color: var(--white);
     width: 70vw;
     margin-left: auto;
@@ -22,7 +22,7 @@
 }
 
 .add-timer .timer-placeholder {
-    padding: 10px;
+    padding: var(--padding-xs);
     text-align: center;
     border-radius: var(--border-radius-xs);
 }
@@ -35,7 +35,7 @@
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
-    padding: 15px 0;
+    padding: var(--padding-sm) 0;
 }
 
 .add-timer .add-timer-wrapper > * {
@@ -48,7 +48,7 @@
 
 .add-timer .timer-data {
     border-radius: var(--border-radius-sm);
-    padding: 10px 20px;
+    padding: var(--padding-xs) var(--padding-md);
 }
 
 @media screen and (max-width: 800px) {

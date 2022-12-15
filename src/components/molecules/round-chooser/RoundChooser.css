@@ -6,5 +6,5 @@
 }
 
 .round-chooser {
-    padding-top: 10px;
+    padding-top: var(--padding-xs);
 }

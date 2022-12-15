@@ -6,7 +6,7 @@ import './TimePanel.css'
 
 export default function TimePanel(props) {
     const [key, setKey] = useState(props.index)
-    const children = ({ remainingTime }) => {
+    const time = ({ remainingTime }) => {
         return (
             <div className='text-center'>
                 {props.title && !props.compact && (<p>{props.title}</p>)}
@@ -44,6 +44,7 @@ export default function TimePanel(props) {
                     )}
                 </div>
                     <CountdownCircleTimer
+                        trailColor='#fff'
                         isPlaying={props.animated}
                         duration={props.duration}
                         strokeWidth={4}
@@ -54,7 +55,7 @@ export default function TimePanel(props) {
                             setKey(prevKey => prevKey + 1)
                         }}
                     >
-                        {children}
+                        {time}
                     </CountdownCircleTimer>
             </div>
     )

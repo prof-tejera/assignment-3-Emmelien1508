@@ -1,12 +1,14 @@
 import { useContext, useEffect, useRef, useState } from "react"
 import { createSearchParams, Link, useNavigate, useSearchParams } from "react-router-dom"
-import { TimerContext } from "../../../context/TimerContext"
-import { initialRounds, initialMinutes, initialSeconds, initialRestMinutes, initialRestSeconds } from "../../../utils/constants"
-import { getFormattedTime, getInitialChooserData, getSeconds, setEditTimerConfiguration } from "../../../utils/helpers"
-import Button from "../../atoms/button/Button"
+import { ErrorBoundary } from 'react-error-boundary'
+
 import RoundChooser from "../../molecules/round-chooser/RoundChooser"
 import TimeChooser from "../../molecules/time-chooser/TimeChooser"
-import { ErrorBoundary } from 'react-error-boundary'
+import Button from "../../atoms/button/Button"
+
+import { TimerContext } from "../../../context/TimerContext"
+import { initialRounds, initialMinutes, initialSeconds, initialRestMinutes, initialRestSeconds } from "../../../utils/constants"
+import { getInitialChooserData, getInitialTimerData, parseTime, saveSearchParams, saveTimerData, setEditTimerConfiguration } from "../../../utils/helpers"
 
 import './EditTimer.css'
 
@@ -14,51 +16,40 @@ import './EditTimer.css'
 export default function EditTimer() {
     const navigate = useNavigate()
     const [searchParams, setSearchParams] = useSearchParams()
+
     const {timers, setTimers} = useContext(TimerContext)
     const [timer, setTimer] = useState(null)
+
     const [rounds, setRounds] = useState(initialRounds)
     const [restMinutes, setRestMinutes] = useState(initialRestMinutes)
     const [restSeconds, setRestSeconds] = useState(initialRestSeconds)
     const [minutes, setMinutes] = useState(initialMinutes)
     const [seconds, setSeconds] = useState(initialSeconds)
+
     const currentTimer = useRef(timer)
     const storedTimers = JSON.parse(localStorage.getItem('timers'))
 
-    const data = getInitialChooserData('', minutes, seconds, setMinutes, setSeconds)
-    const restData = getInitialChooserData('rest ', restMinutes, restSeconds, setRestMinutes, setRestSeconds)
-
+    const [data, setData] = useState(getInitialChooserData('', minutes, seconds, setMinutes, setSeconds))
+    const [restData, setRestData] = useState(getInitialChooserData('rest ', restMinutes, restSeconds, setRestMinutes, setRestSeconds))
+    
     useEffect(() => {
         if (searchParams.get('index')) {
             currentTimer.current = storedTimers[parseInt(searchParams.get('index'))]
             setTimer(currentTimer.current)
         }
 
-        if (searchParams.get('minutes')) {
-            setMinutes(parseInt(searchParams.get('minutes')))
+        if (searchParams.get('name') && searchParams.get('timeEndValue') && searchParams.get('timeStartValue')) {
+            const time = parseTime(searchParams.get('name'), searchParams.get('timeStartValue'), searchParams.get('timeEndValue'))
+            setMinutes(time.minutes)
+            setSeconds(time.seconds)
         }
 
-        if (searchParams.get('seconds')) {
-            setSeconds(parseInt(searchParams.get('seconds')))
+        if (searchParams.get('roundStartValue')) {
+            setRounds(parseInt(searchParams.get('roundStartValue')))
         }
 
-        if (searchParams.get('rest-minutes')) {
-            setRestMinutes(parseInt(searchParams.get('rest-minutes')))
-        }
-
-        if (searchParams.get('rest-seconds')) {
-            setRestSeconds(parseInt(searchParams.get('rest-seconds')))
-        }
-
-        if (searchParams.get('rounds')) {
-            setRounds(parseInt(searchParams.get('rounds')))
-        }
+        saveSearchParams(searchParams, setMinutes, setSeconds, setRestMinutes, setRestSeconds, setRounds)
     }, [])
-
-    useEffect(() => {
-        const timerData = storedTimers ? JSON.stringify(storedTimers) : JSON.stringify(timers)
-        const query = setEditTimerConfiguration(searchParams, currentTimer.current, minutes, seconds, rounds, restMinutes, restSeconds, timerData)
-        setSearchParams(query)
-    }, [minutes, seconds, restMinutes, restSeconds, rounds])
 
     useEffect(() => {
         const storedTimers = JSON.parse(localStorage.getItem('timers'))
@@ -73,36 +64,34 @@ export default function EditTimer() {
         }
     }, [])
 
-    function editTimer() {
-        // const timrs = JSON.parse(searchParams.get('timers'))
-        console.log("save timer config and add it to array of timers")
-        if (currentTimer.current.name === 'Stopwatch') {
-            currentTimer.current.timeEndValue = getSeconds(minutes, seconds) + 1
-            currentTimer.current.duration = currentTimer.current.timeEndValue - 1
-            data.subtitle = `count up to ${getFormattedTime(minutes, seconds)}`
-        } else if (currentTimer.current.name === 'Countdown') {
-            currentTimer.current.timeStartValue = getSeconds(minutes, seconds)
-            currentTimer.current.duration = currentTimer.current.timeStartValue
-            data.subtitle = `count down from ${getFormattedTime(minutes, seconds)}`
-        } else if (currentTimer.current.name === 'XY') {
-            currentTimer.current.roundStartValue = rounds
-            currentTimer.current.timeStartValue = getSeconds(minutes, seconds)
-            currentTimer.current.duration = currentTimer.current.timeStartValue * currentTimer.current.roundStartValue
-            data.subtitle = `count down from ${getFormattedTime(minutes, seconds)}`
-        } else {
-            currentTimer.current.timeStartValue = getSeconds(minutes, seconds)
-            currentTimer.current.restTimeStartValue = getSeconds(restMinutes, restSeconds)
-            currentTimer.current.roundStartValue = rounds
-            currentTimer.current.duration = (currentTimer.current.timeStartValue + currentTimer.current.restTimeStartValue) * currentTimer.current.roundStartValue
-            data.subtitle = `work for ${getFormattedTime(minutes, seconds)} & rest for ${getFormattedTime(restMinutes, restSeconds)}`
-        }
+    useEffect(() => {
+        let newData = getInitialChooserData('', minutes, seconds, rounds, setMinutes, setSeconds, setRounds)
+        setData(newData)
 
-        console.log(timers)
-        console.log(currentTimer.current)
-        timers[currentTimer.current.index] = currentTimer.current
+        let newRestData = getInitialChooserData('rest ', restMinutes, restSeconds, rounds, setRestMinutes, setRestSeconds, setRounds)
+        setRestData(newRestData)
+        
+        const timerData = timers ? JSON.stringify(timers) : JSON.stringify(storedTimers)
+        const query = timer ? (
+            setEditTimerConfiguration(searchParams, timer, newData.minutes, newData.seconds, newData.rounds, newRestData.minutes, newRestData.seconds, timerData)
+        ) : (
+            setEditTimerConfiguration(searchParams, currentTimer.current, newData.minutes, newData.seconds, newData.rounds, newRestData.minutes, newRestData.seconds, timerData)
+        )
+        setSearchParams({
+            ...searchParams,
+            ...query
+        })
+    }, [minutes, seconds, restMinutes, restSeconds, rounds])
+    
+    function editTimer() {
+        let data = getInitialTimerData(timer ? timer.name : currentTimer.current.name, timers.length + 1, minutes, seconds)
+        data.index = currentTimer.current.index
+        data = saveTimerData(data, minutes, seconds, restMinutes, restSeconds, rounds)
+        timers[data.index] = data
+
         navigate({
             pathname: '/',
-            search: `?${createSearchParams({ timers: timers })}`
+            search: `?${createSearchParams({ timers: JSON.stringify(timers) })}`
         })
     }
 

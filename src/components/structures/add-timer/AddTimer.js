@@ -1,17 +1,13 @@
 import { useContext, useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 
-import { getFormattedTime, getInitialChooserData, getInitialTimerData, getSeconds, setAddTimerConfiguration } from '../../../utils/helpers'
-import { initialRounds, initialMinutes, initialSeconds, initialRestMinutes, initialRestSeconds } from '../../../utils/constants'
-import { TimerContext } from '../../../context/TimerContext'
-
-import Button from '../../atoms/button/Button'
 import RoundChooser from '../../molecules/round-chooser/RoundChooser'
 import TimeChooser from '../../molecules/time-chooser/TimeChooser'
-import Countdown from '../../organisms/countdown/Countdown'
-import Stopwatch from '../../organisms/stopwatch/Stopwatch'
-import Tabata from '../../organisms/tabata/Tabata'
-import XY from '../../organisms/xy/XY'
+import Button from '../../atoms/button/Button'
+
+import { TimerContext } from '../../../context/TimerContext'
+import { initialRounds, initialMinutes, initialSeconds, initialRestMinutes, initialRestSeconds } from '../../../utils/constants'
+import { getInitialChooserData, getInitialTimerData, saveSearchParams, saveTimerData, setAddTimerConfiguration } from '../../../utils/helpers'
 
 import './AddTimer.css'
 
@@ -27,8 +23,8 @@ export default function AddTimer() {
     const [minutes, setMinutes] = useState(initialMinutes)
     const [seconds, setSeconds] = useState(initialSeconds)
 
-    const data = getInitialChooserData('', minutes, seconds, setMinutes, setSeconds)
-    const restData = getInitialChooserData('rest ', restMinutes, restSeconds, setRestMinutes, setRestSeconds)
+    const data = getInitialChooserData('', minutes, seconds, rounds, setMinutes, setSeconds, setRounds)
+    const restData = getInitialChooserData('rest ', restMinutes, restSeconds, rounds, setRestMinutes, setRestSeconds, setRounds)
 
     const storedTimers = JSON.parse(localStorage.getItem('timers'))
     useEffect(() => {
@@ -46,26 +42,7 @@ export default function AddTimer() {
 
         if (searchParams.get('type') !== '' || searchParams.get('type') !== 'null') {
             setType(searchParams.get('type'))
-
-            if (searchParams.get('minutes')) {
-                setMinutes(parseInt(searchParams.get('minutes')))
-            }
-    
-            if (searchParams.get('seconds')) {
-                setSeconds(parseInt(searchParams.get('seconds')))
-            }
-    
-            if (searchParams.get('rest-minutes')) {
-                setRestMinutes(parseInt(searchParams.get('rest-minutes')))
-            }
-    
-            if (searchParams.get('rest-seconds')) {
-                setRestSeconds(parseInt(searchParams.get('rest-seconds')))
-            }
-    
-            if (searchParams.get('rounds')) {
-                setRounds(parseInt(searchParams.get('rounds')))
-            }
+            saveSearchParams(searchParams, setMinutes, setSeconds, setRestMinutes, setRestSeconds, setRounds)
         }
     }, [])
 
@@ -77,38 +54,12 @@ export default function AddTimer() {
 
     function addTimer() {
         let data = getInitialTimerData(type, timers.length + 1, minutes, seconds)
-
-        if (type === 'Stopwatch') {
-            data.component = Stopwatch
-            data.subtitle = `count up to ${getFormattedTime(minutes, seconds)}`
-            data.timeEndValue = getSeconds(minutes, seconds) + 1
-            data.timeStartValue = 1
-            data.duration = data.timeEndValue - 1
-        } else if (type === 'Countdown') {
-            data.component = Countdown
-            data.subtitle = `count down from ${getFormattedTime(minutes, seconds)}`
-            data.duration = data.timeStartValue
-        } else if (type === 'XY') {
-            data.component = XY
-            data.currentRound = 0
-            data.roundEndValue = 1
-            data.roundStartValue = rounds
-            data.subtitle = `count down from ${getFormattedTime(minutes, seconds)}`
-            data.duration = data.timeStartValue * data.roundStartValue
-        } else {
-            data.component = Tabata
-            data.restTimeEndValue = 0
-            data.restTimeStartValue = getSeconds(restMinutes, restSeconds)
-            data.roundEndValue = 1
-            data.roundStartValue = rounds
-            data.subtitle = `work for ${getFormattedTime(minutes, seconds)} & rest for ${getFormattedTime(restMinutes, restSeconds)}`
-            data.title = 'Work 🏋🏼'
-            data.duration = (data.timeStartValue + data.restTimeStartValue) * data.roundStartValue
-        }
-
+        data = saveTimerData(data, minutes, seconds, restMinutes, restSeconds, rounds)
         const newTimers = [...timers, data]
+        
         setTimers(newTimers)
         resetTimerData()
+
         setSearchParams({
             timers: newTimers ? JSON.stringify(newTimers) : JSON.stringify(storedTimers)
         })

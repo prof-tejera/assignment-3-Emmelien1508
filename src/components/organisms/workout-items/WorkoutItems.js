@@ -1,19 +1,21 @@
 import { useContext, useEffect } from 'react'
-
+import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { ErrorBoundary } from 'react-error-boundary'
+
 import { faArrowDown, faArrowUp, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { TimerContext } from '../../../context/TimerContext'
-import { workoutIsDone, swapElements } from '../../../utils/helpers'
-import Button from '../../atoms/button/Button'
 import Countdown from '../../organisms/countdown/Countdown'
 import Stopwatch from '../../organisms/stopwatch/Stopwatch'
 import Tabata from '../../organisms/tabata/Tabata'
 import XY from '../../organisms/xy/XY'
+import Button from '../../atoms/button/Button'
+
+import { TimerContext } from '../../../context/TimerContext'
+import { workoutIsDone, swapElements } from '../../../utils/helpers'
 
 import './WorkoutItems.css'
-import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom'
+
 
 export default function WorkoutItems({timers, setTimers}) {
     const { 
@@ -110,10 +112,10 @@ export default function WorkoutItems({timers, setTimers}) {
         }
     }
 
-    function editTimer(index) {
+    function editTimer(timer) {
         navigate({
             pathname: '/edit',
-            search: `?${createSearchParams({ index: index })}`
+            search: `?${createSearchParams({...timer})}`
         })
     }
 
@@ -139,7 +141,7 @@ export default function WorkoutItems({timers, setTimers}) {
                         </Button>
                         {stopped && (
                             <div>
-                                <Button classes='round primary edit' key={`edit-${timer.name}-${index}`} onClick={() => editTimer(index)}>
+                                <Button classes='round primary edit' key={`edit-${timer.name}-${index}`} onClick={() => editTimer(timer)}>
                                     <FontAwesomeIcon icon={faPenToSquare} size="sm" />
                                 </Button>
                                 <Button classes='round secondary up' key={`up-${timer.name}-${index}`} onClick={() => moveTimerUp(index)}>

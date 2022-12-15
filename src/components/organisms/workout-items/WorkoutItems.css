@@ -7,7 +7,7 @@
 
 .timer {
     min-height: 400px;
-    padding: 10px;
+    padding: var(--padding-xs);
     position: relative;
 }
 

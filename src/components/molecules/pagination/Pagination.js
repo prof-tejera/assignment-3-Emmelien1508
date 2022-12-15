@@ -1,4 +1,5 @@
-import Button from '../../atoms/button/Button';
+import Button from '../../atoms/button/Button'
+
 import './Pagination.css'
 
 
@@ -18,5 +19,5 @@ export default function Pagination({ workoutsPerPage, totalWorkouts, paginate })
                 ))}
             </div>
         </div>
-     );
+     )
 }
