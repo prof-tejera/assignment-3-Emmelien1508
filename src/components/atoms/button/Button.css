@@ -1,5 +1,9 @@
 .button {
     cursor: pointer;
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
 }
 
 .button.primary,
@@ -15,14 +19,8 @@
     justify-content: center;
     padding: var(--padding-xs) var(--padding-xl);
     text-align: center;
-    /* text-transform: lowercase; */
     transition: var(--transition);
     white-space: nowrap;
-
-    -webkit-user-select: none; /* Safari */        
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* IE10+/Edge */
-    user-select: none; /* Standard */
 
 }
 

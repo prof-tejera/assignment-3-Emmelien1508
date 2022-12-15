@@ -1,5 +1,4 @@
 .add-timer {
-    padding: var(--padding-lg) var(--padding-xl) var(--padding-xl) var(--padding-xl);
     color: var(--white);
     width: 70vw;
     margin-left: auto;
@@ -7,14 +6,18 @@
     margin-top: 50px;
 }
 
+.add-timer-container {
+    padding: var(--padding-md);
+}
+
 .add-timer .timer-placeholder-summary {
-    margin-bottom: 25px;
+    margin-top: var(--padding-lg);
+    padding: var(--padding-md);
 }
 
 .add-timer .timer-placeholders {
     display: grid;
-    width: 60vw;
-    grid-template-columns: repeat(5, 9vw);
+    grid-template-columns: repeat(5, 18%);
     column-gap: 10px;
     justify-content: space-between;
     row-gap: 10px;
@@ -35,7 +38,8 @@
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
-    padding: var(--padding-sm) 0;
+    padding-top: var(--padding-lg);
+    padding-bottom: var(--padding-sm);
 }
 
 .add-timer .add-timer-wrapper > * {
