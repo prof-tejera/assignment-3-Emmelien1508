@@ -3,15 +3,15 @@ import Button from '../../atoms/button/Button'
 import './RoundChooser.css'
 
 
-export default function RoundChooser(props) {
+export default function RoundChooser({rounds, setRounds}) {
     function handleRoundDecrement() {
-        if (props.rounds > 1) {
-            props.setRounds(props.rounds - 1)
+        if (rounds > 1) {
+            setRounds(rounds - 1)
         }
     }
 
     function handleRoundIncrement() {
-        props.setRounds(props.rounds + 1)
+        setRounds(rounds + 1)
     }
 
 
@@ -20,7 +20,7 @@ export default function RoundChooser(props) {
             <p>rounds</p>
             <div className='chooser-buttons'>
                 <Button onClick={handleRoundDecrement}>-</Button>
-                <p className='chooser-amount'>{props.rounds}</p>
+                <p className='chooser-amount'>{rounds}</p>
                 <Button onClick={handleRoundIncrement}>+</Button>
             </div>
         </div>

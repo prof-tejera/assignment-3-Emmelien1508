@@ -3,55 +3,62 @@ import Button from '../../atoms/button/Button'
 import './TimeChooser.css'
 
 
-export default function TimeChooser(props) {
+export default function TimeChooser({
+    minutesLabel,
+    secondsLabel,
+    minutes,
+    setMinutes,
+    seconds,
+    setSeconds
+}) {
     function handleMinIncrement() {
-        if (props.minutes < 60) {
-            props.setMinutes(props.minutes + 1)
+        if (minutes < 60) {
+            setMinutes(minutes + 1)
         }
     }
 
     function handleMinDecrement() {
-        if (props.minutes > 1) {
-            props.setMinutes(props.minutes - 1)
-        } else if (props.seconds > 0) {
-            props.setMinutes(0)
+        if (minutes > 1) {
+            setMinutes(minutes - 1)
+        } else if (seconds > 0) {
+            setMinutes(0)
         }
     }
 
     function handleSecIncrement() {
-        if (props.seconds === 59) {
-            props.setMinutes(props.minutes + 1)
-            props.setSeconds(0)
+        if (seconds === 59) {
+            setMinutes(minutes + 1)
+            setSeconds(0)
         } else {
-            props.setSeconds(props.seconds + 1)
+            setSeconds(seconds + 1)
         }
     }
 
     function handleSecDecrement() {
-        if (props.seconds >= 1) {
-            props.setSeconds(props.seconds - 1)
-        } else if (props.minutes === 1 && props.seconds === 0) {
-            props.setSeconds(59)
-            props.setMinutes(props.minutes - 1)
+        if (seconds >= 1) {
+            setSeconds(seconds - 1)
+        } else if (minutes === 1 && seconds === 0) {
+            setSeconds(59)
+            setMinutes(minutes - 1)
         }
     }
 
     return (
         <div className='time-chooser'>
             <div className='chooser minute-chooser'>
-                <p>{props.minutesLabel}</p>
+                <p>{minutesLabel}</p>
                 <div className='chooser-buttons'>
                     <Button onClick={handleMinDecrement}>-</Button>
-                    <p className='chooser-amount'>{props.minutes}</p>
+                    <p className='chooser-amount'>{minutes}</p>
                     <Button onClick={handleMinIncrement}>+</Button>
                 </div>
             </div>
             
             <div className='chooser second-chooser'>
-                <p>{props.secondsLabel}</p>
+                <p>{secondsLabel}</p>
                 <div className='chooser-buttons'>
                     <Button onClick={handleSecDecrement}>-</Button>
-                    <p className='chooser-amount'>{props.seconds}</p>
+                    <p className='chooser-amount'>{seconds}</p>
                     <Button onClick={handleSecIncrement}>+</Button>
                 </div>
             </div>

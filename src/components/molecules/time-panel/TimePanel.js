@@ -4,59 +4,75 @@ import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import './TimePanel.css'
 
 
-export default function TimePanel(props) {
-    const [key, setKey] = useState(props.index)
+export default function TimePanel({
+    animated,
+    color,
+    compact,
+    completed,
+    currentRound,
+    currentTime,
+    duration,
+    index,
+    name,
+    roundStartValue,
+    running,
+    size,
+    subtitle,
+    title
+}) {
+    const [key, setKey] = useState(index)
     const time = ({ remainingTime }) => {
         return (
             <div className='text-center'>
-                {props.title && !props.compact && (<p>{props.title}</p>)}
-                {props.running && !props.completed && (
-                    <p className={`${props.size === 100 ? 'text-md' : 'text-xl'} ${props.animated ? 'glowing' : ''}`}>
-                        {props.currentTime}
+                {title && !compact && (<p>{title}</p>)}
+                {running && !completed && (
+                    <p className={`${size === 100 ? 'text-md' : 'text-xl'} ${animated ? 'glowing' : ''}`}>
+                        {currentTime}
                     </p>
                 )}
 
-                {!props.running && !props.completed && (
-                    <p className={`${props.size === 100 ? 'text-md' : 'text-xl'}`}>
-                        {props.currentTime}
+                {!running && !completed && (
+                    <p className={`${size === 100 ? 'text-md' : 'text-xl'}`}>
+                        {currentTime}
                     </p>
                 )}
 
-                {!props.running && props.completed && (
-                    <p className={`${props.size === 100 ? 'text-md' : 'text-xl'}`}>
-                        {props.duration}
+                {!running && completed && (
+                    <p className={`${size === 100 ? 'text-md' : 'text-xl'}`}>
+                        {duration}
                     </p>
                 )}
-                <p className={`${props.size === 100 ? 'text-xs' : 'text-sm'}`}>seconds</p>
+                <p className={`${size === 100 ? 'text-xs' : 'text-sm'}`}>seconds</p>
             </div>
         )
     }
 
     return (
-            <div className={`time-panel ${props.animated ? 'animated' : ''}`}>
+            <div className={`time-panel ${animated ? 'animated' : ''}`}>
                 <div className='time-panel-information'>
-                    {props.name && (<p className='text-lg'>{props.name}</p>)}
-                    {props.subtitle && (<p className='text-xs'>{props.subtitle}</p>)}
-                    {props.currentRound !== null && !props.compact && props.roundStartValue && (
+                    {name && (<p className='text-lg'>{name}</p>)}
+                    {subtitle && (<p className='text-xs'>{subtitle}</p>)}
+                    {currentRound !== null && !compact && roundStartValue && (
                         <p className='rounds'>
-                            Round {props.animated ? props.roundStartValue - props.currentRound + 1 : 1} / {props.roundStartValue}
+                            Round {animated ? roundStartValue - currentRound + 1 : 1} / {roundStartValue}
                         </p>
                     )}
                 </div>
-                    <CountdownCircleTimer
-                        trailColor='#fff'
-                        isPlaying={props.animated}
-                        duration={props.duration}
-                        strokeWidth={4}
-                        key={key}
-                        size={props.size ? props.size : 240}
-                        colors={props.color ? [props.color] : ['#c925ff']}
-                        onComplete={() => {
-                            setKey(prevKey => prevKey + 1)
-                        }}
-                    >
-                        {time}
-                    </CountdownCircleTimer>
+
+                <CountdownCircleTimer
+                    trailColor='#fff'
+                    isPlaying={animated}
+                    duration={duration}
+                    strokeWidth={4}
+                    key={key}
+                    size={size ? size : 240}
+                    colors={color ? [color] : ['#c925ff']}
+                    onComplete={() => {
+                        setKey(prevKey => prevKey + 1)
+                    }}
+                >
+                    {time}
+                </CountdownCircleTimer>
             </div>
     )
 }

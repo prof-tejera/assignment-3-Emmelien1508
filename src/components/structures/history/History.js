@@ -8,7 +8,7 @@ import Button from '../../atoms/button/Button'
 import './History.css'
 
 
-export default function History(props) {
+export default function History() {
     const [currentPage, setCurrentPage] = useState(1)
     const [workoutsPerPage] = useState(10)
     const workoutHistory = JSON.parse(localStorage.getItem('history'))

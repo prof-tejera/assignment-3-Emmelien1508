@@ -28,10 +28,8 @@ export default function AddTimer() {
 
     const storedTimers = JSON.parse(localStorage.getItem('timers'))
     useEffect(() => {
-        setSearchParams({
-            ...searchParams,
-            timers: storedTimers ? JSON.stringify(storedTimers) : timers
-        })
+        searchParams.set('timers', storedTimers ? JSON.stringify(storedTimers) : timers)
+        setSearchParams(searchParams)
     }, [timers])
 
     useEffect(() => {
@@ -48,8 +46,8 @@ export default function AddTimer() {
 
     useEffect(() => {
         const timerData = timers ? JSON.stringify(timers) : JSON.stringify(storedTimers)
-        const query = setAddTimerConfiguration(searchParams, type, minutes, seconds, rounds, restMinutes, restSeconds, timerData)
-        setSearchParams(query)
+        const params = setAddTimerConfiguration(searchParams, type, minutes, seconds, rounds, restMinutes, restSeconds, timerData)
+        setSearchParams(params)
     }, [type, minutes, seconds, restMinutes, restSeconds, rounds])
 
     function addTimer() {
@@ -60,9 +58,8 @@ export default function AddTimer() {
         setTimers(newTimers)
         resetTimerData()
 
-        setSearchParams({
-            timers: newTimers ? JSON.stringify(newTimers) : JSON.stringify(storedTimers)
-        })
+        searchParams.set('timers', newTimers ? JSON.stringify(newTimers) : JSON.stringify(storedTimers))
+        setSearchParams(searchParams)
     }
 
     function resetTimerData() {

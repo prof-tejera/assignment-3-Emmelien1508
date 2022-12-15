@@ -5,19 +5,16 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { faArrowDown, faArrowUp, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import Countdown from '../../organisms/countdown/Countdown'
-import Stopwatch from '../../organisms/stopwatch/Stopwatch'
-import Tabata from '../../organisms/tabata/Tabata'
-import XY from '../../organisms/xy/XY'
 import Button from '../../atoms/button/Button'
 
 import { TimerContext } from '../../../context/TimerContext'
 import { workoutIsDone, swapElements } from '../../../utils/helpers'
 
 import './WorkoutItems.css'
+import Timer from '../timer/Timer'
 
 
-export default function WorkoutItems({timers, setTimers}) {
+export default function WorkoutItems({timers, setTimers, handleReset}) {
     const { 
         stopped, currentTimerIndex
     } = useContext(TimerContext)
@@ -31,15 +28,7 @@ export default function WorkoutItems({timers, setTimers}) {
     }
 
     function getTimerComponent(data, running) {
-        if (data.name === 'Stopwatch') {
-            return <Stopwatch {...data} running={running}/>
-        } else if (data.name === 'Countdown') {
-            return <Countdown {...data} running={running}/>
-        } else if (data.name === 'XY') {
-            return <XY {...data} running={running}/>
-        } else {
-            return <Tabata {...data} running={running}/>
-        }
+        return <Timer {...data} running={running} />
     }
     
     function moveTimerDown(index) {
@@ -80,7 +69,7 @@ export default function WorkoutItems({timers, setTimers}) {
     return (
         <div className='workout-items'>
             {timers.map((timer, index) => (
-                <ErrorBoundary key={`${timer.index}-${index}`} FallbackComponent={ErrorFallback} onReset={() => { }}>
+                <ErrorBoundary key={`${timer.index}-${index}`} FallbackComponent={ErrorFallback} onReset={() => handleReset()}>
                     <div className={`timer blurred-dark ${(index === currentTimerIndex && (!stopped || workoutIsFinished)) ? 'blurred-active' : ''}`} key={`timer-${timer.name}-${index}`}>
                         <Button classes='round primary index'>
                             {index + 1}

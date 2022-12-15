@@ -9,7 +9,7 @@ import Button from '../../atoms/button/Button'
 
 import { TimerContext } from '../../../context/TimerContext'
 import { MAX } from '../../../utils/constants'
-import { calculateWorkoutTime } from '../../../utils/helpers'
+import { calculateWorkoutRemainingTime, calculateWorkoutTime } from '../../../utils/helpers'
 
 import './Workout.css'
 
@@ -26,11 +26,45 @@ export default function Workout() {
     const [sidebarTop, setSidebarTop] = useState(undefined)
     const [searchParams, setSearchParams] = useSearchParams()
     const [totalTime, setTotalTime] = useState(0)
-    const workoutRunningTime = useRef(0)
+    const workoutRemainingTime = useRef(0)
     const totalWorkoutTime = useRef(0)
+    const initialRemainingTime = useRef(0)
 
     const storedTimers = JSON.parse(localStorage.getItem('timers'))
     const workoutHistory = JSON.parse(localStorage.getItem('history'))
+
+    useEffect(() => {
+        if (searchParams.get('current-timer-index')) {
+            setCurrentTimerIndex(parseInt(searchParams.get('current-timer-index')))
+        } 
+
+        if (searchParams.get('paused')) {
+            setPaused(searchParams.get('paused') === 'true')
+        }
+
+        if (searchParams.get('rest-time')) {
+            setRestTime(parseInt(searchParams.get('rest-time')))
+        }
+
+        if (searchParams.get('round')) {
+            setRound(parseInt(searchParams.get('round')))
+        } 
+
+        if (searchParams.get('stopped')) {
+            setStopped(searchParams.get('stopped') === 'true')
+        }
+
+        if (searchParams.get('time')) {
+            setTime(parseInt(searchParams.get('time')))
+        }
+
+        if (searchParams.get('timers')) {
+            setTimers(JSON.parse(searchParams.get('timers')))
+            setTotalTime(calculateWorkoutTime(JSON.parse(searchParams.get('timers'))))
+            initialRemainingTime.current = calculateWorkoutRemainingTime(JSON.parse(searchParams.get('timers')))
+            setRemainingTime(initialRemainingTime.current)
+        }
+    }, [])
 
     useEffect(() => {
         const timerContainer = document.querySelector('.workout-time-container')
@@ -82,17 +116,18 @@ export default function Workout() {
     }, [])
 
     useEffect(() => {
-        setSearchParams({
-            ...searchParams,
-            timers: JSON.stringify(timers)
-        })
+        searchParams.set('timers', JSON.stringify(timers))
+        setSearchParams(searchParams)
 
         if (stopped || paused) {
             totalWorkoutTime.current = calculateWorkoutTime(timers)
             setTotalTime(totalWorkoutTime.current)
-            workoutRunningTime.current = calculateWorkoutTime(timers)
-            setRemainingTime(workoutRunningTime.current)
+            workoutRemainingTime.current = calculateWorkoutRemainingTime(timers)
+            setRemainingTime(workoutRemainingTime.current)
         }
+
+        searchParams.set('remaining-time', `${remainingTime}`)
+        setSearchParams(searchParams)
     }, [timers])
 
     function handleStart() {
@@ -113,22 +148,37 @@ export default function Workout() {
             setRestTime(storedTimers[0].restTimeStartValue)
         }
 
+        initialRemainingTime.current = calculateWorkoutTime(newTimers)
+        setRemainingTime(initialRemainingTime.current)
         setCurrentTimerIndex(0)
         setStopped(false)
         setPaused(false)
+
+        searchParams.set('stopped', 'false')
+        searchParams.set('paused', 'false')
+        setSearchParams(searchParams)
     }
 
     function handlePause() {
         setPaused(!paused)
+        searchParams.set('paused', 'true')
+        setSearchParams(searchParams)
     }
 
     function handleReset() {
         const newTimers = storedTimers.map((timer, index) => {
-            return {...timer, running: false, completed: false}
+            return {...timer, running: false, completed: false, currentTime: 0}
         })
         setTimers(newTimers)
         setStopped(true)
         setCurrentTimerIndex(MAX)
+        setRemainingTime(0)
+
+        searchParams.set('timers', JSON.stringify(newTimers))
+        searchParams.set('stopped', 'true')
+        searchParams.set('current-timer-index', `${MAX}`)
+        searchParams.set('remaining-time', `${calculateWorkoutTime(newTimers)}`)
+        setSearchParams(searchParams)
     }
 
     const { width, height } = useWindowSize()
@@ -174,17 +224,33 @@ export default function Workout() {
                     <div className='workout-time-container blurred'>
                         <div className='workout-time'>
                             <div className='text-center'>
-                                <TimePanel
-                                    animated={stopped ? false : true}
-                                    color={'#a7f745'}
-                                    completed={false}
-                                    currentTime={remainingTime} 
-                                    duration={totalTime}
-                                    index={0}
-                                    name={stopped ? 'Total time': 'Remaining time'}
-                                    running={!stopped}
-                                    size={200}
-                                />
+                                {stopped && (
+                                    <TimePanel
+                                        animated={false}
+                                        color={'#a7f745'}
+                                        completed={false}
+                                        currentTime={totalTime} 
+                                        duration={totalTime}
+                                        index={MAX}
+                                        name={'Total time'}
+                                        running={false}
+                                        size={200}
+                                    />
+                                )}
+
+                                {!stopped && (
+                                    <TimePanel
+                                        animated={!paused}
+                                        color={'#a7f745'}
+                                        completed={false}
+                                        currentTime={remainingTime} 
+                                        duration={totalTime}
+                                        index={MAX}
+                                        name={'Remaining time'}
+                                        running={!paused}
+                                        size={200}
+                                    />
+                                )}
                             </div>
                         </div>
 
@@ -202,6 +268,7 @@ export default function Workout() {
                         <WorkoutItems 
                             timers={storedTimers}
                             setTimers={setTimers}
+                            handleReset={handleReset}
                         />
                     )}
                 </div>

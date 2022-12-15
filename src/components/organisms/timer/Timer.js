@@ -6,23 +6,96 @@ import { TimerContext } from "../../../context/TimerContext"
 import { useSearchParams } from "react-router-dom"
 
 
-export default function Timer(props) {
-    let data = { ...props }
+export default function Timer({
+    animated,
+    compact,
+    completed,
+    currentRound,
+    currentTime,
+    duration,
+    index,
+    name,
+    restTimeEndValue,
+    restTimeStartValue,
+    roundEndValue,
+    roundStartValue,
+    running,
+    size,
+    subtitle,
+    timeEndValue,
+    timeStartValue,
+    title,
+}) {
 
-    if (!props.running || props.completed) {
+    if (!running || completed) {
         return (
-            <div className={props.name}>
-                <TimePanel {...data} />
+            <div className={name}>
+                <TimePanel 
+                    animated={animated}
+                    compact={compact}
+                    completed={completed}
+                    currentRound={currentRound}
+                    currentTime={currentTime}
+                    duration={duration}
+                    index={index}
+                    name={name}
+                    restTimeEndValue={restTimeEndValue}
+                    restTimeStartValue={restTimeStartValue}
+                    roundEndValue={roundEndValue}
+                    roundStartValue={roundStartValue}
+                    running={running}
+                    size={size}
+                    subtitle={subtitle}
+                    timeEndValue={timeEndValue}
+                    timeStartValue={timeStartValue}
+                    title={title} 
+                />
             </div>
         )
     }
 
     return (
-        <InnerTimer {...data} />
+        <InnerTimer 
+            animated={animated}
+            compact={compact}
+            completed={completed}
+            currentRound={currentRound}
+            currentTime={currentTime}
+            duration={duration}
+            index={index}
+            name={name}
+            restTimeEndValue={restTimeEndValue}
+            restTimeStartValue={restTimeStartValue}
+            roundEndValue={roundEndValue}
+            roundStartValue={roundStartValue}
+            running={running}
+            size={size}
+            subtitle={subtitle}
+            timeEndValue={timeEndValue}
+            timeStartValue={timeStartValue}
+            title={title} 
+        />
     )
 }
 
-function InnerTimer(props) {
+function InnerTimer({
+    compact,
+    completed,
+    currentRound,
+    duration,
+    index,
+    name,
+    restTimeEndValue,
+    restTimeStartValue,
+    roundEndValue,
+    roundStartValue,
+    running,
+    size,
+    subtitle,
+    timeEndValue,
+    timeStartValue,
+    title,
+}) {
     const {
         time, setTime, restTime, setRestTime, remainingTime,
         setRemainingTime, round, setRound, currentTimerIndex,
@@ -38,20 +111,14 @@ function InnerTimer(props) {
                 return {...timer, currentTime: index === currentTimerIndex ? time : 0}
             })
 
-            const params = {
-                ...searchParams,
-                'current-timer-index': currentTimerIndex,
-                'paused': paused,
-                'remaining-time': remainingTime,
-                'rest-time': restTime,
-                'round': round,
-                'stopped': stopped,
-                'time': time,
-                'is-work-time': isWorkTime,
-                'timers': JSON.stringify(newTimers)
-            }
-
-            setSearchParams(params)
+            searchParams.set('current-timer-index', `${currentTimerIndex}`)
+            searchParams.set('rest-time', `${restTime}`)
+            searchParams.set('round', `${round}`)
+            searchParams.set('time', `${time}`)
+            searchParams.set('is-work-time', `${isWorkTime}`)
+            searchParams.set('timers', JSON.stringify(newTimers))
+            searchParams.set('remaining-time', `${remainingTime}`)
+            setSearchParams(searchParams)
         }
     
     }, [currentTimerIndex, time, restTime, remainingTime, round])
@@ -73,30 +140,30 @@ function InnerTimer(props) {
 
     function resetRound() {
         setRound(round - 1)
-        setTime(props.timeStartValue)
+        setTime(timeStartValue)
     }
 
     function resetRestTime() {
         setIsWorkTime(true)
-        setRestTime(props.restTimeStartValue)
+        setRestTime(restTimeStartValue)
     }
 
     useEffect(() => {
         let interval = null
         let restInterval = null
-        const timeNotEnded = props.name === 'Stopwatch' ? time <= props.timeEndValue : time > 0
+        const timeNotEnded = name === 'Stopwatch' ? time <= timeEndValue : time > 0
         const restTimeNotEnded = time === 0 && restTime > 0
 
         if (!paused && !stopped) {
-            if (props.name === 'Stopwatch') {
+            if (name === 'Stopwatch') {
                 if (timeNotEnded) { 
                     interval = setInterval(() => increaseTime(), 1000) 
                 }
 
-                if (time === props.timeEndValue) { 
+                if (time === timeEndValue) { 
                     handleTimerCompleted(timer) 
                 }
-            } else if (props.name === 'Countdown') {
+            } else if (name === 'Countdown') {
                 if (timeNotEnded) { 
                     interval = setInterval(() => decreaseTime(), 1000) 
                 }
@@ -104,7 +171,7 @@ function InnerTimer(props) {
                 if (time === 0) { 
                     handleTimerCompleted(timer) 
                 }
-            } else if (props.name === 'XY') {
+            } else if (name === 'XY') {
                 if (timeNotEnded) { 
                     interval = setInterval(() => decreaseTime(), 1000) 
                 }
@@ -143,7 +210,19 @@ function InnerTimer(props) {
         }
     }, [round, time, restTime, paused, stopped])
 
-    let data = { ...props }
+    let data = {   
+        compact,
+        completed,
+        currentRound,
+        duration,
+        index,
+        name,
+        roundStartValue,
+        running,
+        size,
+        subtitle,
+        title
+    }
     data.animated = (!paused && !stopped) && (time > 0 || (time === 0 && restTime > 0))
     data.currentTime = (data.name === 'Tabata' && !isWorkTime ) ? restTime : time
 
@@ -159,7 +238,7 @@ function InnerTimer(props) {
     }
 
     return (
-        <div className={props.name} ref={timer}>
+        <div className={name} ref={timer}>
             <TimePanel {...data} />
         </div>
     )

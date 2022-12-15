@@ -1,7 +1,5 @@
-import Countdown from "../components/organisms/countdown/Countdown"
-import Stopwatch from "../components/organisms/stopwatch/Stopwatch"
-import Tabata from "../components/organisms/tabata/Tabata"
-import XY from "../components/organisms/xy/XY"
+import Timer from "../components/organisms/timer/Timer"
+
 
 export function calculateWorkoutTime(timers) {
     if (timers === null) {
@@ -11,6 +9,21 @@ export function calculateWorkoutTime(timers) {
     let time = 0
     for (let i=0; i<timers.length; i++) {
         time += timers[i].duration
+    }
+    return time
+}
+
+export function calculateWorkoutRemainingTime(timers) {
+    if (timers === null) {
+        return 0
+    }
+
+    let time = 0
+    for (let i=0; i<timers.length; i++) {
+        // ignore timers that are completed
+        if (!timers[i].completed) {
+            time += timers[i].running ? timers[i].currentTime : timers[i].duration
+        }
     }
     return time
 }
@@ -40,7 +53,7 @@ export function getInitialTimerData(type, length, minutes, seconds) {
         animated: false,
         compact: false,
         completed: false,
-        component: null,
+        component: Timer,
         currentRound: null,
         currentTime: 0,
         duration: 0,
@@ -73,46 +86,40 @@ export function getInitialChooserData(prefix, minutes, seconds, rounds, setMinut
 }
 
 export function setEditTimerConfiguration(searchParams, timer, minutes, seconds, rounds, restMinutes, restSeconds, timers) {
-    const q = {
-        ...searchParams,
-        index: timer.index,
-        type: timer.name,
-        minutes: minutes,
-        seconds: seconds,
-        timers: timers,
-    }
+    searchParams.set('index', `${timer.index}`)
+    searchParams.set('type', `${timer.name}`)
+    searchParams.set('minutes', `${minutes}`)
+    searchParams.set('seconds', `${seconds}`)
+    searchParams.set('timers', JSON.stringify(timers))
 
     if (timer.name === 'XY' || timer.name === 'Tabata') {
-        q['rounds'] = rounds
+        searchParams.set('rounds', `${rounds}`)
     }
 
     if (timer.name === 'Tabata') {
-        q['rest-minutes'] = restMinutes
-        q['rest-seconds'] = restSeconds
+        searchParams.set('rest-minutes', `${restMinutes}`)
+        searchParams.set('rest-seconds', `${restSeconds}`)
     }
 
-    return q
+    return searchParams
 }
 
 export function setAddTimerConfiguration(searchParams, type, minutes, seconds, rounds, restMinutes, restSeconds, timers) {
-    const q = {
-        ...searchParams,
-        type: type,
-        minutes: minutes,
-        seconds: seconds,
-        timers: timers,
-    }
+    searchParams.set('type', `${type}`)
+    searchParams.set('minutes', `${minutes}`)
+    searchParams.set('seconds', `${seconds}`)
+    searchParams.set('timers', JSON.stringify(timers))
 
     if (type === 'XY' || type === 'Tabata') {
-        q['rounds'] = rounds
+        searchParams.set('rounds', `${rounds}`)
     }
 
     if (type === 'Tabata') {
-        q['rest-minutes'] = restMinutes
-        q['rest-seconds'] = restSeconds
+        searchParams.set('rest-minutes', `${restMinutes}`)
+        searchParams.set('rest-seconds', `${restSeconds}`)
     }
 
-    return q
+    return searchParams
 }
 
 export function parseTime(name, timeStartValue, timeEndValue) {
@@ -143,24 +150,20 @@ export function saveSearchParams(searchParams, setMinutes, setSeconds, setRestMi
 
 export function saveTimerData(data, minutes, seconds, restMinutes, restSeconds, rounds) {
     if (data.name === 'Stopwatch') {
-        data.component = Stopwatch
         data.subtitle = `count up to ${getFormattedTime(minutes, seconds)}`
         data.timeEndValue = getSeconds(minutes, seconds) + 1
         data.timeStartValue = 1
         data.duration = data.timeEndValue - 1
     } else if (data.name === 'Countdown') {
-        data.component = Countdown
         data.subtitle = `count down from ${getFormattedTime(minutes, seconds)}`
         data.duration = data.timeStartValue
     } else if (data.name === 'XY') {
-        data.component = XY
         data.currentRound = 0
         data.roundEndValue = 1
         data.roundStartValue = rounds
         data.subtitle = `count down from ${getFormattedTime(minutes, seconds)}`
         data.duration = data.timeStartValue * data.roundStartValue
     } else {
-        data.component = Tabata
         data.restTimeEndValue = 0
         data.restTimeStartValue = getSeconds(restMinutes, restSeconds)
         data.currentRound = 0

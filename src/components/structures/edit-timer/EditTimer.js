@@ -7,8 +7,8 @@ import TimeChooser from "../../molecules/time-chooser/TimeChooser"
 import Button from "../../atoms/button/Button"
 
 import { TimerContext } from "../../../context/TimerContext"
-import { initialRounds, initialMinutes, initialSeconds, initialRestMinutes, initialRestSeconds } from "../../../utils/constants"
-import { getInitialChooserData, getInitialTimerData, parseTime, saveSearchParams, saveTimerData, setEditTimerConfiguration } from "../../../utils/helpers"
+import { initialRounds, initialMinutes, initialSeconds, initialRestMinutes, initialRestSeconds, MAX } from "../../../utils/constants"
+import { calculateWorkoutTime, getInitialChooserData, getInitialTimerData, parseTime, saveSearchParams, saveTimerData, setEditTimerConfiguration } from "../../../utils/helpers"
 
 import './EditTimer.css'
 
@@ -17,7 +17,11 @@ export default function EditTimer() {
     const navigate = useNavigate()
     const [searchParams, setSearchParams] = useSearchParams()
 
-    const {timers, setTimers} = useContext(TimerContext)
+    const {
+        setRemainingTime, setStopped, 
+        setCurrentTimerIndex, timers, setTimers, 
+    } = useContext(TimerContext)
+
     const [timer, setTimer] = useState(null)
 
     const [rounds, setRounds] = useState(initialRounds)
@@ -77,10 +81,8 @@ export default function EditTimer() {
         ) : (
             setEditTimerConfiguration(searchParams, currentTimer.current, newData.minutes, newData.seconds, newData.rounds, newRestData.minutes, newRestData.seconds, timerData)
         )
-        setSearchParams({
-            ...searchParams,
-            ...query
-        })
+        searchParams.set({...query})
+        setSearchParams(searchParams)
     }, [minutes, seconds, restMinutes, restSeconds, rounds])
     
     function editTimer() {
@@ -95,6 +97,22 @@ export default function EditTimer() {
         })
     }
 
+    function handleReset() {
+        const newTimers = storedTimers.map((timer, index) => {
+            return {...timer, running: false, completed: false, currentTime: 0}
+        })
+        setTimers(newTimers)
+        setStopped(true)
+        setCurrentTimerIndex(MAX)
+        setRemainingTime(0)
+
+        searchParams.set('timers', JSON.stringify(newTimers))
+        searchParams.set('stopped', 'true')
+        searchParams.set('current-timer-index', `${MAX}`)
+        searchParams.set('remaining-time', `${calculateWorkoutTime(newTimers)}`)
+        setSearchParams(searchParams)
+    }
+
     function ErrorFallback({error, resetErrorBoundary}) {
         return (
           <div role="alert">
@@ -106,7 +124,7 @@ export default function EditTimer() {
     }
 
     return (
-        <ErrorBoundary  FallbackComponent={ErrorFallback} onReset={() => { }}>
+        <ErrorBoundary  FallbackComponent={ErrorFallback} onReset={() => handleReset()}>
             <div className='edit-timer blurred'>
                 {timer && (<p className='text-lg text-center'>Edit {timer.name} ⏱️</p>)}
                 <div className='edit-timer-wrapper'>
