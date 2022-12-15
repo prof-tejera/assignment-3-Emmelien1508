@@ -4,7 +4,6 @@ import { createContext, useEffect, useState } from 'react'
 export const TimerContext = createContext({})
 
 export default function Timers({ children }) {
-
     const [time, setTime] = useState(0)
     const [round, setRound] = useState(0)
     const [restTime, setRestTime] = useState(0)
@@ -18,7 +17,7 @@ export default function Timers({ children }) {
 
     useEffect(() => {
         const storedTimers = JSON.parse(localStorage.getItem('timers'))
-        if (timers.length === 0) {
+        if (timers === null || timers.length === 0) {
             localStorage.setItem('timers', JSON.stringify(storedTimers))
         } else {
             localStorage.setItem('timers', JSON.stringify(timers))
@@ -29,7 +28,6 @@ export default function Timers({ children }) {
         const storedHistory = JSON.parse(localStorage.getItem('history'))
         if (history === null || history.length === 0) {
             localStorage.setItem('history', JSON.stringify(storedHistory))
-            setHistory(storedHistory)
         } else {
             localStorage.setItem('history', JSON.stringify(history))
         }
@@ -69,19 +67,27 @@ export default function Timers({ children }) {
 
             setCurrentTimerIndex(currentTimerIndex + 1)
             timer.current.scrollIntoView({ behavior: "smooth" })
-        } else {
-            const newTimers = timers.map((timer, index) => {
-                return {...timer, running: false, completed: true}
-            })
-            setTimers([])
-            localStorage.setItem('timers', JSON.stringify([]))
-            const newHistory = history !== null ? [...history, newTimers] : [newTimers]
-            setHistory(newHistory)
-            localStorage.setItem('history', JSON.stringify(newHistory))
+        } else {    
+            addWorkoutToHistory()
+            resetTimers()
             setStopped(true)
             setShowConfetti(true)
         }
     } 
+
+    function resetTimers() {
+        setTimers([])
+        localStorage.setItem('timers', JSON.stringify([]))
+    }
+
+    function addWorkoutToHistory() {
+        const newTimers = timers.map((timer, index) => {
+            return {...timer, running: false, completed: true}
+        })
+        const newHistory = history !== null ? [...history, newTimers] : [newTimers]
+        setHistory(newHistory)
+        localStorage.setItem('history', JSON.stringify(newHistory))
+    }
 
     return (
         <TimerContext.Provider
