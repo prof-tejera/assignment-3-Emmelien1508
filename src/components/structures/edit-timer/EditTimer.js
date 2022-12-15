@@ -76,13 +76,11 @@ export default function EditTimer() {
         setRestData(newRestData)
         
         const timerData = timers ? JSON.stringify(timers) : JSON.stringify(storedTimers)
-        const query = timer ? (
+        timer ? (
             setEditTimerConfiguration(searchParams, timer, newData.minutes, newData.seconds, newData.rounds, newRestData.minutes, newRestData.seconds, timerData)
         ) : (
             setEditTimerConfiguration(searchParams, currentTimer.current, newData.minutes, newData.seconds, newData.rounds, newRestData.minutes, newRestData.seconds, timerData)
         )
-        searchParams.set({...query})
-        setSearchParams(searchParams)
     }, [minutes, seconds, restMinutes, restSeconds, rounds])
     
     function editTimer() {
