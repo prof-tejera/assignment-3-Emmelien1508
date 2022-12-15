@@ -35,7 +35,6 @@ export default function AddTimer() {
     useEffect(() => {
         if (searchParams.get('timers') && searchParams.get('timers') !== '') {
             const timers = JSON.parse(searchParams.get('timers'))
-            console.log(timers)
             if (timers === null || timers.length === 0) { } else {
                 setTimers(JSON.parse(searchParams.get('timers')))
             }
