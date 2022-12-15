@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import { createSearchParams, useNavigate } from 'react-router-dom'
 import { ErrorBoundary } from 'react-error-boundary'
+import PropTypes from 'prop-types'
 
 import { faArrowDown, faArrowUp, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -98,4 +99,10 @@ export default function WorkoutItems({timers, setTimers, handleReset}) {
             ))}
         </div>
     )
+}
+
+WorkoutItems.propTypes = {
+    timers: PropTypes.array,
+    setTimers: PropTypes.func,
+    handleReset: PropTypes.func
 }

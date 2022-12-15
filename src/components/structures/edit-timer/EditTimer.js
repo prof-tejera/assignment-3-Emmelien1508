@@ -42,14 +42,14 @@ export default function EditTimer() {
             setTimer(currentTimer.current)
         }
 
-        if (searchParams.get('name') && searchParams.get('timeEndValue') && searchParams.get('timeStartValue')) {
-            const time = parseTime(searchParams.get('name'), searchParams.get('timeStartValue'), searchParams.get('timeEndValue'))
+        if (searchParams.get('name') && searchParams.get('initialTimeEndValue') && searchParams.get('initialTimeStartValue')) {
+            const time = parseTime(searchParams.get('name'), searchParams.get('initialTimeStartValue'), searchParams.get('initialTimeEndValue'))
             setMinutes(time.minutes)
             setSeconds(time.seconds)
         }
 
-        if (searchParams.get('roundStartValue')) {
-            setRounds(parseInt(searchParams.get('roundStartValue')))
+        if (searchParams.get('initialRoundStartValue')) {
+            setRounds(parseInt(searchParams.get('initialRoundStartValue')))
         }
 
         saveSearchParams(searchParams, setMinutes, setSeconds, setRestMinutes, setRestSeconds, setRounds)

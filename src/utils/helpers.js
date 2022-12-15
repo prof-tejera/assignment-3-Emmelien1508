@@ -59,15 +59,15 @@ export function getInitialTimerData(type, length, minutes, seconds) {
         duration: 0,
         index: length > 0 ? length - 1 : 0,
         name: type,
-        restTimeEndValue: null,
-        restTimeStartValue: null,
-        roundEndValue: null,
-        roundStartValue: null,
+        initialRestinitialTimeEndValue: null,
+        initialRestinitialTimeStartValue: null,
+        initialRoundEndValue: null,
+        initialRoundStartValue: null,
         running: false,
         size: 240,
         subtitle: '',
-        timeEndValue: 0,
-        timeStartValue: getSeconds(minutes, seconds),
+        initialTimeEndValue: 0,
+        initialTimeStartValue: getSeconds(minutes, seconds),
         title: '',
     }
 }
@@ -122,8 +122,8 @@ export function setAddTimerConfiguration(searchParams, type, minutes, seconds, r
     return searchParams
 }
 
-export function parseTime(name, timeStartValue, timeEndValue) {
-    return name === 'Stopwatch' ? getTime(parseInt(timeEndValue) - parseInt(timeStartValue)) : getTime(parseInt(timeStartValue))
+export function parseTime(name, initialTimeStartValue, initialTimeEndValue) {
+    return name === 'Stopwatch' ? getTime(parseInt(initialTimeEndValue) - parseInt(initialTimeStartValue)) : getTime(parseInt(initialTimeStartValue))
 }
 
 export function saveSearchParams(searchParams, setMinutes, setSeconds, setRestMinutes, setRestSeconds, setRounds) {
@@ -151,27 +151,27 @@ export function saveSearchParams(searchParams, setMinutes, setSeconds, setRestMi
 export function saveTimerData(data, minutes, seconds, restMinutes, restSeconds, rounds) {
     if (data.name === 'Stopwatch') {
         data.subtitle = `count up to ${getFormattedTime(minutes, seconds)}`
-        data.timeEndValue = getSeconds(minutes, seconds) + 1
-        data.timeStartValue = 1
-        data.duration = data.timeEndValue - 1
+        data.initialTimeEndValue = getSeconds(minutes, seconds) + 1
+        data.initialTimeStartValue = 1
+        data.duration = data.initialTimeEndValue - 1
     } else if (data.name === 'Countdown') {
         data.subtitle = `count down from ${getFormattedTime(minutes, seconds)}`
-        data.duration = data.timeStartValue
+        data.duration = data.initialTimeStartValue
     } else if (data.name === 'XY') {
         data.currentRound = 0
-        data.roundEndValue = 1
-        data.roundStartValue = rounds
+        data.initialRoundEndValue = 1
+        data.initialRoundStartValue = rounds
         data.subtitle = `count down from ${getFormattedTime(minutes, seconds)}`
-        data.duration = data.timeStartValue * data.roundStartValue
+        data.duration = data.initialTimeStartValue * data.initialRoundStartValue
     } else {
-        data.restTimeEndValue = 0
-        data.restTimeStartValue = getSeconds(restMinutes, restSeconds)
+        data.initialRestinitialTimeEndValue = 0
+        data.initialRestinitialTimeStartValue = getSeconds(restMinutes, restSeconds)
         data.currentRound = 0
-        data.roundEndValue = 1
-        data.roundStartValue = rounds
+        data.initialRoundEndValue = 1
+        data.initialRoundStartValue = rounds
         data.subtitle = `work for ${getFormattedTime(minutes, seconds)} & rest for ${getFormattedTime(restMinutes, restSeconds)}`
         data.title = 'Work 🏋🏼'
-        data.duration = (data.timeStartValue + data.restTimeStartValue) * data.roundStartValue
+        data.duration = (data.initialTimeStartValue + data.initialRestinitialTimeStartValue) * data.initialRoundStartValue
     }
 
     return data

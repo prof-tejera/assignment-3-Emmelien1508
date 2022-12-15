@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 import './Button.css'
 
 
@@ -7,4 +9,10 @@ export default function Button({classes, onClick, children}) {
             {children}
         </div>
     )
+}
+
+Button.propTypes = {
+    classes: PropTypes.string, 
+    onClick: PropTypes.func, 
+    children: PropTypes.any
 }

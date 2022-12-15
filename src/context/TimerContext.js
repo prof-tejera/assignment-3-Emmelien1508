@@ -55,14 +55,14 @@ export default function Timers({ children }) {
     function handleTimerCompleted(timer) {
         if (currentTimerIndex + 1 < timers.length) {
             setTimerComplete()
-            setTime(timers[currentTimerIndex + 1].timeStartValue)
+            setTime(timers[currentTimerIndex + 1].initialTimeStartValue)
 
             if (timers[currentTimerIndex + 1].name === 'XY' || timers[currentTimerIndex + 1].name === 'Tabata') {
-                setRound(timers[currentTimerIndex + 1].roundStartValue)
+                setRound(timers[currentTimerIndex + 1].initialRoundStartValue)
             }
 
             if (timers[currentTimerIndex + 1].name === 'Tabata') {
-                setRestTime(timers[currentTimerIndex + 1].restTimeStartValue)
+                setRestTime(timers[currentTimerIndex + 1].initialRestinitialTimeStartValue)
             }
 
             setCurrentTimerIndex(currentTimerIndex + 1)

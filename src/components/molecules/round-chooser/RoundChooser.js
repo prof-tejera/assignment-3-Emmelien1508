@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 import Button from '../../atoms/button/Button'
 
 import './RoundChooser.css'
@@ -25,4 +27,9 @@ export default function RoundChooser({rounds, setRounds}) {
             </div>
         </div>
     )
+}
+
+RoundChooser.propTypes = {
+    rounds: PropTypes.number,
+    setRounds: PropTypes.func
 }

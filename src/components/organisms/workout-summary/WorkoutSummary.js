@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 import Button from '../../atoms/button/Button'
 
 import Timer from '../timer/Timer'
@@ -37,4 +39,9 @@ export default function WorkoutSummary({timers, workoutIndex}) {
 
         </div>
     )
+}
+
+WorkoutSummary.propTypes = {
+    timers: PropTypes.array,
+    workoutIndex: PropTypes.number
 }

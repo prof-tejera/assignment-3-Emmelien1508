@@ -1,4 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react"
+import PropTypes from 'prop-types'
 
 import TimePanel from "../../molecules/time-panel/TimePanel"
 
@@ -15,15 +16,15 @@ export default function Timer({
     duration,
     index,
     name,
-    restTimeEndValue,
-    restTimeStartValue,
-    roundEndValue,
-    roundStartValue,
+    initialRestinitialTimeEndValue,
+    initialRestinitialTimeStartValue,
+    initialRoundEndValue,
+    initialRoundStartValue,
     running,
     size,
     subtitle,
-    timeEndValue,
-    timeStartValue,
+    initialTimeEndValue,
+    initialTimeStartValue,
     title,
 }) {
 
@@ -39,15 +40,15 @@ export default function Timer({
                     duration={duration}
                     index={index}
                     name={name}
-                    restTimeEndValue={restTimeEndValue}
-                    restTimeStartValue={restTimeStartValue}
-                    roundEndValue={roundEndValue}
-                    roundStartValue={roundStartValue}
+                    initialRestinitialTimeEndValue={initialRestinitialTimeEndValue}
+                    initialRestinitialTimeStartValue={initialRestinitialTimeStartValue}
+                    initialRoundEndValue={initialRoundEndValue}
+                    initialRoundStartValue={initialRoundStartValue}
                     running={running}
                     size={size}
                     subtitle={subtitle}
-                    timeEndValue={timeEndValue}
-                    timeStartValue={timeStartValue}
+                    initialTimeEndValue={initialTimeEndValue}
+                    initialTimeStartValue={initialTimeStartValue}
                     title={title} 
                 />
             </div>
@@ -64,15 +65,15 @@ export default function Timer({
             duration={duration}
             index={index}
             name={name}
-            restTimeEndValue={restTimeEndValue}
-            restTimeStartValue={restTimeStartValue}
-            roundEndValue={roundEndValue}
-            roundStartValue={roundStartValue}
+            initialRestinitialTimeEndValue={initialRestinitialTimeEndValue}
+            initialRestinitialTimeStartValue={initialRestinitialTimeStartValue}
+            initialRoundEndValue={initialRoundEndValue}
+            initialRoundStartValue={initialRoundStartValue}
             running={running}
             size={size}
             subtitle={subtitle}
-            timeEndValue={timeEndValue}
-            timeStartValue={timeStartValue}
+            initialTimeEndValue={initialTimeEndValue}
+            initialTimeStartValue={initialTimeStartValue}
             title={title} 
         />
     )
@@ -85,15 +86,13 @@ function InnerTimer({
     duration,
     index,
     name,
-    restTimeEndValue,
-    restTimeStartValue,
-    roundEndValue,
-    roundStartValue,
+    initialRestinitialTimeStartValue,
+    initialRoundStartValue,
     running,
     size,
     subtitle,
-    timeEndValue,
-    timeStartValue,
+    initialTimeEndValue,
+    initialTimeStartValue,
     title,
 }) {
     const {
@@ -140,18 +139,18 @@ function InnerTimer({
 
     function resetRound() {
         setRound(round - 1)
-        setTime(timeStartValue)
+        setTime(initialTimeStartValue)
     }
 
     function resetRestTime() {
         setIsWorkTime(true)
-        setRestTime(restTimeStartValue)
+        setRestTime(initialRestinitialTimeStartValue)
     }
 
     useEffect(() => {
         let interval = null
         let restInterval = null
-        const timeNotEnded = name === 'Stopwatch' ? time <= timeEndValue : time > 0
+        const timeNotEnded = name === 'Stopwatch' ? time <= initialTimeEndValue : time > 0
         const restTimeNotEnded = time === 0 && restTime > 0
 
         if (!paused && !stopped) {
@@ -160,7 +159,7 @@ function InnerTimer({
                     interval = setInterval(() => increaseTime(), 1000) 
                 }
 
-                if (time === timeEndValue) { 
+                if (time === initialTimeEndValue) { 
                     handleTimerCompleted(timer) 
                 }
             } else if (name === 'Countdown') {
@@ -217,7 +216,7 @@ function InnerTimer({
         duration,
         index,
         name,
-        roundStartValue,
+        initialRoundStartValue,
         running,
         size,
         subtitle,
@@ -242,4 +241,42 @@ function InnerTimer({
             <TimePanel {...data} />
         </div>
     )
+}
+
+Timer.propTypes = {
+    animated: PropTypes.bool,
+    compact: PropTypes.bool,
+    completed: PropTypes.bool,
+    currentRound: PropTypes.number,
+    currentTime: PropTypes.number,
+    duration: PropTypes.number,
+    index: PropTypes.number,
+    name: PropTypes.string,
+    initialRestinitialTimeEndValue: PropTypes.number,
+    initialRestinitialTimeStartValue: PropTypes.number,
+    initialRoundEndValue: PropTypes.number,
+    initialRoundStartValue: PropTypes.number,
+    running: PropTypes.bool,
+    size: PropTypes.number,
+    subtitle: PropTypes.string,
+    initialTimeEndValue: PropTypes.number,
+    initialTimeStartValue: PropTypes.number,
+    title: PropTypes.string
+}
+
+InnerTimer.propTypes = {
+    compact: PropTypes.bool,
+    completed: PropTypes.bool,
+    currentRound: PropTypes.number,
+    duration: PropTypes.number,
+    index: PropTypes.number,
+    name: PropTypes.string,
+    initialRestinitialTimeStartValue: PropTypes.number,
+    initialRoundStartValue: PropTypes.number,
+    running: PropTypes.bool,
+    size: PropTypes.number,
+    subtitle: PropTypes.string,
+    initialTimeEndValue: PropTypes.number,
+    initialTimeStartValue: PropTypes.number,
+    title: PropTypes.string
 }

@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 import Button from '../../atoms/button/Button'
 
 import './TimeChooser.css'
@@ -64,4 +66,13 @@ export default function TimeChooser({
             </div>
         </div>
     )
+}
+
+TimeChooser.propTypes = {
+    minutesLabel: PropTypes.string,
+    secondsLabel: PropTypes.string,
+    minutes: PropTypes.number,
+    setMinutes: PropTypes.func,
+    seconds: PropTypes.number,
+    setSeconds: PropTypes.func
 }

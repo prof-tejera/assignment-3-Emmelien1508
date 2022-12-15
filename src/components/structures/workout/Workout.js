@@ -138,14 +138,14 @@ export default function Workout() {
         newTimers[0].running = true
         setTimers(newTimers)
 
-        setTime(storedTimers[0].timeStartValue)
+        setTime(storedTimers[0].initialTimeStartValue)
 
         if (storedTimers[0].name === 'XY' || storedTimers[0].name === 'Tabata') {
-            setRound(storedTimers[0].roundStartValue)
+            setRound(storedTimers[0].initialRoundStartValue)
         }
 
         if (storedTimers[0].name === 'Tabata') {
-            setRestTime(storedTimers[0].restTimeStartValue)
+            setRestTime(storedTimers[0].initialRestinitialTimeStartValue)
         }
 
         initialRemainingTime.current = calculateWorkoutTime(newTimers)

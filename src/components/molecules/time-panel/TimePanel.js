@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
+import PropTypes from 'prop-types'
 
 import './TimePanel.css'
 
@@ -14,7 +15,7 @@ export default function TimePanel({
     duration,
     index,
     name,
-    roundStartValue,
+    initialRoundStartValue,
     running,
     size,
     subtitle,
@@ -52,9 +53,9 @@ export default function TimePanel({
                 <div className='time-panel-information'>
                     {name && (<p className='text-lg'>{name}</p>)}
                     {subtitle && (<p className='text-xs'>{subtitle}</p>)}
-                    {currentRound !== null && !compact && roundStartValue && (
+                    {currentRound !== null && !compact && initialRoundStartValue && (
                         <p className='rounds'>
-                            Round {animated ? roundStartValue - currentRound + 1 : 1} / {roundStartValue}
+                            Round {animated ? initialRoundStartValue - currentRound + 1 : 1} / {initialRoundStartValue}
                         </p>
                     )}
                 </div>
@@ -75,4 +76,21 @@ export default function TimePanel({
                 </CountdownCircleTimer>
             </div>
     )
+}
+
+TimePanel.propTypes = {
+    animated: PropTypes.bool,
+    color: PropTypes.string,
+    compact: PropTypes.bool,
+    completed: PropTypes.bool,
+    currentRound: PropTypes.number,
+    currentTime: PropTypes.number,
+    duration: PropTypes.number,
+    index: PropTypes.number,
+    name: PropTypes.string,
+    initialRoundStartValue: PropTypes.number,
+    running: PropTypes.bool,
+    size: PropTypes.number,
+    subtitle: PropTypes.string,
+    title: PropTypes.string,
 }
