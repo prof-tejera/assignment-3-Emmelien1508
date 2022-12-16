@@ -22,9 +22,12 @@ export function calculateWorkoutRemainingTime(timers) {
     for (let i=0; i<timers.length; i++) {
         // ignore timers that are completed
         if (!timers[i].completed) {
+            console.log(timers[i])
             time += timers[i].running ? timers[i].currentTime : timers[i].duration
         }
     }
+
+    console.log("this is remaining time: " + time)
     return time
 }
 

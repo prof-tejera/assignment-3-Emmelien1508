@@ -62,6 +62,7 @@ export default function Workout() {
             setTimers(JSON.parse(searchParams.get('timers')))
             setTotalTime(calculateWorkoutTime(JSON.parse(searchParams.get('timers'))))
             initialRemainingTime.current = calculateWorkoutRemainingTime(JSON.parse(searchParams.get('timers')))
+            console.log("initial remaining time " + initialRemainingTime.current)
             setRemainingTime(initialRemainingTime.current)
         }
     }, [])
@@ -116,9 +117,6 @@ export default function Workout() {
     }, [])
 
     useEffect(() => {
-        searchParams.set('timers', JSON.stringify(timers))
-        setSearchParams(searchParams)
-
         if (stopped || paused) {
             totalWorkoutTime.current = calculateWorkoutTime(timers)
             setTotalTime(totalWorkoutTime.current)

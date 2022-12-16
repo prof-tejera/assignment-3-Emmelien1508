@@ -27,29 +27,33 @@ export default function AddTimer() {
     const restData = getInitialChooserData('rest ', restMinutes, restSeconds, rounds, setRestMinutes, setRestSeconds, setRounds)
 
     const storedTimers = JSON.parse(localStorage.getItem('timers'))
+
     useEffect(() => {
-        searchParams.set('timers', storedTimers ? JSON.stringify(storedTimers) : timers)
-        setSearchParams(searchParams)
+        if (storedTimers || timers) {
+            searchParams.set('timers', storedTimers ? JSON.stringify(storedTimers) : timers)
+            setSearchParams(searchParams)
+        }
     }, [timers])
 
     useEffect(() => {
-        if (searchParams.get('timers') && searchParams.get('timers') !== '') {
-            const timers = JSON.parse(searchParams.get('timers'))
-            if (timers === null || timers.length === 0) { } else {
-                setTimers(JSON.parse(searchParams.get('timers')))
-            }
-    
-            if (searchParams.get('type') !== '' || searchParams.get('type') !== 'null') {
-                setType(searchParams.get('type'))
-                saveSearchParams(searchParams, setMinutes, setSeconds, setRestMinutes, setRestSeconds, setRounds)
-            }
+        if (searchParams.get('timers') && JSON.parse(searchParams.get('timers')).length > 0) {
+            setTimers(JSON.parse(searchParams.get('timers')))
+        }
+
+        if (searchParams.get('type') === '' || searchParams.get('type') === 'null') {
+            console.log("there is no type")
+        } else {
+            setType(searchParams.get('type'))
+            saveSearchParams(searchParams, setMinutes, setSeconds, setRestMinutes, setRestSeconds, setRounds)
         }
     }, [])
 
     useEffect(() => {
-        const timerData = timers ? JSON.stringify(timers) : JSON.stringify(storedTimers)
-        const params = setAddTimerConfiguration(searchParams, type, minutes, seconds, rounds, restMinutes, restSeconds, timerData)
-        setSearchParams(params)
+        if (searchParams.get('type') !== '' || searchParams.get('type') !== 'null') {
+            const timerData = timers ? JSON.stringify(timers) : JSON.stringify(storedTimers)
+            const params = setAddTimerConfiguration(searchParams, type, minutes, seconds, rounds, restMinutes, restSeconds, timerData)
+            setSearchParams(params)
+        }
     }, [type, minutes, seconds, restMinutes, restSeconds, rounds])
 
     function addTimer() {

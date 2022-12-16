@@ -107,9 +107,10 @@ function InnerTimer({
     useEffect(() => {
         if (!stopped && remainingTime > 0) {
             const newTimers = timers.map((timer, index) => {
-                return {...timer, currentTime: index === currentTimerIndex ? time : 0}
+                return {...timer, running: index === currentTimerIndex, currentTime: index === currentTimerIndex ? time : 0}
             })
 
+            searchParams.set('timers', `${JSON.stringify(newTimers)}`)
             searchParams.set('current-timer-index', `${currentTimerIndex}`)
             searchParams.set('rest-time', `${restTime}`)
             searchParams.set('round', `${round}`)
