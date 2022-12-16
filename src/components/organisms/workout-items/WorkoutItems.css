@@ -1,0 +1,53 @@
+
+.workout-items {
+    display: grid;
+    grid-template-columns: 100%;
+    row-gap: 2vw;
+}
+
+.timer {
+    min-height: 400px;
+    padding: var(--padding-xs);
+    position: relative;
+}
+
+.timer .button {
+    position: absolute;
+}
+
+.timer .button.index,
+.timer .button.delete,
+.timer .button.up,
+.timer .button.down,
+.timer .button.edit {
+    top: -1px;
+}
+
+.timer .button.index {
+    left: -1px;
+}
+
+.timer .button.delete {
+    right: -1px;
+}
+
+.timer .button.edit {
+    right: 116px;
+}
+
+.timer .button.up {
+    right: 77px;
+}
+
+.timer .button.down {
+    right: 38px;
+}
+
+.timer .timer-content {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

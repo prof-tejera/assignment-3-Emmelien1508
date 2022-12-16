@@ -1,3 +1,5 @@
+
+
 # Assignment 3 (A3)
 
 Now that we have our basic workout app working (A2) we are going to build out more features. Our starting point is your A2 code, so copy it into this repo (not the `.github` folder). ***The goal is to have a production ready workout app by the end of A3.*** Some of the features below are harder to implement than others. I recommend staring with the "Persisting state" and then doing the rest in any order.
@@ -53,3 +55,8 @@ We will be grading based on the features listed above and overall code quality
 ## Bonus
 
 - Declare proptypes on all components you have created (5pt)
+
+
+
+#### URL
+https://prof-tejera.github.io/assignment-3-Emmelien1508

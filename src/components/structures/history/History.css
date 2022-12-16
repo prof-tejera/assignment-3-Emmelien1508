@@ -1,0 +1,22 @@
+.workout-history {
+    width: 90vw;
+    margin: var(--padding-xl) auto;
+    color: var(--white);
+}
+
+.history-empty {
+    margin: 0 5vw;
+    padding: var(--padding-xl) 0;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.history-empty > *:not(:last-child) {
+    padding-bottom: var(--padding-lg);
+}
+
+.workout-history > .workout-summary:not(:last-child) {
+    margin-bottom: var(--padding-lg);
+}

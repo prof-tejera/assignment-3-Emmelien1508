@@ -1,0 +1,11 @@
+.round-chooser,
+.round-chooser .chooser-buttons {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.round-chooser {
+    padding-top: var(--padding-sm);
+}

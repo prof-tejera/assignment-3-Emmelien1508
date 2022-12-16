@@ -1,0 +1,50 @@
+.time-panel {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.time-panel-information {
+    margin-bottom: 15px;
+    text-align: center;
+    height: 75px;
+}
+
+.glowing {
+    text-shadow:
+    0 0 7px var(--white),
+    0 0 10px var(--white),
+    0 0 21px var(--white),
+    0 0 42px var(--purple4),
+    0 0 82px var(--purple4),
+    0 0 92px var(--purple4),
+    0 0 102px var(--purple4),
+    0 0 200px var(--purple4);
+    -webkit-animation: glow 1.5s ease-in-out infinite alternate;
+    -moz-animation: glow 1.5s ease-in-out infinite alternate;
+    animation: glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 
+        0 0 10px var(--white), 
+        0 0 20px var(--white), 
+        0 0 30px var(--purple4), 
+        0 0 40px var(--purple4), 
+        0 0 50px var(--purple4), 
+        0 0 60px var(--purple4), 
+        0 0 70px var(--purple4);
+    }
+    to {
+        text-shadow: 
+        0 0 20px var(--white), 
+        0 0 30px var(--purple3), 
+        0 0 40px var(--purple3), 
+        0 0 50px var(--purple3), 
+        0 0 60px var(--purple3), 
+        0 0 70px var(--purple3), 
+        0 0 80px var(--purple3);
+    }
+}
