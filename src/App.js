@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { HashRouter as Router, Routes, Route } from 'react-router-dom'
 
 import AddTimer from './components/structures/add-timer/AddTimer'
 import Documentation from './components/structures/documentation/Documentation'
@@ -13,7 +13,7 @@ export default function App() {
     return (
         <div className='container'>
             <Timers>
-                <Router basename='/assignment-3-Emmelien1508'>
+                <Router>
                     <Navigation />
                     <Routes>
                         <Route path='/' element={<Workout />} />
