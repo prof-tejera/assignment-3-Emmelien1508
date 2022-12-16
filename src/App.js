@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { HashRouter as Router, Routes, Route } from 'react-router-dom'
 
 import AddTimer from './components/structures/add-timer/AddTimer'
 import Documentation from './components/structures/documentation/Documentation'
